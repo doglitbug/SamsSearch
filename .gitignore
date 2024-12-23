@@ -34,6 +34,9 @@
 .idea/
 
 build/
+assets/
+
+SamsSearch
 
 # CMake
 CMakeLists.txt.user
