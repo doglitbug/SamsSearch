@@ -23,3 +23,13 @@ sudo apt-get install libsdl2-mixer-dev
 ```
 find . -name "*.png" | xargs mogrify -sample 200%
 ```
+
+## CLion and the fun that is CMake
+In root directory:
+```
+cmake -S . -B .
+make
+```
+
+- Open in CLion as "Makefile project"
+- Under 'Edit Configuration' add executable as required
