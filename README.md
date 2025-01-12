@@ -10,7 +10,7 @@ sudo apt-get install libsdl2-mixer-dev
 ## Assets used (so far)
 * [80+ RPG Characters Sprites](https://finalbossblues.itch.io/tf-rpg-charactersprites-1) - [finalbossblues](https://finalbossblues.itch.io/)
 * [Future Fantasy](https://finalbossblues.itch.io/future-fantasy) - [finalbossblues](https://finalbossblues.itch.io/)
-* [Farm and Fort](https://finalbossblues.itch.io/time-fantasy-farmandfort) - [finalbossblues](https://finalbossblues.itch.io/)
+* [Fantasy RPG Tileset Pack](https://finalbossblues.itch.io/fantasy-rpg-tileset-pack) - [finalbossblues](https://finalbossblues.itch.io/)
 * [TinyXML-2](https://github.com/leethomason/tinyxml2) - Nifty XML library! 
 * [Tiled](https://www.mapeditor.org/) - Best map editor ever
 * [cpp-base64](https://github.com/ReneNyffenegger/cpp-base64) - Base 64 decoding
