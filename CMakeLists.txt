@@ -12,6 +12,8 @@ include_directories(src/Managers)
 include_directories(src/States)
 include_directories(src/ThirdParty/TinyXML)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
 add_executable(SamsSearch
         src/ThirdParty/Base64/base64.cpp
         src/ThirdParty/Base64/base64.h

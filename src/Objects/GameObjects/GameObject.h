@@ -47,6 +47,8 @@ public:
     /// @todo Move this back to protected/private
     Vector2D m_velocity;
 
+    void drawHitBox(SDL_Rect *pViewport);
+
 protected:
 
     /// @brief Used to denote direction in sprite-sheet
@@ -63,6 +65,5 @@ protected:
     SDL_Rect *m_hitBox;
 
 private:
-    void drawHitBox(SDL_Rect *pViewport);
     void checkMapCollision(float deltaTime);
 };

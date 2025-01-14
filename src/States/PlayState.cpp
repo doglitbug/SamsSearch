@@ -39,6 +39,7 @@ void PlayState::render() {
     for (Layer *layer: *pCurrentLevel->getUpperLayers()) { layer->render(&pViewport); }
 
     drawUI();
+    mPlayer->drawHitBox(&pViewport);
     BaseState::render();//?
 }
 
@@ -69,6 +70,7 @@ SDL_Rect PlayState::getViewport() {
 
 void PlayState::newGame() {
     //Create new player
+
     mPlayer = new Player();
 
     //Load all levels?
@@ -79,9 +81,8 @@ void PlayState::newGame() {
 
     //Set player position/details from map?
     //TODO Get these defaults from choose character screen/co-ords from map?
-    mPlayer->load(new LoaderParams(438, 608, 52, 72, "character2", 0, 0));
+    mPlayer->load(new LoaderParams(100, 100, 26, 36, "character2", 0, 0));
     mPlayer->setCollisionLayer(pCurrentLevel->getCollisionLayer());
-
 }
 
 void PlayState::loadGame() {
