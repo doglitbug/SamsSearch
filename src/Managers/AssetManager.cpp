@@ -117,12 +117,19 @@ void AssetManager::addBorderToExistingTexture(const std::string &textureID, int 
     //Add 4 rectangles to it
     auto top = new SDL_Rect{0, 0, width, size};
     SDL_RenderFillRect(m_pRenderer, top);
+
     auto bottom = new SDL_Rect{0, height - size, width, height};
     SDL_RenderFillRect(m_pRenderer, bottom);
     auto left = new SDL_Rect{0, size, size, height - size};
     SDL_RenderFillRect(m_pRenderer, left);
     auto right = new SDL_Rect{width - size, size, width, height - size};
     SDL_RenderFillRect(m_pRenderer, right);
+
+    delete top;
+    delete bottom;
+    delete left;
+    delete right;
+
     //Reset render target
     SDL_SetRenderTarget(m_pRenderer, nullptr);
 }
