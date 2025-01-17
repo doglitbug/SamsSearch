@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     }
 
     while (EngineStateManager::get()->running()) {
-        frameStart = SDL_GetTicks64();
+        frameStart = SDL_GetTicks();
 
         //Move all this to the EngineStateManager?
         EngineStateManager::get()->handleEvents();
@@ -23,12 +23,12 @@ int main(int argc, char *argv[]) {
         EngineStateManager::get()->render();
 
         //Limit FPS so we don't burn out the GPU (kidding...)
-        frameTime = SDL_GetTicks64() - frameStart;
+        frameTime = SDL_GetTicks() - frameStart;
         if (frameTime < DELAY_TIME) {
             SDL_Delay((int) (DELAY_TIME - frameTime));
         }
 
-        deltaTime = (SDL_GetTicks64() - frameStart) / 100.0f;
+        deltaTime = (SDL_GetTicks() - frameStart) / 100.0f;
     }
     EngineStateManager::get()->clean();
     return 0;

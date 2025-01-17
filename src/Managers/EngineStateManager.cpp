@@ -28,14 +28,14 @@ bool EngineStateManager::init(const char *title, int xpos, int ypos, int width, 
 
     // Attempt to initialize SDL
     // TODO Only init subsystems that are needed, for example we couldn't use this on RISC OS on Raspberry Pi as there is no CD-ROM drive!
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    if (!SDL_Init(SDL_INIT_VIDEO))
     {
         std::cout << "SDL Init fail\n";
         return false;
     }
 
     // Init the window
-    m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+    m_pWindow = SDL_CreateWindow(title, width, height, flags);
     if (m_pWindow == nullptr)
     {
         std::cout << "SDL Window init fail\n";
@@ -43,7 +43,7 @@ bool EngineStateManager::init(const char *title, int xpos, int ypos, int width, 
     }
 
     // Create the renderer
-    m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, 0);
+    m_pRenderer = SDL_CreateRenderer(m_pWindow, NULL);
     if (m_pRenderer == nullptr) // renderer init success
     {
         std::cout << "SDL Renderer init fail\n";
@@ -56,7 +56,7 @@ bool EngineStateManager::init(const char *title, int xpos, int ypos, int width, 
     // Set a drawing scale
     // TODO Option in video m_settings?
     // IF you scale here, everything else needs to account for it, for example MousePosition...
-    if (SDL_RenderSetScale(m_pRenderer, m_scale, m_scale) != 0)
+    if (!SDL_SetRenderScale(m_pRenderer, m_scale, m_scale))
     {
         std::cout << "SDL Renderer set scale fail\n";
         return false;

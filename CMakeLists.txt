@@ -74,4 +74,4 @@ add_executable(SamsSearch
 
 find_package(ZLIB)
 
-target_link_libraries(${PROJECT_NAME} SDL2 SDL2_mixer SDL2_image SDL2_ttf ZLIB::ZLIB)
+target_link_libraries(${PROJECT_NAME} SDL3 SDL3_image SDL3_mixer SDL3_ttf ZLIB::ZLIB)

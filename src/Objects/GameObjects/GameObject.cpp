@@ -64,14 +64,14 @@ GameObject::~GameObject() {
 void GameObject::drawHitBox(SDL_Rect *pViewport) {
         //TODO VIEWPORT OFFSET
         // Draw hit box
-        SDL_Rect hitBox;
+        SDL_FRect hitBox;
         hitBox.x = m_position.getX() + m_hitBox->x;
         hitBox.y = m_position.getY() + m_hitBox->y;
         hitBox.w = m_hitBox->w;
         hitBox.h = m_hitBox->h;
 
         SDL_SetRenderDrawColor(EngineStateManager::get()->getRenderer(), 255, 0, 0, 0);
-        SDL_RenderDrawRect(EngineStateManager::get()->getRenderer(), &hitBox);
+        SDL_RenderRect(EngineStateManager::get()->getRenderer(), &hitBox);
 }
 
 void GameObject::checkMapCollision(float deltaTime) {

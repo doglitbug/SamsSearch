@@ -9,13 +9,13 @@ bool AssetManager::loadFont(const std::string &filename, const std::string &font
     }
 
     if (TTF_Init() == -1) {
-        std::cout << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << std::endl;
+        std::cout << "SDL_ttf could not initialize! SDL_ttf Error: " << SDL_GetError() << std::endl;
         return false;
     }
 
     TTF_Font *pFont = TTF_OpenFont(("assets/fonts/" + filename).c_str(), size);
     if (pFont == nullptr) {
-        std::cout << "Failed to load font! SDL_ttf Error: " << TTF_GetError() << std::endl;
+        std::cout << "Failed to load font! SDL_ttf Error: " << SDL_GetError() << std::endl;
         return false;
     }
 
@@ -41,15 +41,15 @@ bool AssetManager::createTextTexture(int width, int height, const std::string &t
     // Create the text item
     //TODO Make this a parameter
     auto textColor = SDL_Color{0xFF, 0xFF, 0xFF};
-    SDL_Surface *pTextSurface = TTF_RenderText_Blended(gFont, text.c_str(), textColor);
+    SDL_Surface *pTextSurface = TTF_RenderText_Blended(gFont, text.c_str(), 0, textColor);
     SDL_Texture *pTextTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTextSurface);
-    SDL_FreeSurface(pTextSurface);
+    SDL_DestroySurface(pTextSurface);
 
     // Get size of the text texture
-    int textWidth, textHeight;
-    SDL_QueryTexture(pTextTexture, nullptr, nullptr, &textWidth, &textHeight);
+    float textWidth, textHeight;
+    SDL_GetTextureSize(pTextTexture, &textWidth, &textHeight);
 
-    SDL_Rect dstRect;
+    SDL_FRect dstRect;
 
     // Center the text
     // TODO Alignment as a parameter?
@@ -59,7 +59,7 @@ bool AssetManager::createTextTexture(int width, int height, const std::string &t
     dstRect.h = textHeight;
 
     // Draw text
-    SDL_RenderCopy(m_pRenderer, pTextTexture, nullptr, &dstRect);
+    SDL_RenderTexture(m_pRenderer, pTextTexture, nullptr, &dstRect);
 
     // Save to Textures
     m_textureMap[textureID] = backgroundTexture;
@@ -84,7 +84,7 @@ bool AssetManager::loadTexture(const std::string &filename, const std::string &i
     }
 
     SDL_Texture *pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTempSurface);
-    SDL_FreeSurface(pTempSurface);
+    SDL_DestroySurface(pTempSurface);
 
     if (!pTexture) {
         std::cout << "Could not create texture " << std::endl;
@@ -96,7 +96,7 @@ bool AssetManager::loadTexture(const std::string &filename, const std::string &i
     return true;
 }
 
-void AssetManager::addBorderToExistingTexture(const std::string &textureID, int size) {
+void AssetManager::addBorderToExistingTexture(const std::string &textureID, float size) {
     //TODO Refactor this mess to use SDL_RenderFillRects
 
     //Check texture exists
@@ -105,9 +105,9 @@ void AssetManager::addBorderToExistingTexture(const std::string &textureID, int 
     }
 
     //Get texture details
-    int width;
-    int height;
-    SDL_QueryTexture(m_textureMap[textureID], nullptr, nullptr, &width, &height);
+    float width;
+    float height;
+    SDL_GetTextureSize(m_textureMap[textureID], &width, &height);
 
     //Set as destination
     SDL_SetRenderTarget(m_pRenderer, m_textureMap[textureID]);
@@ -115,14 +115,13 @@ void AssetManager::addBorderToExistingTexture(const std::string &textureID, int 
     SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
 
     //Add 4 rectangles to it
-    auto top = new SDL_Rect{0, 0, width, size};
+    auto top = new SDL_FRect{0, 0, width, size};
     SDL_RenderFillRect(m_pRenderer, top);
-
-    auto bottom = new SDL_Rect{0, height - size, width, height};
+    auto bottom = new SDL_FRect{0, height - size, width, height};
     SDL_RenderFillRect(m_pRenderer, bottom);
-    auto left = new SDL_Rect{0, size, size, height - size};
+    auto left = new SDL_FRect{0, size, size, height - size};
     SDL_RenderFillRect(m_pRenderer, left);
-    auto right = new SDL_Rect{width - size, size, width, height - size};
+    auto right = new SDL_FRect{width - size, size, width, height - size};
     SDL_RenderFillRect(m_pRenderer, right);
 
     delete top;
@@ -135,46 +134,46 @@ void AssetManager::addBorderToExistingTexture(const std::string &textureID, int 
 }
 
 
-void AssetManager::drawTexture(const std::string &id, int x, int y, int width, int height, SDL_RendererFlip flip) {
+void AssetManager::drawTexture(const std::string &id, float x, float y, float width, float height) {
     if (width==0) {
-        SDL_QueryTexture(m_textureMap[id], nullptr, nullptr, &width, &height);
+        SDL_GetTextureSize(m_textureMap[id], &width, &height);
     }
-    SDL_Rect srcRect;
-    SDL_Rect destRect;
+    SDL_FRect srcRect;
+    SDL_FRect destRect;
     srcRect.x = 0;
     srcRect.y = 0;
     srcRect.w = destRect.w = width;
     srcRect.h = destRect.h = height;
     destRect.x = x;
     destRect.y = y;
-    SDL_RenderCopyEx(m_pRenderer, m_textureMap[id], &srcRect, &destRect, 0, nullptr, flip);
+    SDL_RenderTexture(m_pRenderer, m_textureMap[id], &srcRect, &destRect);
 }
 
-void AssetManager::drawTextureFrame(const std::string &id, int x, int y, int width, int height, int currentRow,
-                                    int currentFrame, SDL_RendererFlip flip) {
-    SDL_Rect srcRect;
-    SDL_Rect destRect;
-    srcRect.x = width * currentFrame;
-    srcRect.y = height * currentRow;
+void AssetManager::drawTextureFrame(const std::string &id, float x, float y, float width, float height, int currentRow,
+                                    int currentFrame) {
+    SDL_FRect srcRect;
+    SDL_FRect destRect;
+    srcRect.x = width * (float)currentFrame;
+    srcRect.y = height * (float)currentRow;
     srcRect.w = destRect.w = width;
     srcRect.h = destRect.h = height;
     destRect.x = x;
     destRect.y = y;
-    SDL_RenderCopyEx(m_pRenderer, m_textureMap[id], &srcRect, &destRect, 0, nullptr, flip);
+    SDL_RenderTexture(m_pRenderer, m_textureMap[id], &srcRect, &destRect);
 }
 
 void AssetManager::drawTile(const std::string &id, int margin, int spacing, int x, int y, int width, int height,
                             int currentRow,
                             int currentFrame) {
-    SDL_Rect srcRect;
-    SDL_Rect destRect;
+    SDL_FRect srcRect;
+    SDL_FRect destRect;
     srcRect.x = margin + (spacing + width) * currentFrame;
     srcRect.y = margin + (spacing + height) * currentRow;
     srcRect.w = destRect.w = width;
     srcRect.h = destRect.h = height;
     destRect.x = x;
     destRect.y = y;
-    SDL_RenderCopyEx(m_pRenderer, m_textureMap[id], &srcRect, &destRect, 0, nullptr, SDL_FLIP_NONE);
+    SDL_RenderTexture(m_pRenderer, m_textureMap[id], &srcRect, &destRect);
 }
 
 void AssetManager::deleteTexture(const std::string &id) {
@@ -196,7 +195,7 @@ bool AssetManager::loadMusic(const std::string &filename, const std::string &id)
         m_music[id] = pMusic;
         return true;
     }
-    std::cout << "Could not load music: " << Mix_GetError() << std::endl;
+    std::cout << "Could not load music: " << SDL_GetError() << std::endl;
     return false;
 }
 
@@ -227,7 +226,7 @@ void AssetManager::clean() {
 }
 
 AssetManager::AssetManager() {
-    Mix_OpenAudio(22050, AUDIO_S16, 2, 4096);
+    Mix_OpenAudio(0, NULL);
     //Set volumes!
     //TODO Load from Settings?
     Mix_Volume(-1, 4);
@@ -261,7 +260,7 @@ bool AssetManager::loadSound(const std::string &filename, const std::string &id)
         m_sound[id] = pSound;
         return true;
     }
-    std::cout << "Could not load sound: " << id <<" : " << Mix_GetError() << std::endl;
+    std::cout << "Could not load sound: " << id << " : " << SDL_GetError() << std::endl;
     return false;
 }
 
