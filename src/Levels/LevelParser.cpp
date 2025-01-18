@@ -206,8 +206,9 @@ void LevelParser::parseCollisionLayer(XMLElement *pTileElement, CollisionLayer *
     pCollisionLayer->setTileData(data);
 }
 
+
 // ToDo BaseObject layers, do these need to be loaded from a save file for each level?
-void LevelParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<Layer *> *pLayers, CollisionLayer *pCollisionLayer)
+void LevelParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<ObjectLayer *> *pLayers, CollisionLayer *pCollisionLayer) const
 {
     // Create an object layer
     auto *pObjectLayer = new ObjectLayer();

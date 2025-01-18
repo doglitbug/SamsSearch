@@ -2,6 +2,7 @@
 
 #include "../Managers/InputManager.h"
 #include "../Levels/LevelParser.h"
+#include "ObjectLayer.h"
 
 void PlayState::onEnter() {
     //TODO Determine if we are starting a new game or loading one?
@@ -11,12 +12,26 @@ void PlayState::onEnter() {
 void PlayState::update(float deltaTime) {
     BaseState::update(deltaTime);
 
-    //TODO Only update object layer?
-    //At least until we have animations eg for water?
-    for (Layer *layer: *pCurrentLevel->getObjectLayers()) { layer->update(deltaTime); }
+    //TODO Only update object layer, at least until we have animations eg for water?
     mPlayer->update(deltaTime);
+    SDL_FRect *playerHitBox = mPlayer->getWorldHitBox();
+    for (ObjectLayer *layer: *pCurrentLevel->getObjectLayers()) {
+        layer->update(deltaTime);
+        for(auto *gameObject: *layer->getGameObjects()){
+            //Check intersection with player
+            SDL_FRect *otherHitBox = new SDL_FRect();
+            otherHitBox = gameObject->getWorldHitBox();
+            if (SDL_HasRectIntersectionFloat(playerHitBox, otherHitBox)) {
+                gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
+            }
+            delete otherHitBox;
+        }
+    }
+    delete playerHitBox;
+
 
     //TODO Check for collisions etc here?
+    //Assume only one object layer at this time?
 
     handleInput();
 }

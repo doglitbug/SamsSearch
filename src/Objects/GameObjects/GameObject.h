@@ -33,7 +33,7 @@ public:
 
     /// @brief Called when another GameObject interacts with this one
     /// @param other GameObject that has interacted
-    void onInteraction(GameObject* other, INTERACT_TYPE interactType);
+    virtual void onInteraction(GameObject* other, INTERACT_TYPE interactType);
 
     void clean() override;
 
@@ -49,6 +49,20 @@ public:
 
     void drawHitBox(SDL_Rect *pViewport);
 
+    /// @brief Objects hit-box for colliding with other objects
+    SDL_FRect *m_hitBox;
+
+    SDL_FRect *getWorldHitBox(){
+        if(!m_hitBox) return nullptr;
+        SDL_FRect *hitBoxLocation = new SDL_FRect();
+        hitBoxLocation->x = m_position.getX() + m_hitBox->x;
+        hitBoxLocation->y = m_position.getY() + m_hitBox->y ;
+        hitBoxLocation->w = m_hitBox->w;
+        hitBoxLocation->h = m_hitBox->h;
+
+        return hitBoxLocation;
+    }
+
 protected:
 
     /// @brief Used to denote direction in sprite-sheet
@@ -61,8 +75,6 @@ protected:
 
     /// @brief Collision layer for moving around world
     CollisionLayer *m_pCollisionLayer;
-    /// @brief Objects hit-box for colliding with other objects
-    SDL_Rect *m_hitBox;
 
 private:
     void checkMapCollision(float deltaTime);

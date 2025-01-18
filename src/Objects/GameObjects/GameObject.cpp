@@ -55,6 +55,7 @@ void GameObject::onInteraction(GameObject *other, INTERACT_TYPE interactionType)
 }
 
 void GameObject::clean() {
+    if (m_hitBox) delete m_hitBox;
 }
 
 GameObject::~GameObject() {

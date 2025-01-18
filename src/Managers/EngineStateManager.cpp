@@ -69,8 +69,8 @@ bool EngineStateManager::init(const char *title, int width, int height, bool ful
 
     //TODO Move loading to a startup State? (video etc)
     //Preload assets
-    AssetManager::get()->loadFont("PressStart2P-vaV7.ttf", "Text", 16);
-    AssetManager::get()->loadFont("PressStart2P-vaV7.ttf", "Header", 64);
+    AssetManager::get()->loadFont("PressStart2P-vaV7.ttf", "Text", 8);
+    AssetManager::get()->loadFont("PressStart2P-vaV7.ttf", "Header", 32);
 
     //Load the background textures for the title image
     AssetManager::get()->loadTexture("assets/images/menus/mainlogo.png", "title");

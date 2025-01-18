@@ -10,7 +10,6 @@ bool CollisionLayer::isWalkable(float x, float y)
     //TODO No magic numbers, this is tile width!
     int cx = std::floor(x / 16.0);
     int cy = std::floor(y / 16.0);
-    std::cout << cx << ":" << cy << std::endl;
     if (cx < 0 || cx >= m_tileData[0].size() || cy < 0 || cy >= m_tileData.size())
     {
         return false;
