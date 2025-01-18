@@ -62,16 +62,14 @@ GameObject::~GameObject() {
 }
 
 void GameObject::drawHitBox(SDL_Rect *pViewport) {
-        //TODO VIEWPORT OFFSET
-        // Draw hit box
-        SDL_FRect hitBox;
-        hitBox.x = m_position.getX() + m_hitBox->x;
-        hitBox.y = m_position.getY() + m_hitBox->y;
-        hitBox.w = m_hitBox->w;
-        hitBox.h = m_hitBox->h;
+    SDL_FRect hitBoxLocation;
+    hitBoxLocation.x = m_position.getX() + m_hitBox->x - pViewport->x;
+    hitBoxLocation.y = m_position.getY() + m_hitBox->y - pViewport->y;
+    hitBoxLocation.w = m_hitBox->w;
+    hitBoxLocation.h = m_hitBox->h;
 
-        SDL_SetRenderDrawColor(EngineStateManager::get()->getRenderer(), 255, 0, 0, 0);
-        SDL_RenderRect(EngineStateManager::get()->getRenderer(), &hitBox);
+    SDL_SetRenderDrawColor(EngineStateManager::get()->getRenderer(), 255, 0, 0, 0);
+    SDL_RenderRect(EngineStateManager::get()->getRenderer(), &hitBoxLocation);
 }
 
 void GameObject::checkMapCollision(float deltaTime) {

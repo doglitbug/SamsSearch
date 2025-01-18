@@ -70,7 +70,9 @@ add_executable(SamsSearch
         src/Objects/Menus/UIObject.h
         src/Objects/Menus/UIObject.cpp
         src/Objects/GameObjects/NPC.h
-        src/Objects/GameObjects/NPC.cpp)
+        src/Objects/GameObjects/NPC.cpp
+        src/Objects/GameObjects/Dog.cpp
+        src/Objects/GameObjects/Dog.h)
 
 find_package(ZLIB)
 

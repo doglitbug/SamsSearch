@@ -4,7 +4,7 @@ NPC::NPC() {}
 
 void NPC::load(const LoaderParams *pParams) {
     GameObject::load(pParams);
-    m_hitBox = new SDL_Rect{12, 44, 28, 28};
+    //m_hitBox = new SDL_Rect{12, 44, 28, 28};
     timeElapsed = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (8)));
 }
 
@@ -13,7 +13,7 @@ void NPC::update(float deltaTime) {
     m_currentFrame = frames[int((SDL_GetTicks() / 150) % 4)];
 
     timeElapsed += deltaTime;
-    if (timeElapsed > 7.5f) {
+    if (timeElapsed > 8.5f) {
         m_velocity = chooseRandomDirection();
         timeElapsed = 0.0f;
     }
@@ -32,7 +32,7 @@ Vector2D NPC::chooseRandomDirection() {
     auto direction = Vector2D(x, y);
 
     direction.normalize();
-    direction *= 15.0f;
+    direction *= 10.0f;
 
     return direction;
 }

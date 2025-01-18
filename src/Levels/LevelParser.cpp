@@ -203,7 +203,7 @@ void LevelParser::parseCollisionLayer(XMLElement *pTileElement, CollisionLayer *
         }
     }
 
-    pCollisionLayer->setTileIDs(data);
+    pCollisionLayer->setTileData(data);
 }
 
 // ToDo BaseObject layers, do these need to be loaded from a save file for each level?
@@ -227,7 +227,9 @@ void LevelParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<Layer
             GameObject *pGameObject = GameObjectFactory::get()->create(e->Attribute("type"));
 
             // Get the custom property values
-            // ToDo Place all values into a map as each type of object will need different data?
+            // TODO Place all values into a map as each type of object will need different data?
+            // OR have these values load their own stuff, perhaps just override if need be
+
             for (XMLElement *property = e->FirstChildElement()->FirstChildElement();
                  property != nullptr; property = property->NextSiblingElement())
             {

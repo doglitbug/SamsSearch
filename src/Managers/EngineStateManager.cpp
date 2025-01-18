@@ -9,14 +9,15 @@
 #include "../States/PlayState.h"
 #include "../States/SettingsState.h"
 
-#include "Objects/GameObjects/Player.h"
-#include "Objects/GameObjects/Teleport.h"
-#include "Objects/GameObjects/NPC.h"
+#include "GameObjects/Player.h"
+#include "GameObjects/Teleport.h"
+#include "GameObjects/NPC.h"
+#include "GameObjects/Dog.h"
 
 #include <algorithm>
 
 
-bool EngineStateManager::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
+bool EngineStateManager::init(const char *title, int width, int height, bool fullscreen)
 {
     //Let's load the settings here as we don't know when we will need any of them
     SettingsManager::get()->loadSettings();
@@ -101,6 +102,7 @@ bool EngineStateManager::init(const char *title, int xpos, int ypos, int width, 
     GameObjectFactory::get()->registerType("Player", new PlayerCreator());
     GameObjectFactory::get()->registerType("NPC", new NPCCreator());
     GameObjectFactory::get()->registerType("Teleport", new TeleportCreator());
+    GameObjectFactory::get()->registerType("Dog", new DogCreator());
 
     m_pGameStateMachine->registerState("PAUSE", new PauseState());
     m_pGameStateMachine->registerState("SETTINGS", new SettingsState());

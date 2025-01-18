@@ -21,7 +21,7 @@ public:
 
     void operator=(const EngineStateManager &) = delete;
 
-    bool init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen);
+    bool init(const char *title, int width, int height, bool fullscreen);
 
     void render();
 
