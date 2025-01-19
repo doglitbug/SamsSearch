@@ -1,35 +1,27 @@
 #include "InputManager.h"
 
 void InputManager::initializeJoysticks() {
-    // TODO Check if we were unable to init subsystem and return?
-    // TODO Enable using other joysticks?, currently assume to be using XBox controller
-    if (SDL_WasInit(SDL_INIT_JOYSTICK) == 0) {
-        SDL_InitSubSystem(SDL_INIT_JOYSTICK);
-    }
+    if (SDL_InitSubSystem(SDL_INIT_JOYSTICK)) {
+        int i, num_joysticks;
+        SDL_JoystickID *joysticks = SDL_GetJoysticks(&num_joysticks);
+        if (joysticks) {
+            for (i = 0; i < num_joysticks; ++i) {
+                SDL_JoystickID instance_id = joysticks[i];
+                const char *name = SDL_GetJoystickNameForID(instance_id);
+                const char *path = SDL_GetJoystickPathForID(instance_id);
 
-    if (SDL_NumJoysticks() == 0) {
-        m_bJoysticksInitialised = false;
-        return;
-    }
-    for (int i = 0; i < SDL_NumJoysticks(); i++) {
-        SDL_Joystick *joy = SDL_JoystickOpen(i);
-        if (joy) {
-            m_joysticks.push_back(joy);
-            m_joystickValues.push_back(std::make_pair(new Vector2D(), new Vector2D()));
-
-            std::vector<bool> tempButtons;
-            for (int j = 0; j < SDL_JoystickNumButtons(joy); j++) {
-                tempButtons.push_back(false);
+                SDL_Log("Joystick %" SDL_PRIu32 ": %s%s%s VID 0x%.4x, PID 0x%.4x\n",
+                        instance_id, name ? name : "Unknown", path ? ", " : "", path ? path : "", SDL_GetJoystickVendorForID(instance_id), SDL_GetJoystickProductForID(instance_id));
             }
-            m_buttonStates.push_back(tempButtons);
-
-        } else {
-            std::cout << SDL_GetError();
+            SDL_free(joysticks);
         }
+        SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
     }
 
-    SDL_JoystickEventState(SDL_ENABLE);
-    m_bJoysticksInitialised = true;
+    //TODO Actually init joysticks, code removed during SDL3 migration!!
+
+    SDL_SetJoystickEventsEnabled(false);
+    m_bJoysticksInitialised = false;
 }
 
 void InputManager::update() {
@@ -37,32 +29,32 @@ void InputManager::update() {
     int whichOne;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
-            case SDL_QUIT:
+            case SDL_EVENT_QUIT:
                 EngineStateManager::get()->quit();
                 return;
 
-            case SDL_JOYAXISMOTION:
+            case SDL_EVENT_JOYSTICK_AXIS_MOTION:
                 onJoystickAxisMove(event);
                 break;
-            case SDL_JOYBUTTONDOWN:
+            case SDL_EVENT_JOYSTICK_BUTTON_DOWN:
                 onJoystickButtonChange(event, true);
                 break;
-            case SDL_JOYBUTTONUP:
+            case SDL_EVENT_JOYSTICK_BUTTON_UP:
                 onJoystickButtonChange(event, false);
                 break;
 
-            case SDL_MOUSEMOTION:
+            case SDL_EVENT_MOUSE_MOTION:
                 onMouseMove(event);
                 break;
-            case SDL_MOUSEBUTTONDOWN:
+            case SDL_EVENT_MOUSE_BUTTON_DOWN:
                 onMouseButtonChange(event, true);
                 break;
-            case SDL_MOUSEBUTTONUP:
+            case SDL_EVENT_MOUSE_BUTTON_UP:
                 onMouseButtonChange(event, false);
                 break;
 
-            case SDL_KEYDOWN:
-            case SDL_KEYUP:
+            case SDL_EVENT_KEY_DOWN:
+            case SDL_EVENT_KEY_UP:
                 onKeyChange();
                 break;
             default:
@@ -72,11 +64,8 @@ void InputManager::update() {
 }
 
 void InputManager::clean() {
-    // TODO What if number of joysticks changes during play, ie a player plugs one in or trips and removes one?
     if (m_bJoysticksInitialised) {
-        for (int i = 0; i < SDL_NumJoysticks(); i++) {
-            SDL_JoystickClose(m_joysticks[i]);
-        }
+       //TODO Actual code, as this was removed during SDL3 migration
     }
 }
 
@@ -128,9 +117,9 @@ Vector2D *InputManager::getMousePosition() {
 }
 
 bool InputManager::isKeyDown(SDL_Scancode key) {
-    if (!m_keystates)
+    if (!m_keyStates)
         return false;
-    return m_keystates[key] == 1;
+    return m_keyStates[key] == 1;
 }
 
 /**
@@ -192,7 +181,7 @@ void InputManager::onJoystickButtonChange(SDL_Event &event, bool state) {
 }
 
 void InputManager::onKeyChange() {
-    m_keystates = SDL_GetKeyboardState(0);
+    m_keyStates = SDL_GetKeyboardState(0);
 }
 
 void InputManager::onMouseMove(SDL_Event &event) {

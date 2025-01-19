@@ -24,7 +24,7 @@ public:
     void operator=(GameObjectFactory const &) = delete;
 
     bool registerType(const std::string& ID, BaseCreator *pCreator) {
-        std::map<std::string, BaseCreator *>::iterator it = m_creators.find(ID);
+        auto it = m_creators.find(ID);
         //If already registered, do nothing
         if (it != m_creators.end()) {
             delete pCreator;
@@ -36,7 +36,7 @@ public:
     }
 
     GameObject *create(const std::string &ID) {
-        std::map<std::string, BaseCreator *>::iterator it = m_creators.find(ID);
+        auto it = m_creators.find(ID);
         if (it == m_creators.end()) {
             std::cout << "Could not find type: " << ID << std::endl;
             return nullptr;
@@ -48,7 +48,12 @@ public:
 
 private:
     GameObjectFactory() = default;
-    ~GameObjectFactory() = default;
+    ~GameObjectFactory() {
+        for (auto it = m_creators.cbegin(); it != m_creators.cend() /* not hoisted */; /* no increment */) {
+            delete it->second;
+            m_creators.erase(it++);
+        }
+    };
 
     std::map<std::string, BaseCreator *> m_creators;
 };

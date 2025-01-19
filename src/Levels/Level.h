@@ -5,6 +5,7 @@
 #include "Layer.h"
 #include "CollisionLayer.h"
 #include "Vector2D.h"
+#include "ObjectLayer.h"
 
 struct TileSet
 {
@@ -21,7 +22,9 @@ struct TileSet
 
 class Level {
 public:
-    ~Level(){};
+    ~Level(){
+        //TODO Clean up layers here
+    };
     /// @brief Get TileSets for drawing
     /// @return TileSets
     std::vector<TileSet>* getTileSets(){
@@ -32,7 +35,7 @@ public:
         return &m_lowerLayers;
     }
 
-    std::vector<Layer*>* getObjectLayers(){
+    std::vector<ObjectLayer*>* getObjectLayers(){
         return &m_objectLayers;
     }
 
@@ -59,7 +62,7 @@ private:
 
     std::vector<TileSet> m_tileSets;
     std::vector<Layer*>  m_lowerLayers;
-    std::vector<Layer*>  m_objectLayers;
+    std::vector<ObjectLayer*>  m_objectLayers;
     std::vector<Layer*>  m_upperLayers;
     CollisionLayer m_collisionLayer;
 

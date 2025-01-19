@@ -9,13 +9,13 @@ int main(int argc, char *argv[]) {
 
     // TODO Move these parameters into the init method, as they will be loaded from m_settings and main.cpp doesn't need to know about them
     // TODO Which screen to launch on for those with multi monitor set ups
-    if (!EngineStateManager::get()->init("Sam's Search", 100, 100, 1366, 768, false)) {
+    if (!EngineStateManager::get()->init("Sam's Search", 640, 480, false)) {
         std::cout << "Error starting EngineStateManager" << std::endl;
         return -1;
     }
 
     while (EngineStateManager::get()->running()) {
-        frameStart = SDL_GetTicks64();
+        frameStart = SDL_GetTicks();
 
         //Move all this to the EngineStateManager?
         EngineStateManager::get()->handleEvents();
@@ -23,12 +23,12 @@ int main(int argc, char *argv[]) {
         EngineStateManager::get()->render();
 
         //Limit FPS so we don't burn out the GPU (kidding...)
-        frameTime = SDL_GetTicks64() - frameStart;
+        frameTime = SDL_GetTicks() - frameStart;
         if (frameTime < DELAY_TIME) {
             SDL_Delay((int) (DELAY_TIME - frameTime));
         }
 
-        deltaTime = (SDL_GetTicks64() - frameStart) / 100.0f;
+        deltaTime = (SDL_GetTicks() - frameStart) / 100.0f;
     }
     EngineStateManager::get()->clean();
     return 0;

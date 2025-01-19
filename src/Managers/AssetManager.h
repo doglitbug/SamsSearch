@@ -3,10 +3,10 @@
 #include <string>
 #include <map>
 
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
-#include "SDL2/SDL_ttf.h"
-#include "SDL2/SDL_mixer.h"
+#include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3_mixer/SDL_mixer.h>
 
 class AssetManager {
 public:
@@ -48,7 +48,7 @@ public:
     /// @param textureID texture
     /// @param size width of border
     /// @param pRenderer renderer to use
-    void addBorderToExistingTexture(const std::string &textureID, int size);
+    void addBorderToExistingTexture(const std::string &textureID, float size);
 
     /// @brief
     /// @param id
@@ -56,9 +56,7 @@ public:
     /// @param y position on screen
     /// @param width
     /// @param height
-    /// @param flip
-    void drawTexture(const std::string &id, int x, int y, int width, int height,
-                     SDL_RendererFlip flip = SDL_FLIP_NONE);
+    void drawTexture(const std::string &id, float x, float y, float width, float height);
 
     /// @brief
     /// @param id
@@ -68,9 +66,7 @@ public:
     /// @param height
     /// @param currentRow
     /// @param currentColumn
-    /// @param flip
-    void drawTextureFrame(const std::string &id, int x, int y, int width, int height, int currentRow, int currentColumn,
-                          SDL_RendererFlip flip = SDL_FLIP_NONE);
+    void drawTextureFrame(const std::string &id, float x, float y, float width, float height, int currentRow, int currentColumn);
 
     /// @brief Draw a tile from a sprite sheet
     /// @param id texture ID

@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 
-#include "../Objects/Menus/UIObject.h"
-#include "../Managers/AssetManager.h"
+#include "Objects/UIObjects/UIObject.h"
+#include "Managers/AssetManager.h"
 
 class BaseState {
 public:
@@ -29,6 +29,7 @@ public:
     virtual void onExit() {
         for (UIObject *go: m_gameObjects) {
             go->clean();
+            delete go;
         }
         m_gameObjects.clear();
 

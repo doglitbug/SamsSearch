@@ -6,7 +6,7 @@
 /// @brief Base object for UI/Game Objects
 class BaseObject {
 public:
-    virtual void load(const LoaderParams *pParams) = 0;
+    virtual void load(const LoaderParams &pParams) = 0;
     virtual void update(float deltaTime) = 0;
     virtual void clean() = 0;
 

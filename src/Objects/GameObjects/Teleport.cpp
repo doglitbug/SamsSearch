@@ -1,6 +1,6 @@
 #include "Teleport.h"
 
-void Teleport::load(const LoaderParams *pParams) {
+void Teleport::load(const LoaderParams &pParams) {
     GameObject::load(pParams);
 }
 

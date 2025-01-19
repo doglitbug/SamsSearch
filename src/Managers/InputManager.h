@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 #include "EngineStateManager.h"
 #include "../Vector2D.h"
@@ -72,7 +72,7 @@ private:
     Vector2D m_mousePosition;
 
     // Keyboard
-    const Uint8 *m_keystates;
+    const bool *m_keyStates;
 
     void onKeyChange();
 

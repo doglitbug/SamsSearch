@@ -1,12 +1,10 @@
 #include <regex>
 #include "LevelParser.h"
-#include "../Managers/AssetManager.h"
-#include "../Managers/EngineStateManager.h"
 #include "TileLayer.h"
 #include "zlib.h"
-#include "../Base64/base64.h"
+#include "base64.h"
 #include "ObjectLayer.h"
-#include "../Objects/GameObjectFactory.h"
+#include "Objects/GameObjects/GameObjectFactory.h"
 
 Level *LevelParser::parseLevel(const char *levelFile)
 {
@@ -203,11 +201,12 @@ void LevelParser::parseCollisionLayer(XMLElement *pTileElement, CollisionLayer *
         }
     }
 
-    pCollisionLayer->setTileIDs(data);
+    pCollisionLayer->setTileData(data);
 }
 
+
 // ToDo BaseObject layers, do these need to be loaded from a save file for each level?
-void LevelParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<Layer *> *pLayers, CollisionLayer *pCollisionLayer)
+void LevelParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<ObjectLayer *> *pLayers, CollisionLayer *pCollisionLayer) const
 {
     // Create an object layer
     auto *pObjectLayer = new ObjectLayer();
@@ -227,7 +226,9 @@ void LevelParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<Layer
             GameObject *pGameObject = GameObjectFactory::get()->create(e->Attribute("type"));
 
             // Get the custom property values
-            // ToDo Place all values into a map as each type of object will need different data?
+            // TODO Place all values into a map as each type of object will need different data?
+            // OR have these values load their own stuff, perhaps just override if need be
+
             for (XMLElement *property = e->FirstChildElement()->FirstChildElement();
                  property != nullptr; property = property->NextSiblingElement())
             {
@@ -249,7 +250,7 @@ void LevelParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<Layer
                 }
             }
 
-            pGameObject->load(new LoaderParams(x, y, width, height, textureID, startColumn, startRow));
+            pGameObject->load(LoaderParams(x, y, width, height, textureID, startColumn, startRow));
 
             pGameObject->setCollisionLayer(pCollisionLayer);
 

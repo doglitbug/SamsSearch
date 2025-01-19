@@ -3,8 +3,8 @@
 #include <vector>
 #include <iostream>
 
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
+#include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
 
 #include "../Objects/BaseObject.h"
 #include "../States/StateMachine.h"
@@ -21,7 +21,7 @@ public:
 
     void operator=(const EngineStateManager &) = delete;
 
-    bool init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen);
+    bool init(const char *title, int width, int height, bool fullscreen);
 
     void render();
 
@@ -45,7 +45,7 @@ public:
      * @param height
      * @todo Account for SDL_Scale factor if using?
      */
-    void getWindowSize(int *width, int *height) { SDL_GetRendererOutputSize(m_pRenderer, width, height); }
+    void getWindowSize(int *width, int *height) { SDL_GetCurrentRenderOutputSize(m_pRenderer, width, height); }
 
     void clean();
 

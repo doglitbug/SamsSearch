@@ -13,7 +13,7 @@ private:
 
     void parseTileLayer(XMLElement *pTileElement, std::vector<Layer*> *pLayers, const std::vector<TileSet>* pTilesets) const;
     void parseCollisionLayer(XMLElement *pTileElement, CollisionLayer *pCollisionLayer) const;
-    static void parseObjectLayer(XMLElement *pObjectElement, std::vector<Layer *> *pLayers, CollisionLayer *pCollisionLayer);
+    void parseObjectLayer(XMLElement *pObjectElement, std::vector<ObjectLayer *> *pLayers, CollisionLayer *pCollisionLayer) const;
 
     int m_tileSize;
     int m_width;

@@ -7,7 +7,7 @@ class Player : public GameObject {
 public:
     Player();
 
-    void load(const LoaderParams *pParams) override;
+    void load(const LoaderParams &pParams) override;
     void update(float deltaTime) override;
 
     /// @brief

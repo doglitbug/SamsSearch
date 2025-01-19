@@ -9,14 +9,15 @@
 #include "../States/PlayState.h"
 #include "../States/SettingsState.h"
 
-#include "Objects/GameObjects/Player.h"
-#include "Objects/GameObjects/Teleport.h"
-#include "Objects/GameObjects/NPC.h"
+#include "GameObjects/Player.h"
+#include "GameObjects/Teleport.h"
+#include "GameObjects/NPC.h"
+#include "GameObjects/Dog.h"
 
 #include <algorithm>
 
 
-bool EngineStateManager::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
+bool EngineStateManager::init(const char *title, int width, int height, bool fullscreen)
 {
     //Let's load the settings here as we don't know when we will need any of them
     SettingsManager::get()->loadSettings();
@@ -28,14 +29,14 @@ bool EngineStateManager::init(const char *title, int xpos, int ypos, int width, 
 
     // Attempt to initialize SDL
     // TODO Only init subsystems that are needed, for example we couldn't use this on RISC OS on Raspberry Pi as there is no CD-ROM drive!
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    if (!SDL_Init(SDL_INIT_VIDEO))
     {
         std::cout << "SDL Init fail\n";
         return false;
     }
 
     // Init the window
-    m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+    m_pWindow = SDL_CreateWindow(title, width, height, flags);
     if (m_pWindow == nullptr)
     {
         std::cout << "SDL Window init fail\n";
@@ -43,7 +44,7 @@ bool EngineStateManager::init(const char *title, int xpos, int ypos, int width, 
     }
 
     // Create the renderer
-    m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, 0);
+    m_pRenderer = SDL_CreateRenderer(m_pWindow, NULL);
     if (m_pRenderer == nullptr) // renderer init success
     {
         std::cout << "SDL Renderer init fail\n";
@@ -56,7 +57,7 @@ bool EngineStateManager::init(const char *title, int xpos, int ypos, int width, 
     // Set a drawing scale
     // TODO Option in video m_settings?
     // IF you scale here, everything else needs to account for it, for example MousePosition...
-    if (SDL_RenderSetScale(m_pRenderer, m_scale, m_scale) != 0)
+    if (!SDL_SetRenderScale(m_pRenderer, m_scale, m_scale))
     {
         std::cout << "SDL Renderer set scale fail\n";
         return false;
@@ -68,8 +69,8 @@ bool EngineStateManager::init(const char *title, int xpos, int ypos, int width, 
 
     //TODO Move loading to a startup State? (video etc)
     //Preload assets
-    AssetManager::get()->loadFont("PressStart2P-vaV7.ttf", "Text", 16);
-    AssetManager::get()->loadFont("PressStart2P-vaV7.ttf", "Header", 64);
+    AssetManager::get()->loadFont("PressStart2P-vaV7.ttf", "Text", 8);
+    AssetManager::get()->loadFont("PressStart2P-vaV7.ttf", "Header", 32);
 
     //Load the background textures for the title image
     AssetManager::get()->loadTexture("assets/images/menus/mainlogo.png", "title");
@@ -101,6 +102,7 @@ bool EngineStateManager::init(const char *title, int xpos, int ypos, int width, 
     GameObjectFactory::get()->registerType("Player", new PlayerCreator());
     GameObjectFactory::get()->registerType("NPC", new NPCCreator());
     GameObjectFactory::get()->registerType("Teleport", new TeleportCreator());
+    GameObjectFactory::get()->registerType("Dog", new DogCreator());
 
     m_pGameStateMachine->registerState("PAUSE", new PauseState());
     m_pGameStateMachine->registerState("SETTINGS", new SettingsState());

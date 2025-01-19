@@ -1,15 +1,15 @@
 #include "GameObject.h"
 
-void GameObject::load(const LoaderParams *pParams) {
-    m_position = Vector2D(pParams->getX(), pParams->getY());
-    m_width = pParams->getWidth();
-    m_height = pParams->getHeight();
+void GameObject::load(const LoaderParams &pParams) {
+    m_position = Vector2D(pParams.getX(), pParams.getY());
+    m_width = pParams.getWidth();
+    m_height = pParams.getHeight();
 
-    m_textureID = pParams->getTextureID();
+    m_textureID = pParams.getTextureID();
     m_direction = DIRECTION::SOUTH;
     m_currentFrame = 0;
-    m_startColumn = pParams->getStartColumn();
-    m_startRow = pParams->getStartRow();
+    m_startColumn = pParams.getStartColumn();
+    m_startRow = pParams.getStartRow();
     // TODO Use width and height to make a default?
 
     m_hitBox = nullptr;
@@ -55,6 +55,7 @@ void GameObject::onInteraction(GameObject *other, INTERACT_TYPE interactionType)
 }
 
 void GameObject::clean() {
+    if (m_hitBox) delete m_hitBox;
 }
 
 GameObject::~GameObject() {
@@ -62,16 +63,14 @@ GameObject::~GameObject() {
 }
 
 void GameObject::drawHitBox(SDL_Rect *pViewport) {
-        //TODO VIEWPORT OFFSET
-        // Draw hit box
-        SDL_Rect hitBox;
-        hitBox.x = m_position.getX() + m_hitBox->x;
-        hitBox.y = m_position.getY() + m_hitBox->y;
-        hitBox.w = m_hitBox->w;
-        hitBox.h = m_hitBox->h;
+    SDL_FRect hitBoxLocation;
+    hitBoxLocation.x = m_position.getX() + m_hitBox->x - pViewport->x;
+    hitBoxLocation.y = m_position.getY() + m_hitBox->y - pViewport->y;
+    hitBoxLocation.w = m_hitBox->w;
+    hitBoxLocation.h = m_hitBox->h;
 
-        SDL_SetRenderDrawColor(EngineStateManager::get()->getRenderer(), 255, 0, 0, 0);
-        SDL_RenderDrawRect(EngineStateManager::get()->getRenderer(), &hitBox);
+    SDL_SetRenderDrawColor(EngineStateManager::get()->getRenderer(), 255, 0, 0, 0);
+    SDL_RenderRect(EngineStateManager::get()->getRenderer(), &hitBoxLocation);
 }
 
 void GameObject::checkMapCollision(float deltaTime) {

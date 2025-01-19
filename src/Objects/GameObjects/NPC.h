@@ -7,9 +7,10 @@ class NPC : public GameObject {
 public:
     NPC();
 
-    void load(const LoaderParams *pParams) override;
+    void load(const LoaderParams &pParams) override;
     void update(float deltaTime) override;
 private:
+    //Various default behaviours to be placed here
     Vector2D chooseRandomDirection();
     float timeElapsed;
 };

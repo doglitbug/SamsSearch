@@ -9,7 +9,7 @@ public:
 
     ~Button() {};
 
-    void load(const LoaderParams *pParams) override;
+    void load(const LoaderParams &pParams) override;
 
     void update(float deltaTime) override;
 
