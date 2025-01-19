@@ -9,7 +9,7 @@ public:
     UIObject()= default;
     ~UIObject() = default;
 
-    void load(const LoaderParams *pParams) override;
+    void load(const LoaderParams &pParams) override;
     void draw();
     void update(float deltaTime) override {};
     void clean() override {};

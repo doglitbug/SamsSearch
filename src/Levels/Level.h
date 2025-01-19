@@ -22,7 +22,9 @@ struct TileSet
 
 class Level {
 public:
-    ~Level(){};
+    ~Level(){
+        //TODO Clean up layers here
+    };
     /// @brief Get TileSets for drawing
     /// @return TileSets
     std::vector<TileSet>* getTileSets(){

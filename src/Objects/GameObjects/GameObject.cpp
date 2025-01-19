@@ -1,15 +1,15 @@
 #include "GameObject.h"
 
-void GameObject::load(const LoaderParams *pParams) {
-    m_position = Vector2D(pParams->getX(), pParams->getY());
-    m_width = pParams->getWidth();
-    m_height = pParams->getHeight();
+void GameObject::load(const LoaderParams &pParams) {
+    m_position = Vector2D(pParams.getX(), pParams.getY());
+    m_width = pParams.getWidth();
+    m_height = pParams.getHeight();
 
-    m_textureID = pParams->getTextureID();
+    m_textureID = pParams.getTextureID();
     m_direction = DIRECTION::SOUTH;
     m_currentFrame = 0;
-    m_startColumn = pParams->getStartColumn();
-    m_startRow = pParams->getStartRow();
+    m_startColumn = pParams.getStartColumn();
+    m_startRow = pParams.getStartRow();
     // TODO Use width and height to make a default?
 
     m_hitBox = nullptr;

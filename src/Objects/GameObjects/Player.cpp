@@ -3,7 +3,7 @@
 
 Player::Player() {}
 
-void Player::load(const LoaderParams *pParams)
+void Player::load(const LoaderParams &pParams)
 {
     GameObject::load(pParams);
     //TODO multiple by scale!

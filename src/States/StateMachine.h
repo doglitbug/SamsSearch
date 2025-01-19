@@ -32,4 +32,12 @@ private:
     changeType m_requestedChangeType = NOCHANGE;
 
     void changeState();
+
+private:
+    ~StateMachine() {
+        for (auto it = m_gameStates.cbegin(); it != m_gameStates.cend() /* not hoisted */; /* no increment */) {
+            delete it->second;
+            m_gameStates.erase(it++);
+        }
+    };
 };

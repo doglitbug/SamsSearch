@@ -1,10 +1,8 @@
 #include <regex>
 #include "LevelParser.h"
-#include "../Managers/AssetManager.h"
-#include "../Managers/EngineStateManager.h"
 #include "TileLayer.h"
 #include "zlib.h"
-#include "../Base64/base64.h"
+#include "base64.h"
 #include "ObjectLayer.h"
 #include "Objects/GameObjects/GameObjectFactory.h"
 
@@ -252,7 +250,7 @@ void LevelParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<Objec
                 }
             }
 
-            pGameObject->load(new LoaderParams(x, y, width, height, textureID, startColumn, startRow));
+            pGameObject->load(LoaderParams(x, y, width, height, textureID, startColumn, startRow));
 
             pGameObject->setCollisionLayer(pCollisionLayer);
 

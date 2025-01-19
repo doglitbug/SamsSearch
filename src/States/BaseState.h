@@ -29,6 +29,7 @@ public:
     virtual void onExit() {
         for (UIObject *go: m_gameObjects) {
             go->clean();
+            delete go;
         }
         m_gameObjects.clear();
 

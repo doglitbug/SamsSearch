@@ -19,8 +19,7 @@ void PlayState::update(float deltaTime) {
         layer->update(deltaTime);
         for(auto *gameObject: *layer->getGameObjects()){
             //Check intersection with player
-            SDL_FRect *otherHitBox = new SDL_FRect();
-            otherHitBox = gameObject->getWorldHitBox();
+            SDL_FRect *otherHitBox = gameObject->getWorldHitBox();
             if (SDL_HasRectIntersectionFloat(playerHitBox, otherHitBox)) {
                 gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
             }
@@ -96,7 +95,7 @@ void PlayState::newGame() {
 
     //Set player position/details from map?
     //TODO Get these defaults from choose character screen/co-ords from map?
-    mPlayer->load(new LoaderParams(100, 100, 26, 36, "character2", 0, 0));
+    mPlayer->load(LoaderParams(100, 100, 26, 36, "character2", 0, 0));
     mPlayer->setCollisionLayer(pCurrentLevel->getCollisionLayer());
 }
 

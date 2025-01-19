@@ -2,7 +2,7 @@
 
 Dog::Dog() {}
 
-void Dog::load(const LoaderParams *pParams) {
+void Dog::load(const LoaderParams &pParams) {
     GameObject::load(pParams);
     //TODO multiple by scale!
     m_hitBox = new SDL_FRect{6, 22, 14, 14};

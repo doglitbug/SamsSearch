@@ -2,7 +2,7 @@
 
 NPC::NPC() {}
 
-void NPC::load(const LoaderParams *pParams) {
+void NPC::load(const LoaderParams &pParams) {
     GameObject::load(pParams);
     //m_hitBox = new SDL_Rect{12, 44, 28, 28};
     timeElapsed = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (8)));

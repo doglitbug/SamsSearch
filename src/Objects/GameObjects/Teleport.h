@@ -8,7 +8,7 @@ public:
     Teleport() = default;
     ~Teleport() = default;
 
-    void load(const LoaderParams *pParams) override;
+    void load(const LoaderParams &pParams) override;
     void update(float deltaTime) override;
 
 private:

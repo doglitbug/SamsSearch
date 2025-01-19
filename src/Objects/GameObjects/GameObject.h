@@ -19,7 +19,7 @@ public:
     GameObject() = default;
     ~GameObject();
 
-    void load(const LoaderParams *pParams) override;
+    void load(const LoaderParams &pParams) override;
     void drawAt(SDL_Rect *pViewPort);
 
     /// @brief

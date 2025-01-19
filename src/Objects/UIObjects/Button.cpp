@@ -1,7 +1,7 @@
 #include "Button.h"
 #include "../../Managers/InputManager.h"
 
-void Button::load(const LoaderParams *pParams) {
+void Button::load(const LoaderParams &pParams) {
     UIObject::load(pParams);
     m_currentFrame = INACTIVE;
     m_bReleased = false;
