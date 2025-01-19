@@ -2,11 +2,11 @@
 
 #include "BaseState.h"
 #include "../Managers/EngineStateManager.h"
-#include "../Objects/Menus/Title.h"
-#include "../Objects/Menus/Button.h"
-#include "../Objects/Menus/Label.h"
-#include "../Objects/Menus/LabelBoolean.h"
-#include "../Objects/Menus/LabelInteger.h"
+#include "Objects/UIObjects/Title.h"
+#include "Objects/UIObjects/Button.h"
+#include "Objects/UIObjects/Label.h"
+#include "Objects/UIObjects/LabelBoolean.h"
+#include "Objects/UIObjects/LabelInteger.h"
 
 /// @brief Base state for all menu states
 class MenuState : public BaseState

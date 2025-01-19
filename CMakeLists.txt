@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(src)
 include_directories(src/ThirdParty/Base64)
 include_directories(src/Objects)
-include_directories(src/Objects/Menus)
+include_directories(src/Objects/UIObjects)
 include_directories(src/Levels)
 include_directories(src/Managers)
 include_directories(src/States)
@@ -17,16 +17,16 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(SamsSearch
         src/ThirdParty/Base64/base64.cpp
         src/ThirdParty/Base64/base64.h
-        src/Objects/Menus/Button.cpp
-        src/Objects/Menus/Button.h
-        src/Objects/Menus/Label.h
-        src/Objects/Menus/LabelBoolean.h
-        src/Objects/Menus/LabelInteger.h
-        src/Objects/Menus/Title.h
+        src/Objects/UIObjects/Button.cpp
+        src/Objects/UIObjects/Button.h
+        src/Objects/UIObjects/Label.h
+        src/Objects/UIObjects/LabelBoolean.h
+        src/Objects/UIObjects/LabelInteger.h
+        src/Objects/UIObjects/Title.h
         src/Objects/GameObjects/Teleport.cpp
         src/Objects/GameObjects/Teleport.h
         src/Objects/BaseObject.h
-        src/Objects/GameObjectFactory.h
+        src/Objects/GameObjects/GameObjectFactory.h
         src/Objects/LoaderParams.h
         src/Objects/GameObjects/Player.cpp
         src/Objects/GameObjects/Player.h
@@ -67,8 +67,8 @@ add_executable(SamsSearch
         src/ThirdParty/TinyXML/tinyxml2.h
         src/main.cpp
         src/Vector2D.h
-        src/Objects/Menus/UIObject.h
-        src/Objects/Menus/UIObject.cpp
+        src/Objects/UIObjects/UIObject.h
+        src/Objects/UIObjects/UIObject.cpp
         src/Objects/GameObjects/NPC.h
         src/Objects/GameObjects/NPC.cpp
         src/Objects/GameObjects/Dog.cpp

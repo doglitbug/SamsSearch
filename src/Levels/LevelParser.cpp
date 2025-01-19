@@ -6,7 +6,7 @@
 #include "zlib.h"
 #include "../Base64/base64.h"
 #include "ObjectLayer.h"
-#include "../Objects/GameObjectFactory.h"
+#include "Objects/GameObjects/GameObjectFactory.h"
 
 Level *LevelParser::parseLevel(const char *levelFile)
 {

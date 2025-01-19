@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 
-#include "../Objects/Menus/UIObject.h"
-#include "../Managers/AssetManager.h"
+#include "Objects/UIObjects/UIObject.h"
+#include "Managers/AssetManager.h"
 
 class BaseState {
 public:
