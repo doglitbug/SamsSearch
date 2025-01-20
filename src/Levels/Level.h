@@ -23,8 +23,22 @@ struct TileSet
 class Level {
 public:
     ~Level(){
-        //TODO Clean up layers here
-    };
+
+        // Clean up layers here
+
+        for (auto it = m_upperLayers.begin(); it != m_upperLayers.end();) {
+                it = m_upperLayers.erase(it);  // Returns iterator to the next element
+        }
+
+        for (auto it = m_objectLayers.begin(); it != m_objectLayers.end();) {
+            it = m_objectLayers.erase(it);  // Returns iterator to the next element
+        }
+
+        for (auto it = m_lowerLayers.begin(); it != m_lowerLayers.end();) {
+            it = m_lowerLayers.erase(it);  // Returns iterator to the next element
+        }
+    }
+
     /// @brief Get TileSets for drawing
     /// @return TileSets
     std::vector<TileSet>* getTileSets(){

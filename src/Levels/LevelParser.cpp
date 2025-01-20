@@ -9,6 +9,7 @@
 Level *LevelParser::parseLevel(const char *levelFile)
 {
     // Create an XML document and load the map XML
+    // Not placing on stack as it may be too big?
     XMLDocument levelDocument = new XMLDocument(false, COLLAPSE_WHITESPACE);
     levelDocument.LoadFile(levelFile);
 
