@@ -34,7 +34,7 @@ void MainMenuState::update(float deltaTime) {
     m_gameObjects[index++]->setPosition(leftSide - 100, middle + 75 * line++);
     m_gameObjects[index++]->setPosition(leftSide - 100, middle + 75 * line++);
 
-    MenuState::update(deltaTime);
+    BaseMenuState::update(deltaTime);
 }
 
 void MainMenuState::onExit() {

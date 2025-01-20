@@ -55,8 +55,8 @@ add_executable(SamsSearch
         src/States/StateMachine.h
         src/States/MainMenuState.cpp
         src/States/MainMenuState.h
-        src/States/MenuState.cpp
-        src/States/MenuState.h
+        src/States/BaseMenuState.cpp
+        src/States/BaseMenuState.h
         src/States/PauseState.cpp
         src/States/PauseState.h
         src/States/PlayState.cpp

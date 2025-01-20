@@ -9,7 +9,7 @@
 #include "Objects/UIObjects/LabelInteger.h"
 
 /// @brief Base state for all menu states
-class MenuState : public BaseState
+class BaseMenuState : public BaseState
 {
 public:
     /// @brief Generate Title

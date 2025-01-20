@@ -1,10 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include "MenuState.h"
+#include "BaseMenuState.h"
 #include "../Managers/SettingsManager.h"
 
-class SettingsState : public MenuState {
+class SettingsState : public BaseMenuState {
 public:
     void onEnter() override;
     void update(float deltaTime) override;

@@ -24,7 +24,7 @@ void PauseState::update(float deltaTime){
     m_gameObjects[index++]->setPosition(leftSide - 100, middle + 75 * index);
     m_gameObjects[index++]->setPosition(leftSide - 100, middle + 75 * index);
 
-    MenuState::update(deltaTime);
+    BaseMenuState::update(deltaTime);
 }
 
 void PauseState::onExit() {

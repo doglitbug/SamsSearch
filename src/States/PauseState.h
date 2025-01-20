@@ -1,9 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include "MenuState.h"
+#include "BaseMenuState.h"
 
-class PauseState : public MenuState {
+class PauseState : public BaseMenuState {
 public:
     void onEnter() override;
     void update(float deltaTime) override;
