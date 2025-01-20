@@ -10,6 +10,7 @@ public:
 
     void load(const LoaderParams &pParams) override;
     void update(float deltaTime) override;
+    void onInteraction(GameObject* other, INTERACT_TYPE interactType) override;
 
 private:
     std::string destMap;

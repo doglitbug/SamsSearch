@@ -4,13 +4,14 @@
 #include "GameObjectFactory.h"
 #include "NPC.h"
 
-class Dog : public GameObject {
+class Dog : public NPC {
 public:
     Dog();
     void load(const LoaderParams &pParams) override;
-    /// @brief Called when another GameObject interacts with this one
-    /// @param other GameObject that has interacted
+
     void onInteraction(GameObject* other, INTERACT_TYPE interactType) override;
+
+    void update(float deltaTime) override;
 };
 
 class DogCreator : public BaseCreator {

@@ -28,10 +28,6 @@ void PlayState::update(float deltaTime) {
     }
     delete playerHitBox;
 
-
-    //TODO Check for collisions etc here?
-    //Assume only one object layer at this time?
-
     handleInput();
 }
 
@@ -95,7 +91,7 @@ void PlayState::newGame() {
 
     //Set player position/details from map?
     //TODO Get these defaults from choose character screen/co-ords from map?
-    mPlayer->load(LoaderParams(100, 100, 26, 36, "character2", 0, 0));
+    mPlayer->load(LoaderParams(100, 100, 52, 72, "character2", 0, 0));
     mPlayer->setCollisionLayer(pCurrentLevel->getCollisionLayer());
 }
 

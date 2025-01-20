@@ -17,12 +17,15 @@ void PauseState::update(float deltaTime){
 
     //Reposition all game objects
     int index = 0;
+
     //Header
-    m_gameObjects[index++]->setPosition(leftSide - 350, middle - 100);
+    m_gameObjects[index++]->setPosition(leftSide - HEADER_WIDTH / 2, middle - 100);
+
+    leftSide -= LABEL_WIDTH / 2;
     //Buttons
-    m_gameObjects[index++]->setPosition(leftSide - 100, middle + 75 * index);
-    m_gameObjects[index++]->setPosition(leftSide - 100, middle + 75 * index);
-    m_gameObjects[index++]->setPosition(leftSide - 100, middle + 75 * index);
+    m_gameObjects[index++]->setPosition(leftSide, middle + (ROW_HEIGHT + ROW_GAP) * index);
+    m_gameObjects[index++]->setPosition(leftSide, middle + (ROW_HEIGHT + ROW_GAP) * index);
+    m_gameObjects[index++]->setPosition(leftSide, middle + (ROW_HEIGHT + ROW_GAP) * index);
 
     BaseMenuState::update(deltaTime);
 }

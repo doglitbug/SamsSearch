@@ -198,6 +198,7 @@ void LevelParser::parseCollisionLayer(XMLElement *pTileElement, CollisionLayer *
         {
             // filled gids are not 1, due to ordering of tile sheets, walkable will be 1 or 0 at this stage (not 0.75 for mud etc)
             // TODO Figure how to change collision layer to have one way etc
+            // GID 1 = walkable, all else not walkable
             data[rows][cols] = gids[rows * m_width + cols] == 1 ? 0 : 1;
         }
     }
