@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "BaseState.h"
-#include "Level.h"
+#include "Map.h"
 #include "Objects/GameObjects/Player.h"
 
 class PlayState : public BaseState
@@ -14,14 +14,16 @@ public:
     void onExit() override;
 
 private:
-    void newGame();
+    void loadMap();
     void loadGame();
     void drawUI();
     void handleInput();
 
-    Level *pCurrentLevel;
+    Map *pCurrentLevel;
     /// @brief Get the viewport to draw within (basically camera position)
     SDL_Rect getViewport();
 
     Player *mPlayer;
+
+    //TODO Move
 };

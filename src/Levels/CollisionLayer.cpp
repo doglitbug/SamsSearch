@@ -1,7 +1,7 @@
 #include "CollisionLayer.h"
 
 
-void CollisionLayer::setTileData(const std::vector<std::vector<int>> &data) {
+void CollisionLayer::setCollisionData(const std::vector<std::vector<int>> &data) {
     m_tileData = data;
 }
 

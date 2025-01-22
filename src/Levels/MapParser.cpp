@@ -1,19 +1,19 @@
 #include <regex>
-#include "LevelParser.h"
+#include "MapParser.h"
 #include "TileLayer.h"
 #include "zlib.h"
 #include "base64.h"
 #include "ObjectLayer.h"
 #include "Objects/GameObjects/GameObjectFactory.h"
 
-Level *LevelParser::parseLevel(const char *levelFile)
+Map *MapParser::parseLevel(const char *levelFile)
 {
     // Create an XML document and load the map XML
     // Not placing on stack as it may be too big?
     XMLDocument levelDocument = new XMLDocument(false, COLLAPSE_WHITESPACE);
     levelDocument.LoadFile(levelFile);
 
-    auto *pLevel = new Level();
+    auto *pLevel = new Map();
 
     // Get the root node
     XMLElement *pRoot = levelDocument.RootElement();
@@ -59,7 +59,7 @@ Level *LevelParser::parseLevel(const char *levelFile)
     return pLevel;
 }
 
-void LevelParser::parseTilesets(XMLElement *pTilesetRoot, std::vector<TileSet> *pTilesets)
+void MapParser::parseTilesets(XMLElement *pTilesetRoot, std::vector<TileSet> *pTilesets)
 {
     // First add the tileset to the texture manager (from image element)
     // Adjust source to point to correct location (swap '..' for 'assets'
@@ -82,7 +82,7 @@ void LevelParser::parseTilesets(XMLElement *pTilesetRoot, std::vector<TileSet> *
     pTilesets->push_back(tileset);
 }
 
-void LevelParser::parseAdditionalMapProperties(XMLElement *pPropertiesRoot, Level *pLevel)
+void MapParser::parseAdditionalMapProperties(XMLElement *pPropertiesRoot, Map *pLevel)
 {
     for (XMLElement *e = pPropertiesRoot->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
@@ -103,8 +103,8 @@ void LevelParser::parseAdditionalMapProperties(XMLElement *pPropertiesRoot, Leve
     }
 }
 
-void LevelParser::parseTileLayer(XMLElement *pTileElement, std::vector<Layer *> *pLayers,
-                                 const std::vector<TileSet> *pTilesets) const
+void MapParser::parseTileLayer(XMLElement *pTileElement, std::vector<BaseLayer *> *pLayers,
+                               const std::vector<TileSet> *pTilesets) const
 {
     auto *pTileLayer = new TileLayer(m_tileSize, *pTilesets);
 
@@ -155,7 +155,7 @@ void LevelParser::parseTileLayer(XMLElement *pTileElement, std::vector<Layer *> 
     pLayers->push_back(pTileLayer);
 }
 
-void LevelParser::parseCollisionLayer(XMLElement *pTileElement, CollisionLayer *pCollisionLayer) const
+void MapParser::parseCollisionLayer(XMLElement *pTileElement, CollisionLayer *pCollisionLayer) const
 {
     // Tile Data
     std::vector<std::vector<int>> data;
@@ -203,12 +203,12 @@ void LevelParser::parseCollisionLayer(XMLElement *pTileElement, CollisionLayer *
         }
     }
 
-    pCollisionLayer->setTileData(data);
+    pCollisionLayer->setCollisionData(data);
 }
 
 
 // ToDo BaseObject layers, do these need to be loaded from a save file for each level?
-void LevelParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<ObjectLayer *> *pLayers, CollisionLayer *pCollisionLayer) const
+void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<ObjectLayer *> *pLayers, CollisionLayer *pCollisionLayer) const
 {
     // Create an object layer
     auto *pObjectLayer = new ObjectLayer();

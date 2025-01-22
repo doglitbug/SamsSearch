@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Level.h"
-#include "Layer.h"
+#include "Map.h"
+#include "BaseLayer.h"
 
-class TileLayer : public Layer {
+class TileLayer : public BaseLayer {
 public:
     TileLayer(int tileSize, const std::vector<TileSet> &tileSets);
 

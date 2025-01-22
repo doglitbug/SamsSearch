@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <vector>
-#include "Layer.h"
+#include "BaseLayer.h"
 #include "CollisionLayer.h"
 #include "Vector2D.h"
 #include "ObjectLayer.h"
@@ -20,9 +20,9 @@ struct TileSet
     std::string name;
 };
 
-class Level {
+class Map {
 public:
-    ~Level(){
+    ~Map(){
 
         // Clean up layers here
 
@@ -45,7 +45,7 @@ public:
         return &m_tileSets;
     }
 
-    std::vector<Layer*>* getLowerLayers(){
+    std::vector<BaseLayer*>* getLowerLayers(){
         return &m_lowerLayers;
     }
 
@@ -53,7 +53,7 @@ public:
         return &m_objectLayers;
     }
 
-    std::vector<Layer*>* getUpperLayers(){
+    std::vector<BaseLayer*>* getUpperLayers(){
         return &m_upperLayers;
     }
 
@@ -71,13 +71,13 @@ public:
     std::string getName(){ return name;}
 
 private:
-    friend class LevelParser;
-    Level(){};
+    friend class MapParser;
+    Map(){};
 
     std::vector<TileSet> m_tileSets;
-    std::vector<Layer*>  m_lowerLayers;
+    std::vector<BaseLayer*>  m_lowerLayers;
     std::vector<ObjectLayer*>  m_objectLayers;
-    std::vector<Layer*>  m_upperLayers;
+    std::vector<BaseLayer*>  m_upperLayers;
     CollisionLayer m_collisionLayer;
 
     int width;

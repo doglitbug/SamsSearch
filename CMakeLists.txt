@@ -34,10 +34,10 @@ add_executable(SamsSearch
         src/Objects/GameObjects/GameObject.h
         src/Levels/CollisionLayer.cpp
         src/Levels/CollisionLayer.h
-        src/Levels/Layer.h
-        src/Levels/Level.h
-        src/Levels/LevelParser.cpp
-        src/Levels/LevelParser.h
+        src/Levels/BaseLayer.h
+        src/Levels/Map.h
+        src/Levels/MapParser.cpp
+        src/Levels/MapParser.h
         src/Levels/ObjectLayer.cpp
         src/Levels/ObjectLayer.h
         src/Levels/TileLayer.cpp

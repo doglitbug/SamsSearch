@@ -1,12 +1,12 @@
 #include "PlayState.h"
 
 #include "../Managers/InputManager.h"
-#include "../Levels/LevelParser.h"
+#include "../Levels/MapParser.h"
 #include "ObjectLayer.h"
 
 void PlayState::onEnter() {
     //TODO Determine if we are starting a new game or loading one?
-    newGame();
+    loadMap();
 }
 
 void PlayState::update(float deltaTime) {
@@ -43,10 +43,10 @@ void PlayState::render() {
     //5. Ghost outline of player if required?
     //6. Ignore collision layer
 
-    for (Layer *layer: *pCurrentLevel->getLowerLayers()) { layer->render(&pViewport); }
-    for (Layer *layer: *pCurrentLevel->getObjectLayers()) { layer->render(&pViewport); }
+    for (BaseLayer *layer: *pCurrentLevel->getLowerLayers()) { layer->render(&pViewport); }
+    for (BaseLayer *layer: *pCurrentLevel->getObjectLayers()) { layer->render(&pViewport); }
     mPlayer->drawAt(&pViewport);
-    for (Layer *layer: *pCurrentLevel->getUpperLayers()) { layer->render(&pViewport); }
+    for (BaseLayer *layer: *pCurrentLevel->getUpperLayers()) { layer->render(&pViewport); }
 
     drawUI();
     mPlayer->drawHitBox(&pViewport);
@@ -78,13 +78,13 @@ SDL_Rect PlayState::getViewport() {
     return SDL_Rect{x, y, width, height};
 }
 
-void PlayState::newGame() {
+void PlayState::loadMap() {
     //Create new player
 
     mPlayer = new Player();
 
     //Load all levels?
-    LevelParser levelParser{};
+    MapParser levelParser{};
 
     //TODO Make this a vector
     pCurrentLevel = levelParser.parseLevel("assets/maps/Temp.tmx");

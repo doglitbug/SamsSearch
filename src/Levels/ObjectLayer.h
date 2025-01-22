@@ -2,10 +2,10 @@
 
 #include <vector>
 
-#include "Layer.h"
+#include "BaseLayer.h"
 #include "Objects/GameObjects/GameObject.h"
 
-class ObjectLayer : public Layer {
+class ObjectLayer : public BaseLayer {
 public:
     void update(float deltaTime) override;
     void render(SDL_Rect *pViewport) override;
