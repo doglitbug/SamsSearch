@@ -23,13 +23,13 @@ add_executable(SamsSearch
         src/Objects/UIObjects/LabelBoolean.h
         src/Objects/UIObjects/LabelInteger.h
         src/Objects/UIObjects/Title.h
-        src/Objects/GameObjects/Teleport.cpp
-        src/Objects/GameObjects/Teleport.h
+        src/Objects/GameObjects/GameObjectItem/Teleport.cpp
+        src/Objects/GameObjects/GameObjectItem/Teleport.h
         src/Objects/BaseObject.h
         src/Objects/GameObjects/GameObjectFactory.h
         src/Objects/LoaderParams.h
-        src/Objects/GameObjects/Player.cpp
-        src/Objects/GameObjects/Player.h
+        src/Objects/GameObjects/GameObjectCreature/Player.cpp
+        src/Objects/GameObjects/GameObjectCreature/Player.h
         src/Objects/GameObjects/GameObject.cpp
         src/Objects/GameObjects/GameObject.h
         src/Maps/CollisionLayer.cpp
@@ -69,12 +69,16 @@ add_executable(SamsSearch
         src/Vector2D.h
         src/Objects/UIObjects/UIObject.h
         src/Objects/UIObjects/UIObject.cpp
-        src/Objects/GameObjects/NPC.h
-        src/Objects/GameObjects/NPC.cpp
-        src/Objects/GameObjects/Dog.cpp
-        src/Objects/GameObjects/Dog.h
-        src/Maps/MapTest.cpp
-        src/Maps/MapTest.h)
+        src/Objects/GameObjects/GameObjectCreature/NPC.h
+        src/Objects/GameObjects/GameObjectCreature/NPC.cpp
+        src/Objects/GameObjects/GameObjectCreature/Dog.cpp
+        src/Objects/GameObjects/GameObjectCreature/Dog.h
+        src/Maps/Maps/MapTest.cpp
+        src/Maps/Maps/MapTest.h
+        src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.cpp
+        src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.h
+        src/Objects/GameObjects/GameObjectItem/GameObjectItem.cpp
+        src/Objects/GameObjects/GameObjectItem/GameObjectItem.h)
 
 find_package(ZLIB)
 

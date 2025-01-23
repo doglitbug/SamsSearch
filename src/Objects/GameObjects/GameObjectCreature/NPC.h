@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Objects/GameObjects/GameObject.h"
-#include "GameObjectFactory.h"
+#include "Objects/GameObjects/GameObjectCreature/GameObjectCreature.h"
+#include "Objects/GameObjects/GameObjectFactory.h"
 
-class NPC : public GameObject {
+class NPC : public GameObjectCreature {
 public:
     NPC();
 

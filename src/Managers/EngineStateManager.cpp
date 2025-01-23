@@ -9,10 +9,10 @@
 #include "../States/PlayState.h"
 #include "../States/SettingsState.h"
 
-#include "GameObjects/Player.h"
-#include "GameObjects/Teleport.h"
-#include "GameObjects/NPC.h"
-#include "GameObjects/Dog.h"
+#include "Objects/GameObjects/GameObjectCreature/Player.h"
+#include "Objects/GameObjects/GameObjectItem/Teleport.h"
+#include "Objects/GameObjects/GameObjectCreature/NPC.h"
+#include "Objects/GameObjects/GameObjectCreature/Dog.h"
 
 #include <algorithm>
 

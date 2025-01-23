@@ -3,7 +3,7 @@
 Dog::Dog() {}
 
 void Dog::load(const LoaderParams &pParams) {
-    GameObject::load(pParams);
+    NPC::load(pParams);
     //TODO multiple by scale!
     m_hitBox = new SDL_FRect{12, 44, 28, 28};
 }

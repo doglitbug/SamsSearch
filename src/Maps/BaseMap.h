@@ -64,10 +64,10 @@ public:
         return &m_collisionLayer;
     }
 
-    /// @brief BaseMap width in tiles
-    [[nodiscard]] int getWidth() const { return width; }
-    /// @brief BaseMap height in tiles
-    [[nodiscard]] int getHeight() const { return height; };
+    /// @brief Map width in tiles
+    int getWidth() const { return width; }
+    /// @brief Map height in tiles
+    int getHeight() const { return height; };
 
     std::string getName(){ return name;}
 

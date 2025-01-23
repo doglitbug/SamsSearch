@@ -4,21 +4,26 @@
 #include "../Maps/MapParser.h"
 #include "GameObjectLayer.h"
 
-
 void PlayState::onEnter() {
     //TODO Determine if we are starting a new game or loading one?
     loadMap();
 }
 
 void PlayState::update(float deltaTime) {
-    BaseState::update(deltaTime);
 
     //TODO Only update object layer, at least until we have animations eg for water?
     mPlayer->update(deltaTime);
+    mPlayer->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
+
     SDL_FRect *playerHitBox = mPlayer->getWorldHitBox();
     for (GameObjectLayer *layer: *pCurrentMap->getObjectLayers()) {
         layer->update(deltaTime);
         for(auto *gameObject: *layer->getGameObjects()){
+            //Check map collision here
+            if(auto goc = dynamic_cast<GameObjectCreature*>(gameObject)){
+                goc->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
+            }
+
             //Check intersection with player
             SDL_FRect *otherHitBox = gameObject->getWorldHitBox();
             if (SDL_HasRectIntersectionFloat(playerHitBox, otherHitBox)) {
@@ -35,7 +40,7 @@ void PlayState::update(float deltaTime) {
 void PlayState::render() {
     SDL_Rect pViewport = getViewport();
     //Draw level
-    //TODO render in order:
+    //Render in order:
 
     //1. Lower layers
     //2. Object layer
@@ -46,12 +51,12 @@ void PlayState::render() {
 
     for (BaseLayer *layer: *pCurrentMap->getLowerLayers()) { layer->render(&pViewport); }
     for (BaseLayer *layer: *pCurrentMap->getObjectLayers()) { layer->render(&pViewport); }
+    //Draw player on top of everyone!
     mPlayer->drawAt(&pViewport);
     for (BaseLayer *layer: *pCurrentMap->getUpperLayers()) { layer->render(&pViewport); }
 
     drawUI();
     mPlayer->drawHitBox(&pViewport);
-    BaseState::render();//?
 }
 
 void PlayState::onExit() {
@@ -81,13 +86,11 @@ SDL_Rect PlayState::getViewport() {
 
 void PlayState::loadMap() {
     //Create new player
-
     mPlayer = new Player();
 
-    //Load all levels?
     MapParser levelParser{};
 
-    //TODO Make this a vector
+    //TODO Make this a vector in onEnter
     pCurrentMap = new MapTest();
 
     levelParser.parseMap(pCurrentMap);
@@ -95,7 +98,6 @@ void PlayState::loadMap() {
     //Set player position/details from map?
     //TODO Get these defaults from choose character screen/co-ords from map?
     mPlayer->load(LoaderParams(100, 100, 52, 72, "character2", 0, 0));
-    mPlayer->setCollisionLayer(pCurrentMap->getCollisionLayer());
 }
 
 void PlayState::loadGame() {

@@ -254,8 +254,6 @@ void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObj
 
             pGameObject->load(LoaderParams(x, y, width, height, textureID, startColumn, startRow));
 
-            pGameObject->setCollisionLayer(pCollisionLayer);
-
             // Terrible hack that probably breaks all sort of SOLID principals
             //TODO Give this to all objects?
             //TODO Player shouldn't be created here anyway

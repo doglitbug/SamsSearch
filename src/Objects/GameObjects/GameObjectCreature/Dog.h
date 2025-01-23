@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Objects/GameObjects/GameObject.h"
-#include "GameObjectFactory.h"
+#include "Objects/GameObjects/GameObjectFactory.h"
 #include "NPC.h"
 
 class Dog : public NPC {

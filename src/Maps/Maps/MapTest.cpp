@@ -2,4 +2,5 @@
 
 MapTest::MapTest() {
     filename = "assets/maps/Temp.tmx";
+    //TODO ParseMap
 }

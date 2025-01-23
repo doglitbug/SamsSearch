@@ -1,15 +1,15 @@
 #pragma once
 
 #include "Objects/GameObjects/GameObject.h"
-#include "GameObjectFactory.h"
+#include "Objects/GameObjects/GameObjectFactory.h"
+#include "GameObjectItem.h"
 
-class Teleport : public GameObject {
+class Teleport : public GameObjectItem {
 public:
     Teleport() = default;
     ~Teleport() = default;
 
     void load(const LoaderParams &pParams) override;
-    void update(float deltaTime) override;
     void onInteraction(GameObject* other, INTERACT_TYPE interactType) override;
 
 private:

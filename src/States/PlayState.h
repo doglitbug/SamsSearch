@@ -1,14 +1,14 @@
 #pragma once
 
 #include <iostream>
-#include "Objects/GameObjects/Player.h"
+#include "Objects/GameObjects/GameObjectCreature/Player.h"
 
 #include "BaseState.h"
 #include "BaseMap.h"
 
-#include "MapTest.h"
+#include "Maps/Maps/MapTest.h"
 
-/// @brief PLayState is the GameEngine
+/// @brief PlayState is the GameEngine
 class PlayState : public BaseState
 {
 public:

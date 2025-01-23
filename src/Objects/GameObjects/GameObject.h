@@ -28,24 +28,12 @@ public:
     /// @param deltaTime
     void update(float deltaTime) override;
 
-    /// @brief Choose a direction to face based on movement vector
-    void faceDirection();
-
     /// @brief Called when another GameObject interacts with this one
     /// @param other GameObject that has interacted
+    /// @param interactType Type of interaction
     virtual void onInteraction(GameObject* other, INTERACT_TYPE interactType);
 
     void clean() override;
-
-    /// @brief Set this objects collision layer
-    /// @param pCollisionLayer
-    void setCollisionLayer(CollisionLayer *pCollisionLayer) {
-        m_pCollisionLayer = pCollisionLayer;
-    }
-
-    /// @brief GameObject velocity
-    /// @todo Move this back to protected/private
-    Vector2D m_velocity;
 
     void drawHitBox(SDL_Rect *pViewport);
 
@@ -64,7 +52,6 @@ public:
     }
 
 protected:
-
     /// @brief Used to denote direction in sprite-sheet
     DIRECTION m_direction;
     /// @brief used to denote animation frame(column) in sprite-sheet
@@ -72,10 +59,4 @@ protected:
 
     int m_startColumn;
     int m_startRow;
-
-    /// @brief Collision layer for moving around world
-    CollisionLayer *m_pCollisionLayer;
-
-private:
-    void checkMapCollision(float deltaTime);
 };

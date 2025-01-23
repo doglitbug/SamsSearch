@@ -29,25 +29,7 @@ void GameObject::drawAt(SDL_Rect *pViewport) {
 }
 
 void GameObject::update(float deltaTime) {
-    checkMapCollision(deltaTime);
-    //checkObjectCollision(deltaTime)
-
-}
-
-void GameObject::faceDirection() {
-    if (m_velocity.getX() < 0) {
-        m_direction = DIRECTION::WEST;
-    } else if (m_velocity.getX() > 0) {
-        m_direction = DIRECTION::EAST;
-    } else if (m_velocity.getY() < 0) {
-        m_direction = DIRECTION::NORTH;
-    } else if (m_velocity.getY() > 0) {
-        m_direction = DIRECTION::SOUTH;
-    } else {
-        // No movement whatsoever, so stop animation
-        m_currentFrame = 1;
-        //m_direction = DIRECTION::SOUTH;
-    }
+    //Animation?
 }
 
 void GameObject::onInteraction(GameObject *other, INTERACT_TYPE interactionType) {
@@ -72,43 +54,3 @@ void GameObject::drawHitBox(SDL_Rect *pViewport) {
     SDL_SetRenderDrawColor(EngineStateManager::get()->getRenderer(), 255, 0, 0, 0);
     SDL_RenderRect(EngineStateManager::get()->getRenderer(), &hitBoxLocation);
 }
-
-void GameObject::checkMapCollision(float deltaTime) {
-    Vector2D newPosition = m_position + m_velocity * deltaTime;
-    if (m_pCollisionLayer && m_hitBox) {
-        // Collision on X axis
-        if (m_velocity.getX() < 0) {
-            if (!m_pCollisionLayer->isWalkable(newPosition.getX() + m_hitBox->x, m_position.getY() + m_hitBox->y) ||
-                !m_pCollisionLayer->isWalkable(newPosition.getX() + m_hitBox->x,
-                                               m_position.getY() + m_hitBox->y + m_hitBox->h)) {
-                m_velocity.setX(0);
-            }
-        } else if (m_velocity.getX() > 0) {
-            if (!m_pCollisionLayer->isWalkable(newPosition.getX() + m_hitBox->x + m_hitBox->w,
-                                               m_position.getY() + m_hitBox->y) ||
-                !m_pCollisionLayer->isWalkable(newPosition.getX() + m_hitBox->x + m_hitBox->w,
-                                               m_position.getY() + m_hitBox->y + m_hitBox->h)) {
-                m_velocity.setX(0);
-            }
-        }
-
-        // Collision Y axis now that X is completely clean
-        if (m_velocity.getY() < 0) {
-            if (!m_pCollisionLayer->isWalkable(m_position.getX() + m_hitBox->x, newPosition.getY() + m_hitBox->y) ||
-                !m_pCollisionLayer->isWalkable(m_position.getX() + m_hitBox->x + m_hitBox->w,
-                                               newPosition.getY() + m_hitBox->y)) {
-                m_velocity.setY(0);
-            }
-        } else if (m_velocity.getY() > 0) {
-            if (!m_pCollisionLayer->isWalkable(m_position.getX() + m_hitBox->x,
-                                               newPosition.getY() + m_hitBox->y + m_hitBox->h) ||
-                !m_pCollisionLayer->isWalkable(m_position.getX() + m_hitBox->x + m_hitBox->w,
-                                               newPosition.getY() + m_hitBox->y + m_hitBox->h)) {
-                m_velocity.setY(0);
-            }
-        }
-    }
-    m_position += m_velocity * deltaTime;
-
-}
-
