@@ -1,12 +1,12 @@
-#include "ObjectLayer.h"
+#include "GameObjectLayer.h"
 
-void ObjectLayer::update(float deltaTime) {
+void GameObjectLayer::update(float deltaTime) {
     for (GameObject *go: m_gameObjects) {
         go->update(deltaTime);
     }
 }
 
-void ObjectLayer::render(SDL_Rect *pViewPort) {
+void GameObjectLayer::render(SDL_Rect *pViewPort) {
     for (GameObject *go: m_gameObjects) {
         go->drawAt(pViewPort);
     }

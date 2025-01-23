@@ -4,7 +4,7 @@
 #include "Managers/AssetManager.h"
 #include "Managers/EngineStateManager.h"
 #include "Vector2D.h"
-#include "Levels/CollisionLayer.h"
+#include "Maps/CollisionLayer.h"
 
 enum INTERACT_TYPE {
     //Walked or collided with each other

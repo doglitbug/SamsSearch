@@ -18,7 +18,7 @@ public:
     /// @param x world location
     /// @param y world location
     /// @return walkable or not
-    /// @todo Move to Map?
+    /// @todo Move to BaseMap?
     bool isWalkable(float x, float y);
 
 private:

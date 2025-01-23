@@ -5,7 +5,7 @@
 #include "BaseLayer.h"
 #include "Objects/GameObjects/GameObject.h"
 
-class ObjectLayer : public BaseLayer {
+class GameObjectLayer : public BaseLayer {
 public:
     void update(float deltaTime) override;
     void render(SDL_Rect *pViewport) override;

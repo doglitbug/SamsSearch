@@ -62,7 +62,4 @@ private:
 
     bool m_bRunning;
     StateMachine *m_pGameStateMachine;
-
-    /// @brief Used to calculate camera position later on
-    Vector2D *m_playerLocation;
 };

@@ -1,8 +1,9 @@
 #include "PlayState.h"
 
 #include "../Managers/InputManager.h"
-#include "../Levels/MapParser.h"
-#include "ObjectLayer.h"
+#include "../Maps/MapParser.h"
+#include "GameObjectLayer.h"
+
 
 void PlayState::onEnter() {
     //TODO Determine if we are starting a new game or loading one?
@@ -15,7 +16,7 @@ void PlayState::update(float deltaTime) {
     //TODO Only update object layer, at least until we have animations eg for water?
     mPlayer->update(deltaTime);
     SDL_FRect *playerHitBox = mPlayer->getWorldHitBox();
-    for (ObjectLayer *layer: *pCurrentLevel->getObjectLayers()) {
+    for (GameObjectLayer *layer: *pCurrentMap->getObjectLayers()) {
         layer->update(deltaTime);
         for(auto *gameObject: *layer->getGameObjects()){
             //Check intersection with player
@@ -43,10 +44,10 @@ void PlayState::render() {
     //5. Ghost outline of player if required?
     //6. Ignore collision layer
 
-    for (BaseLayer *layer: *pCurrentLevel->getLowerLayers()) { layer->render(&pViewport); }
-    for (BaseLayer *layer: *pCurrentLevel->getObjectLayers()) { layer->render(&pViewport); }
+    for (BaseLayer *layer: *pCurrentMap->getLowerLayers()) { layer->render(&pViewport); }
+    for (BaseLayer *layer: *pCurrentMap->getObjectLayers()) { layer->render(&pViewport); }
     mPlayer->drawAt(&pViewport);
-    for (BaseLayer *layer: *pCurrentLevel->getUpperLayers()) { layer->render(&pViewport); }
+    for (BaseLayer *layer: *pCurrentMap->getUpperLayers()) { layer->render(&pViewport); }
 
     drawUI();
     mPlayer->drawHitBox(&pViewport);
@@ -55,7 +56,7 @@ void PlayState::render() {
 
 void PlayState::onExit() {
     //TODO Ask to save here as we would only be exiting to the main menu
-    delete (pCurrentLevel);
+    delete (pCurrentMap);
     delete (mPlayer);
     BaseState::onExit();
 }
@@ -68,12 +69,12 @@ SDL_Rect PlayState::getViewport() {
     x = mPlayer->getPosition().getX() - width / 2;
     if (x < 0) x = 0;
     //TODO Fix this
-    //if (x > pCurrentLevel->getWidth()*32 - width) x = pCurrentLevel->getWidth()*32 - width;
+    //if (x > pCurrentMap->getWidth()*32 - width) x = pCurrentMap->getWidth()*32 - width;
 
     y = mPlayer->getPosition().getY() - height / 2;
     if (y < 0) y = 0;
     //TODO Fix this
-    //if (y + height > pCurrentLevel->getHeight()) y = pCurrentLevel->getHeight() - height;
+    //if (y + height > pCurrentMap->getHeight()) y = pCurrentMap->getHeight() - height;
 
     return SDL_Rect{x, y, width, height};
 }
@@ -87,12 +88,14 @@ void PlayState::loadMap() {
     MapParser levelParser{};
 
     //TODO Make this a vector
-    pCurrentLevel = levelParser.parseLevel("assets/maps/Temp.tmx");
+    pCurrentMap = new MapTest();
+
+    levelParser.parseMap(pCurrentMap);
 
     //Set player position/details from map?
     //TODO Get these defaults from choose character screen/co-ords from map?
     mPlayer->load(LoaderParams(100, 100, 52, 72, "character2", 0, 0));
-    mPlayer->setCollisionLayer(pCurrentLevel->getCollisionLayer());
+    mPlayer->setCollisionLayer(pCurrentMap->getCollisionLayer());
 }
 
 void PlayState::loadGame() {
@@ -105,7 +108,7 @@ void PlayState::drawUI() {
     int width, height;
     EngineStateManager::get()->getWindowSize(&width, &height);
 
-    std::string mapName = pCurrentLevel->getName();
+    std::string mapName = pCurrentMap->getName();
     //TODO Make this better by measuring correctly
     int textWidth = (int) mapName.length() * 16;
     //TODO Overwrite this texture with the new map name on change map...

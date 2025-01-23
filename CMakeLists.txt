@@ -7,7 +7,7 @@ include_directories(src)
 include_directories(src/ThirdParty/Base64)
 include_directories(src/Objects)
 include_directories(src/Objects/UIObjects)
-include_directories(src/Levels)
+include_directories(src/Maps)
 include_directories(src/Managers)
 include_directories(src/States)
 include_directories(src/ThirdParty/TinyXML)
@@ -32,16 +32,16 @@ add_executable(SamsSearch
         src/Objects/GameObjects/Player.h
         src/Objects/GameObjects/GameObject.cpp
         src/Objects/GameObjects/GameObject.h
-        src/Levels/CollisionLayer.cpp
-        src/Levels/CollisionLayer.h
-        src/Levels/BaseLayer.h
-        src/Levels/Map.h
-        src/Levels/MapParser.cpp
-        src/Levels/MapParser.h
-        src/Levels/ObjectLayer.cpp
-        src/Levels/ObjectLayer.h
-        src/Levels/TileLayer.cpp
-        src/Levels/TileLayer.h
+        src/Maps/CollisionLayer.cpp
+        src/Maps/CollisionLayer.h
+        src/Maps/BaseLayer.h
+        src/Maps/BaseMap.h
+        src/Maps/MapParser.cpp
+        src/Maps/MapParser.h
+        src/Maps/GameObjectLayer.cpp
+        src/Maps/GameObjectLayer.h
+        src/Maps/TileLayer.cpp
+        src/Maps/TileLayer.h
         src/Managers/AssetManager.cpp
         src/Managers/AssetManager.h
         src/Managers/EngineStateManager.cpp
@@ -72,7 +72,9 @@ add_executable(SamsSearch
         src/Objects/GameObjects/NPC.h
         src/Objects/GameObjects/NPC.cpp
         src/Objects/GameObjects/Dog.cpp
-        src/Objects/GameObjects/Dog.h)
+        src/Objects/GameObjects/Dog.h
+        src/Maps/MapTest.cpp
+        src/Maps/MapTest.h)
 
 find_package(ZLIB)
 

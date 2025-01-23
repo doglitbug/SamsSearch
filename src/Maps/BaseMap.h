@@ -5,7 +5,7 @@
 #include "BaseLayer.h"
 #include "CollisionLayer.h"
 #include "Vector2D.h"
-#include "ObjectLayer.h"
+#include "GameObjectLayer.h"
 
 struct TileSet
 {
@@ -20,12 +20,13 @@ struct TileSet
     std::string name;
 };
 
-class Map {
+class BaseMap {
 public:
-    ~Map(){
+    BaseMap(){};
+
+    ~BaseMap(){
 
         // Clean up layers here
-
         for (auto it = m_upperLayers.begin(); it != m_upperLayers.end();) {
                 it = m_upperLayers.erase(it);  // Returns iterator to the next element
         }
@@ -49,7 +50,7 @@ public:
         return &m_lowerLayers;
     }
 
-    std::vector<ObjectLayer*>* getObjectLayers(){
+    std::vector<GameObjectLayer*>* getObjectLayers(){
         return &m_objectLayers;
     }
 
@@ -63,24 +64,25 @@ public:
         return &m_collisionLayer;
     }
 
-    /// @brief Map width in tiles
+    /// @brief BaseMap width in tiles
     [[nodiscard]] int getWidth() const { return width; }
-    /// @brief Map height in tiles
+    /// @brief BaseMap height in tiles
     [[nodiscard]] int getHeight() const { return height; };
 
     std::string getName(){ return name;}
 
 private:
     friend class MapParser;
-    Map(){};
 
     std::vector<TileSet> m_tileSets;
     std::vector<BaseLayer*>  m_lowerLayers;
-    std::vector<ObjectLayer*>  m_objectLayers;
+    std::vector<GameObjectLayer*>  m_objectLayers;
     std::vector<BaseLayer*>  m_upperLayers;
     CollisionLayer m_collisionLayer;
 
     int width;
     int height;
     std::string name;
+protected:
+    std::string filename;
 };

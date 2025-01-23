@@ -1,10 +1,14 @@
 #pragma once
 
 #include <iostream>
-#include "BaseState.h"
-#include "Map.h"
 #include "Objects/GameObjects/Player.h"
 
+#include "BaseState.h"
+#include "BaseMap.h"
+
+#include "MapTest.h"
+
+/// @brief PLayState is the GameEngine
 class PlayState : public BaseState
 {
 public:
@@ -19,7 +23,7 @@ private:
     void drawUI();
     void handleInput();
 
-    Map *pCurrentLevel;
+    BaseMap *pCurrentMap;
     /// @brief Get the viewport to draw within (basically camera position)
     SDL_Rect getViewport();
 

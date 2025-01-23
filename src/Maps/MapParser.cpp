@@ -3,17 +3,19 @@
 #include "TileLayer.h"
 #include "zlib.h"
 #include "base64.h"
-#include "ObjectLayer.h"
+#include "GameObjectLayer.h"
 #include "Objects/GameObjects/GameObjectFactory.h"
 
-Map *MapParser::parseLevel(const char *levelFile)
+void MapParser::parseMap(BaseMap *pMap)
 {
+    auto mapFile = pMap->filename;
+
     // Create an XML document and load the map XML
     // Not placing on stack as it may be too big?
     XMLDocument levelDocument = new XMLDocument(false, COLLAPSE_WHITESPACE);
-    levelDocument.LoadFile(levelFile);
+    levelDocument.LoadFile(mapFile.c_str());
 
-    auto *pLevel = new Map();
+
 
     // Get the root node
     XMLElement *pRoot = levelDocument.RootElement();
@@ -26,37 +28,35 @@ Map *MapParser::parseLevel(const char *levelFile)
     {
         if (e->Value() == std::string("properties"))
         {
-            parseAdditionalMapProperties(e, pLevel);
+            parseAdditionalMapProperties(e, pMap);
         }
         else if (e->Value() == std::string("tileset"))
         {
-            parseTilesets(e, pLevel->getTileSets());
+            parseTilesets(e, pMap->getTileSets());
         }
         else if (e->Value() == std::string("layer"))
         {
             std::string layerClass = e->Attribute("class");
 
             if (layerClass == "Lower") {
-                parseTileLayer(e, pLevel->getLowerLayers(), pLevel->getTileSets());
+                parseTileLayer(e, pMap->getLowerLayers(), pMap->getTileSets());
             } else if (layerClass == "Upper") {
-                parseTileLayer(e, pLevel->getUpperLayers(), pLevel->getTileSets());
+                parseTileLayer(e, pMap->getUpperLayers(), pMap->getTileSets());
             } else if (layerClass == "Collision") {
-                parseCollisionLayer(e, pLevel->getCollisionLayer());
+                parseCollisionLayer(e, pMap->getCollisionLayer());
             } else {
                 std::cout << "Unknown layer class" << std::endl;
             }
         }
         else if (e->Value() == std::string("objectgroup"))
         {
-            parseObjectLayer(e, pLevel->getObjectLayers(), pLevel->getCollisionLayer());
+            parseObjectLayer(e, pMap->getObjectLayers(), pMap->getCollisionLayer());
         }
         else
         {
             std::cout << "Unknown value: " << e->Value() << std::endl;
         }
     }
-
-    return pLevel;
 }
 
 void MapParser::parseTilesets(XMLElement *pTilesetRoot, std::vector<TileSet> *pTilesets)
@@ -82,7 +82,7 @@ void MapParser::parseTilesets(XMLElement *pTilesetRoot, std::vector<TileSet> *pT
     pTilesets->push_back(tileset);
 }
 
-void MapParser::parseAdditionalMapProperties(XMLElement *pPropertiesRoot, Map *pLevel)
+void MapParser::parseAdditionalMapProperties(XMLElement *pPropertiesRoot, BaseMap *pLevel)
 {
     for (XMLElement *e = pPropertiesRoot->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
@@ -208,10 +208,10 @@ void MapParser::parseCollisionLayer(XMLElement *pTileElement, CollisionLayer *pC
 
 
 // ToDo BaseObject layers, do these need to be loaded from a save file for each level?
-void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<ObjectLayer *> *pLayers, CollisionLayer *pCollisionLayer) const
+void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObjectLayer *> *pLayers, CollisionLayer *pCollisionLayer) const
 {
     // Create an object layer
-    auto *pObjectLayer = new ObjectLayer();
+    auto *pObjectLayer = new GameObjectLayer();
     for (XMLElement *e = pObjectElement->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
         if (e->Value() == std::string("object"))
@@ -270,7 +270,7 @@ void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<ObjectL
         }
         else
         {
-            std::cout << "Unknown ObjectLayer value: " << e->Value() << std::endl;
+            std::cout << "Unknown GameObjectLayer value: " << e->Value() << std::endl;
         }
     }
 

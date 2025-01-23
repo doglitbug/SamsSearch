@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Map.h"
+#include "BaseMap.h"
 #include "BaseLayer.h"
 
 class TileLayer : public BaseLayer {
