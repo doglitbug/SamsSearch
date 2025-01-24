@@ -11,11 +11,8 @@ void MapParser::parseMap(BaseMap *pMap)
     auto mapFile = pMap->filename;
 
     // Create an XML document and load the map XML
-    // Not placing on stack as it may be too big?
-    XMLDocument levelDocument = new XMLDocument(false, COLLAPSE_WHITESPACE);
+    XMLDocument levelDocument = XMLDocument(false, COLLAPSE_WHITESPACE);
     levelDocument.LoadFile(mapFile.c_str());
-
-
 
     // Get the root node
     XMLElement *pRoot = levelDocument.RootElement();
@@ -45,12 +42,12 @@ void MapParser::parseMap(BaseMap *pMap)
             } else if (layerClass == "Collision") {
                 parseCollisionLayer(e, pMap->getCollisionLayer());
             } else {
-                std::cout << "Unknown layer class" << std::endl;
+                std::cout << "Unknown layer class: " << layerClass << std::endl;
             }
         }
         else if (e->Value() == std::string("objectgroup"))
         {
-            parseObjectLayer(e, pMap->getObjectLayers(), pMap->getCollisionLayer());
+            parseObjectLayer(e, pMap->getObjectLayers());
         }
         else
         {
@@ -155,14 +152,14 @@ void MapParser::parseTileLayer(XMLElement *pTileElement, std::vector<BaseLayer *
     pLayers->push_back(pTileLayer);
 }
 
-void MapParser::parseCollisionLayer(XMLElement *pTileElement, CollisionLayer *pCollisionLayer) const
+void MapParser::parseCollisionLayer(XMLElement *pCollisionElement, CollisionLayer *pCollisionLayer) const
 {
     // Tile Data
     std::vector<std::vector<int>> data;
     std::string decodedIDs;
     XMLElement *pDataNode;
 
-    for (XMLElement *e = pTileElement->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
+    for (XMLElement *e = pCollisionElement->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
         if (e->Value() == std::string("data"))
         {
@@ -208,7 +205,7 @@ void MapParser::parseCollisionLayer(XMLElement *pTileElement, CollisionLayer *pC
 
 
 // ToDo BaseObject layers, do these need to be loaded from a save file for each level?
-void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObjectLayer *> *pLayers, CollisionLayer *pCollisionLayer) const
+void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObjectLayer *> *pLayers) const
 {
     // Create an object layer
     auto *pObjectLayer = new GameObjectLayer();
