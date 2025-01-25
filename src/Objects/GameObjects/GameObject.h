@@ -7,20 +7,19 @@
 #include "Maps/CollisionLayer.h"
 
 enum INTERACT_TYPE {
-    //Walked or collided with each other
     TOUCH,
-    //Deliberate interaction eg used action button
-    INTERACT
+    INTERACT,
+    ATTACK
 };
 
-/// @brief BaseObject in GameWorld
+/// @brief Object in GameWorld, Javidx9 calls this a Dynamic
 class GameObject : public BaseObject {
 public:
     GameObject() = default;
     ~GameObject();
 
     void load(const LoaderParams &pParams) override;
-    void drawAt(SDL_Rect *pViewPort);
+    void drawSelf(SDL_Rect *pViewport);
 
     /// @brief
     /// @see https://youtu.be/oJvJZNyW_rw?si=05JhdC_6xejzS-5V&t=523
@@ -37,9 +36,8 @@ public:
 
     void drawHitBox(SDL_Rect *pViewport);
 
-    /// @brief Objects hit-box for colliding with other objects
-    SDL_FRect *m_hitBox;
-
+    /// @brief Get hit-box in world co-ords
+    /// @return
     SDL_FRect *getWorldHitBox(){
         if(!m_hitBox) return nullptr;
         SDL_FRect *hitBoxLocation = new SDL_FRect();
@@ -52,11 +50,15 @@ public:
     }
 
 protected:
+    /// @brief Objects hit-box for colliding with other objects
+    SDL_FRect *m_hitBox;
+
     /// @brief Used to denote direction in sprite-sheet
     DIRECTION m_direction;
     /// @brief used to denote animation frame(column) in sprite-sheet
     int m_currentFrame;
-
+    /// @brief Starting column in the sprite sheet
     int m_startColumn;
+    /// @brief Starting row in the sprite sheet
     int m_startRow;
 };

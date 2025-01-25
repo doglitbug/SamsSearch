@@ -8,6 +8,6 @@ void GameObjectLayer::update(float deltaTime) {
 
 void GameObjectLayer::render(SDL_Rect *pViewPort) {
     for (GameObject *go: m_gameObjects) {
-        go->drawAt(pViewPort);
+        go->drawSelf(pViewPort);
     }
 }

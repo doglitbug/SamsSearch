@@ -19,7 +19,7 @@ public:
     /// @param y world location
     /// @return walkable or not
     /// @todo Move to BaseMap?
-    bool isWalkable(float x, float y);
+    bool isWalkable(float x, float y) const;
 
 private:
     friend class MapParser;

@@ -261,6 +261,10 @@ void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObj
 
             //TODO If teleport, do this etc
 
+            if (e->Attribute("type") == std::string("Teleport")){
+                //TODO Load additional params?
+            }
+
             pObjectLayer->getGameObjects()->push_back(pGameObject);
         }
         else

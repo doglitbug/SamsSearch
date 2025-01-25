@@ -12,5 +12,5 @@ public:
     /// @brief Velocity
     Vector2D m_velocity;
 
-    void checkMapCollision(float deltaTime, CollisionLayer m_pCollisionLayer);
+    void checkMapCollision(float deltaTime, const CollisionLayer &m_pCollisionLayer);
 };

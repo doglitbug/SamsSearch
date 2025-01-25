@@ -220,8 +220,12 @@ void AssetManager::clean() {
     TTF_Quit();
 
     //Audio
-    //Mix_FreeMusic
-    //Mix_FreeChunk
+    for (auto &[id, music]: m_music){
+        Mix_FreeMusic(m_music[id]);
+    }
+    for (auto &[id, chunk]: m_sound){
+        Mix_FreeChunk(m_sound[id]);
+    }
     Mix_CloseAudio();
 }
 

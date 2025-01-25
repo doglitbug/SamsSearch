@@ -10,6 +10,9 @@
 #include "../States/StateMachine.h"
 #include "../Vector2D.h"
 
+/// @brief Do we want to show object hit-boxes on screen?
+#define SHOW_HITBOX true
+
 class EngineStateManager {
 public:
     static EngineStateManager *get() {

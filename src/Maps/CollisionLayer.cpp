@@ -5,8 +5,7 @@ void CollisionLayer::setCollisionData(const std::vector<std::vector<int>> &data)
     m_tileData = data;
 }
 
-bool CollisionLayer::isWalkable(float x, float y)
-{
+bool CollisionLayer::isWalkable(float x, float y) const {
     //TODO No magic numbers, this is tile width!
     int cx = std::floor(x / 32.0);
     int cy = std::floor(y / 32.0);

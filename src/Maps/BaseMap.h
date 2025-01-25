@@ -66,6 +66,7 @@ public:
 
     /// @brief Map width in tiles
     int getWidth() const { return width; }
+
     /// @brief Map height in tiles
     int getHeight() const { return height; };
 

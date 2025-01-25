@@ -3,6 +3,7 @@
 #include "../Managers/InputManager.h"
 #include "../Maps/MapParser.h"
 #include "GameObjectLayer.h"
+#include "GameObjects/GameObjectItem/Teleport.h"
 
 void PlayState::onEnter() {
     //TODO Determine if we are starting a new game or loading one?
@@ -27,6 +28,7 @@ void PlayState::update(float deltaTime) {
             //Check intersection with player
             SDL_FRect *otherHitBox = gameObject->getWorldHitBox();
             if (SDL_HasRectIntersectionFloat(playerHitBox, otherHitBox)) {
+
                 gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
             }
             delete otherHitBox;
@@ -52,11 +54,10 @@ void PlayState::render() {
     for (BaseLayer *layer: *pCurrentMap->getLowerLayers()) { layer->render(&pViewport); }
     for (BaseLayer *layer: *pCurrentMap->getObjectLayers()) { layer->render(&pViewport); }
     //Draw player on top of everyone!
-    mPlayer->drawAt(&pViewport);
+    mPlayer->drawSelf(&pViewport);
     for (BaseLayer *layer: *pCurrentMap->getUpperLayers()) { layer->render(&pViewport); }
 
     drawUI();
-    mPlayer->drawHitBox(&pViewport);
 }
 
 void PlayState::onExit() {

@@ -16,7 +16,7 @@ void GameObjectCreature::faceDirection() {
     }
 }
 
-void GameObjectCreature::checkMapCollision(float deltaTime, CollisionLayer m_pCollisionLayer) {
+void GameObjectCreature::checkMapCollision(float deltaTime, const CollisionLayer &m_pCollisionLayer) {
     Vector2D newPosition = m_position + m_velocity * deltaTime;
         // Collision on X axis
         if (m_velocity.getX() < 0) {
