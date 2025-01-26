@@ -3,11 +3,15 @@
 #include "../Managers/InputManager.h"
 #include "../Maps/MapParser.h"
 #include "GameObjectLayer.h"
-#include "GameObjects/GameObjectItem/Teleport.h"
 
 void PlayState::onEnter() {
     //TODO Determine if we are starting a new game or loading one?
-    loadMap();
+    //Set player position/details from map?
+    //TODO Get these defaults from choose character screen/co-ords from map?
+    //Create new player
+    mPlayer = new Player();
+    mPlayer->load(LoaderParams(100, 100, 52, 72, "character2", 0, 0));
+    loadMap("Temp");
 }
 
 void PlayState::update(float deltaTime) {
@@ -85,25 +89,21 @@ SDL_Rect PlayState::getViewport() {
     return SDL_Rect{x, y, width, height};
 }
 
-void PlayState::loadMap() {
-    //Create new player
-    mPlayer = new Player();
-
+void PlayState::loadMap(const std::string mapName) {
     MapParser levelParser{};
 
-    //TODO Make this a vector in onEnter
+    //TODO Make this a vector in onEnter?
     pCurrentMap = new MapTest();
-
     levelParser.parseMap(pCurrentMap);
-
-    //Set player position/details from map?
-    //TODO Get these defaults from choose character screen/co-ords from map?
-    mPlayer->load(LoaderParams(100, 100, 52, 72, "character2", 0, 0));
 }
 
 void PlayState::loadGame() {
     //TODO Let this function know which game/file to load
 }
+
+void PlayState::saveGame(){
+    //TODO Save game state for later loading
+};
 
 void PlayState::drawUI() {
     //TODO Make this better by caching this crap?

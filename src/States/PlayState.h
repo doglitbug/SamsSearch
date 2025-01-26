@@ -18,8 +18,9 @@ public:
     void onExit() override;
 
 private:
-    void loadMap();
+    void loadMap(const std::string mapName);
     void loadGame();
+    void saveGame();
     void drawUI();
     void handleInput();
 
