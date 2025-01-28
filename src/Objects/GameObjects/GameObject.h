@@ -38,13 +38,12 @@ public:
 
     /// @brief Get hit-box in world co-ords
     /// @return
-    SDL_FRect *getWorldHitBox(){
-        if(!m_hitBox) return nullptr;
-        SDL_FRect *hitBoxLocation = new SDL_FRect();
-        hitBoxLocation->x = m_position.getX() + m_hitBox->x;
-        hitBoxLocation->y = m_position.getY() + m_hitBox->y ;
-        hitBoxLocation->w = m_hitBox->w;
-        hitBoxLocation->h = m_hitBox->h;
+    SDL_FRect getWorldHitBox(){
+        SDL_FRect hitBoxLocation;
+        hitBoxLocation.x = m_position.getX() + m_hitBox->x;
+        hitBoxLocation.y = m_position.getY() + m_hitBox->y ;
+        hitBoxLocation.w = m_hitBox->w;
+        hitBoxLocation.h = m_hitBox->h;
 
         return hitBoxLocation;
     }

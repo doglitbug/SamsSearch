@@ -20,7 +20,7 @@ void PlayState::update(float deltaTime) {
     mPlayer->update(deltaTime);
     mPlayer->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
 
-    SDL_FRect *playerHitBox = mPlayer->getWorldHitBox();
+    SDL_FRect playerHitBox = mPlayer->getWorldHitBox();
     for (GameObjectLayer *layer: *pCurrentMap->getObjectLayers()) {
         layer->update(deltaTime);
         for(auto *gameObject: *layer->getGameObjects()){
@@ -30,15 +30,13 @@ void PlayState::update(float deltaTime) {
             }
 
             //Check intersection with player
-            SDL_FRect *otherHitBox = gameObject->getWorldHitBox();
-            if (SDL_HasRectIntersectionFloat(playerHitBox, otherHitBox)) {
+            SDL_FRect otherHitBox = gameObject->getWorldHitBox();
+            if (SDL_HasRectIntersectionFloat(&playerHitBox, &otherHitBox)) {
 
                 gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
             }
-            delete otherHitBox;
         }
     }
-    delete playerHitBox;
 
     handleInput();
 }
