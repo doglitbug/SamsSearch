@@ -12,6 +12,6 @@ void Dog::onInteraction(GameObject *other, INTERACT_TYPE interactType) {
     std::cout << "Bark!" << std::endl;
 }
 
-void Dog::update(float deltaTime) {
-    NPC::update(deltaTime);
+void Dog::update(float deltaTime, GameObject *pPlayer) {
+    NPC::update(deltaTime, pPlayer);
 }

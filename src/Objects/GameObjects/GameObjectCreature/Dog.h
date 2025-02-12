@@ -11,7 +11,7 @@ public:
 
     void onInteraction(GameObject* other, INTERACT_TYPE interactType) override;
 
-    void update(float deltaTime) override;
+    void update(float deltaTime, GameObject *pPlayer) override;
 };
 
 class DogCreator : public BaseCreator {

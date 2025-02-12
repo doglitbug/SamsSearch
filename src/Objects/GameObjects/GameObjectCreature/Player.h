@@ -8,7 +8,7 @@ public:
     Player();
 
     void load(const LoaderParams &pParams) override;
-    void update(float deltaTime) override;
+    void update(float deltaTime, GameObject *pPlayer = nullptr) override;
 
     /// @brief
     /// @todo move back to protected/private

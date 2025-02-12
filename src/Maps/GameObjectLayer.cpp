@@ -1,8 +1,8 @@
 #include "GameObjectLayer.h"
 
-void GameObjectLayer::update(float deltaTime) {
+void GameObjectLayer::update(float deltaTime, GameObject *pPlayer) {
     for (GameObject *go: m_gameObjects) {
-        go->update(deltaTime);
+        go->update(deltaTime, pPlayer);
     }
 }
 

@@ -18,11 +18,14 @@ void PlayState::update(float deltaTime) {
 
     //TODO Only update object layer, at least until we have animations eg for water?
     mPlayer->update(deltaTime);
+    //TODO All dynamics need to do this?
     mPlayer->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
 
     SDL_FRect playerHitBox = mPlayer->getWorldHitBox();
+
     for (GameObjectLayer *layer: *pCurrentMap->getObjectLayers()) {
-        layer->update(deltaTime);
+        layer->update(deltaTime, mPlayer);
+
         for(auto *gameObject: *layer->getGameObjects()){
             //Check map collision here
             if(auto goc = dynamic_cast<GameObjectCreature*>(gameObject)){
@@ -32,12 +35,12 @@ void PlayState::update(float deltaTime) {
             //Check intersection with player
             SDL_FRect otherHitBox = gameObject->getWorldHitBox();
             if (SDL_HasRectIntersectionFloat(&playerHitBox, &otherHitBox)) {
-
                 gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
             }
         }
     }
 
+    //TODO Disable if in cutscene
     handleInput();
 }
 

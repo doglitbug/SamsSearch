@@ -44,10 +44,6 @@ void GameObject::drawSelf(SDL_Rect *pViewport) {
     }
 }
 
-void GameObject::update(float deltaTime) {
-    //Animation?
-}
-
 void GameObject::onInteraction(GameObject *other, INTERACT_TYPE interactionType) {
     std::cout << "I was touched!" << std::endl;
 }
@@ -58,4 +54,8 @@ void GameObject::clean() {
 
 GameObject::~GameObject() {
     delete m_hitBox;
+}
+
+void GameObject::update(float deltaTime, GameObject *pPlayer) {
+
 }

@@ -25,7 +25,7 @@ public:
     /// @see https://youtu.be/oJvJZNyW_rw?si=05JhdC_6xejzS-5V&t=523
     /// @see https://youtu.be/oJvJZNyW_rw?si=o1UPLNghN-7xtD30&t=1702
     /// @param deltaTime
-    void update(float deltaTime) override;
+    virtual void update(float deltaTime, GameObject *pPlayer = nullptr);
 
     /// @brief Called when another GameObject interacts with this one
     /// @param other GameObject that has interacted
@@ -51,7 +51,6 @@ public:
 protected:
     /// @brief Objects hit-box for colliding with other objects
     SDL_FRect *m_hitBox;
-
     /// @brief Used to denote direction in sprite-sheet
     DIRECTION m_direction;
     /// @brief used to denote animation frame(column) in sprite-sheet

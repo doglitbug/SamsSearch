@@ -100,7 +100,6 @@ bool EngineStateManager::init(const char *title, int width, int height, bool ful
 
     //TODO Move elsewhere, should this be in the PlayState?
     GameObjectFactory::get()->registerType("Player", new PlayerCreator());
-    GameObjectFactory::get()->registerType("NPC", new NPCCreator());
     GameObjectFactory::get()->registerType("Teleport", new TeleportCreator());
     GameObjectFactory::get()->registerType("Dog", new DogCreator());
 

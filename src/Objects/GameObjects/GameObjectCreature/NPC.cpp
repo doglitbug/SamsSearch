@@ -8,7 +8,7 @@ void NPC::load(const LoaderParams &pParams) {
     timeElapsed = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (8)));
 }
 
-void NPC::update(float deltaTime) {
+void NPC::update(float deltaTime, GameObject *pPlayer) {
     int frames[] = {0, 1, 2, 1};
     m_currentFrame = frames[int((SDL_GetTicks() / 150) % 4)];
 
@@ -17,8 +17,6 @@ void NPC::update(float deltaTime) {
         m_velocity = chooseRandomDirection();
         timeElapsed = 0.0f;
     }
-
-    GameObject::update(deltaTime);
 
     faceDirection();
 }

@@ -7,7 +7,8 @@
 
 class GameObjectLayer : public BaseLayer {
 public:
-    void update(float deltaTime) override;
+    void update(float deltaTime) { }
+    void update(float deltaTime, GameObject *pPlayer);
     void render(SDL_Rect *pViewport) override;
 
     std::vector<GameObject *> *getGameObjects() {

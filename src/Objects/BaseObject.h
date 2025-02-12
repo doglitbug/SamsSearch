@@ -8,7 +8,7 @@ class BaseObject {
 public:
     virtual void load(const LoaderParams &pParams) = 0;
 
-    virtual void update(float deltaTime) = 0;
+    virtual void update(float deltaTime) {};
 
     virtual void clean() = 0;
 
