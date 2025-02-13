@@ -6,11 +6,12 @@
 
 class Dog : public NPC {
 public:
-    Dog();
-    void load(const LoaderParams &pParams) override;
+    Dog() = default;
+    ~Dog() = default;
 
-    void onInteraction(GameObject* other, INTERACT_TYPE interactType) override;
+    void load(const LoaderParams &pParams);
 
+    void onInteraction(GameObject *other, INTERACT_TYPE interactType) override;
     void update(float deltaTime, GameObject *pPlayer) override;
 };
 

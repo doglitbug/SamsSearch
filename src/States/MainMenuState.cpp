@@ -1,7 +1,7 @@
 #include "MainMenuState.h"
 
 void MainMenuState::onEnter() {
-    if (SettingsManager::get()->getTitleMusicEnabled()) {
+    if (SettingsManager::getTitleMusicEnabled()) {
         AssetManager::get()->playMusic("main_menu");
     }
     //Title

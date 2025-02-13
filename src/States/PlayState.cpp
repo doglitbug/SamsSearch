@@ -11,7 +11,8 @@ void PlayState::onEnter() {
     //Create new player
     mPlayer = new Player();
     mPlayer->load(LoaderParams(100, 100, 52, 72, "character2", 0, 0));
-    loadMap("Temp");
+
+    changeMap("Test");
 }
 
 void PlayState::update(float deltaTime) {
@@ -21,7 +22,7 @@ void PlayState::update(float deltaTime) {
     //TODO All dynamics need to do this?
     mPlayer->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
 
-    SDL_FRect playerHitBox = mPlayer->getWorldHitBox();
+    const SDL_FRect playerHitBox = mPlayer->getWorldHitBox();
 
     for (GameObjectLayer *layer: *pCurrentMap->getObjectLayers()) {
         layer->update(deltaTime, mPlayer);
@@ -90,10 +91,13 @@ SDL_Rect PlayState::getViewport() {
     return SDL_Rect{x, y, width, height};
 }
 
-void PlayState::loadMap(const std::string mapName) {
+void PlayState::changeMap(const std::string mapName) {
+    if(pCurrentMap) {
+        //TODO delete current map, GOs etc
+    }
+
     MapParser levelParser{};
 
-    //TODO Make this a vector in onEnter?
     pCurrentMap = new MapTest();
     levelParser.parseMap(pCurrentMap);
 }

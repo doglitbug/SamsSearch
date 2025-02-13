@@ -1,7 +1,7 @@
 #include "Player.h"
 #include "Managers/InputManager.h"
 
-Player::Player() {}
+Player::Player() = default;
 
 void Player::load(const LoaderParams &pParams)
 {

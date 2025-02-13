@@ -12,10 +12,10 @@ void Button::update(float deltaTime) {
 
     // Check if mouse is hovering over button
     // TODO Replace with SDL_PointInRect?
-    if (pMousePos->getX() < (m_position.getX() + m_width)
-        && pMousePos->getX() > m_position.getX()
-        && pMousePos->getY() < (m_position.getY() + m_height)
-        && pMousePos->getY() > m_position.getY()) {
+    if (pMousePos->getX() < (m_ScreenPosition.getX() + m_width)
+        && pMousePos->getX() > m_ScreenPosition.getX()
+        && pMousePos->getY() < (m_ScreenPosition.getY() + m_height)
+        && pMousePos->getY() > m_ScreenPosition.getY()) {
 
         if (InputManager::get()->getMouseButtonState(InputManager::get()->LEFT) && m_bReleased) {
             m_bReleased = false;

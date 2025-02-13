@@ -1,10 +1,7 @@
 #pragma once
 
-#include "BaseObject.h"
-#include "Managers/AssetManager.h"
 #include "Managers/EngineStateManager.h"
 #include "Vector2D.h"
-#include "Maps/CollisionLayer.h"
 
 enum INTERACT_TYPE {
     TOUCH,
@@ -13,18 +10,20 @@ enum INTERACT_TYPE {
 };
 
 /// @brief Object in GameWorld, Javidx9 calls this a Dynamic
-class GameObject : public BaseObject {
+class GameObject {
 public:
     GameObject() = default;
-    ~GameObject();
 
-    void load(const LoaderParams &pParams) override;
+    virtual ~GameObject();
+
+    virtual void load(const LoaderParams &pParams);
     void drawSelf(SDL_Rect *pViewport);
 
     /// @brief
     /// @see https://youtu.be/oJvJZNyW_rw?si=05JhdC_6xejzS-5V&t=523
     /// @see https://youtu.be/oJvJZNyW_rw?si=o1UPLNghN-7xtD30&t=1702
     /// @param deltaTime
+    /// @param pPlayer
     virtual void update(float deltaTime, GameObject *pPlayer = nullptr);
 
     /// @brief Called when another GameObject interacts with this one
@@ -32,7 +31,9 @@ public:
     /// @param interactType Type of interaction
     virtual void onInteraction(GameObject* other, INTERACT_TYPE interactType);
 
-    void clean() override;
+    void clean();
+
+    Vector2D getPosition() const { return m_position; }
 
     void drawHitBox(SDL_Rect *pViewport);
 
@@ -49,14 +50,19 @@ public:
     }
 
 protected:
+    Vector2D m_position;
     /// @brief Objects hit-box for colliding with other objects
     SDL_FRect *m_hitBox;
     /// @brief Used to denote direction in sprite-sheet
     DIRECTION m_direction;
+    std::string m_textureID;
     /// @brief used to denote animation frame(column) in sprite-sheet
     int m_currentFrame;
     /// @brief Starting column in the sprite sheet
     int m_startColumn;
     /// @brief Starting row in the sprite sheet
     int m_startRow;
+
+    int m_width = 0;
+    int m_height = 0;
 };

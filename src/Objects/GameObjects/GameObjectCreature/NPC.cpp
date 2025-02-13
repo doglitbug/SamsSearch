@@ -1,7 +1,5 @@
 #include "NPC.h"
 
-NPC::NPC() {}
-
 void NPC::load(const LoaderParams &pParams) {
     GameObject::load(pParams);
     //m_hitBox = new SDL_Rect{12, 44, 28, 28};

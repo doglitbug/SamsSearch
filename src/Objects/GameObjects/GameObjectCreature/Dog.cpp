@@ -1,7 +1,5 @@
 #include "Dog.h"
 
-Dog::Dog() {}
-
 void Dog::load(const LoaderParams &pParams) {
     NPC::load(pParams);
     //TODO multiple by scale!

@@ -25,7 +25,6 @@ add_executable(SamsSearch
         src/Objects/UIObjects/Title.h
         src/Objects/GameObjects/GameObjectItem/Teleport.cpp
         src/Objects/GameObjects/GameObjectItem/Teleport.h
-        src/Objects/BaseObject.h
         src/Objects/GameObjects/GameObjectFactory.h
         src/Objects/LoaderParams.h
         src/Objects/GameObjects/GameObjectCreature/Player.cpp
