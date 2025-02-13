@@ -1,3 +1,4 @@
+#pragma once
 #include "BaseMap.h"
 #include "../TinyXML/tinyxml2.h"
 

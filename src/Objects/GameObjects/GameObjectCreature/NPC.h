@@ -8,7 +8,8 @@ public:
     NPC() = default;
     ~NPC()= default;
 
-    void load(const LoaderParams &pParams) override;
+
+    void load(int x, int y, int width, int height, const std::map<std::string, std::string> &pCustomProperties);
     void update(float deltaTime, GameObject *pPlayer) override;
 private:
     //Various default behaviours to be placed here

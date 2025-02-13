@@ -1,17 +1,24 @@
 #include "GameObject.h"
 
-void GameObject::load(const LoaderParams &pParams) {
-    m_position = Vector2D(pParams.getX(), pParams.getY());
-    m_width = pParams.getWidth();
-    m_height = pParams.getHeight();
+#include <bits/parse_numbers.h>
 
-    m_textureID = pParams.getTextureID();
+void GameObject::load(  const int x,
+                        const int y,
+                        const int width,
+                        const int height,
+                        const std::map<std::string, std::string> &pCustomProperties) {
+    m_position = Vector2D(static_cast<float>(x), static_cast<float>(y));
+    m_width = width;
+    m_height = height;
+
+    m_textureID = pCustomProperties.find("textureID")->second;
+    //TODO Find or default
     m_direction = DIRECTION::SOUTH;
     m_currentFrame = 0;
-    m_startColumn = pParams.getStartColumn();
-    m_startRow = pParams.getStartRow();
-    // TODO Use width and height to make a default?
+    m_startColumn = std::stoi(pCustomProperties.find("startColumn")->second);
+    m_startRow = std::stoi(pCustomProperties.find("startRow")->second);
 
+    // TODO Use width and height to make a default?
     m_hitBox = nullptr;
 }
 

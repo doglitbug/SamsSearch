@@ -2,6 +2,7 @@
 
 #include "Managers/EngineStateManager.h"
 #include "Vector2D.h"
+#include "CPO.h"
 
 enum INTERACT_TYPE {
     TOUCH,
@@ -16,7 +17,8 @@ public:
 
     virtual ~GameObject();
 
-    virtual void load(const LoaderParams &pParams);
+    virtual void load(int x, int y, int width, int height, const std::map<std::string, std::string> &pCustomProperties);
+
     void drawSelf(SDL_Rect *pViewport);
 
     /// @brief
@@ -29,20 +31,21 @@ public:
     /// @brief Called when another GameObject interacts with this one
     /// @param other GameObject that has interacted
     /// @param interactType Type of interaction
-    virtual void onInteraction(GameObject* other, INTERACT_TYPE interactType);
+    virtual void onInteraction(GameObject *other, INTERACT_TYPE interactType);
 
     void clean();
 
-    Vector2D getPosition() const { return m_position; }
+    [[nodiscard]] Vector2D getPosition() const { return m_position; }
+    void setPosition(const Vector2D &newPosition)  { m_position = newPosition; }
 
     void drawHitBox(SDL_Rect *pViewport);
 
     /// @brief Get hit-box in world co-ords
     /// @return
-    SDL_FRect getWorldHitBox(){
+    SDL_FRect getWorldHitBox() {
         SDL_FRect hitBoxLocation;
         hitBoxLocation.x = m_position.getX() + m_hitBox->x;
-        hitBoxLocation.y = m_position.getY() + m_hitBox->y ;
+        hitBoxLocation.y = m_position.getY() + m_hitBox->y;
         hitBoxLocation.w = m_hitBox->w;
         hitBoxLocation.h = m_hitBox->h;
 
@@ -62,7 +65,6 @@ protected:
     int m_startColumn;
     /// @brief Starting row in the sprite sheet
     int m_startRow;
-
-    int m_width = 0;
-    int m_height = 0;
+    int m_width;
+    int m_height;
 };

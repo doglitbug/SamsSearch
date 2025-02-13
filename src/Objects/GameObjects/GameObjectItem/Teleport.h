@@ -9,14 +9,13 @@ public:
     Teleport() = default;
     ~Teleport() = default;
 
-    void load(const LoaderParams &pParams) override;
-    void onInteraction(GameObject* other, INTERACT_TYPE interactType) override;
-
-private:
+    void load(int x, int y, int width, int height, const std::map<std::string, std::string> &pCustomProperties);
+public:
     /// @brief Name of the map we are moving the player to
     std::string destMap;
     /// @brief The location to move to
-    Vector2D destLocation;
+    float destX;
+    float destY;
     /// @brief What direction we want them to end up facing
     DIRECTION destDirection;
 };

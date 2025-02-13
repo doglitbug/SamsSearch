@@ -9,8 +9,7 @@ public:
     Dog() = default;
     ~Dog() = default;
 
-    void load(const LoaderParams &pParams);
-
+    void load(int x, int y, int width, int height, const std::map<std::string, std::string> &pCustomProperties);
     void onInteraction(GameObject *other, INTERACT_TYPE interactType) override;
     void update(float deltaTime, GameObject *pPlayer) override;
 };

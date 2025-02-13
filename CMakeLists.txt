@@ -77,7 +77,8 @@ add_executable(SamsSearch
         src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.cpp
         src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.h
         src/Objects/GameObjects/GameObjectItem/GameObjectItem.cpp
-        src/Objects/GameObjects/GameObjectItem/GameObjectItem.h)
+        src/Objects/GameObjects/GameObjectItem/GameObjectItem.h
+        src/CPO.h)
 
 find_package(ZLIB)
 

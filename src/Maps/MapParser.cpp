@@ -213,10 +213,11 @@ void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObj
     {
         if (e->Value() == std::string("object"))
         {
-            int x, y, width, height, startColumn, startRow;
-            std::string textureID;
+            int x, y, width, height;
 
-            // Get values on the object node
+            //, startColumn, startRow; std::string textureID;
+
+            // Get values on the object node (this will exist for all Game Objects)
             x = e->IntAttribute("x");
             y = e->IntAttribute("y");
             width = e->IntAttribute("width");
@@ -224,46 +225,22 @@ void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObj
 
             GameObject *pGameObject = GameObjectFactory::get()->create(e->Attribute("type"));
 
-            // Get the custom property values
-            // TODO Place all values into a map as each type of object will need different data?
-            // OR have these values load their own stuff, perhaps just override if need be
+            //Get additional properties that may be different for different GameObjects and place in a map
+            auto customProperties = std::map<std::string, std::string>();
 
-            for (XMLElement *property = e->FirstChildElement()->FirstChildElement();
-                 property != nullptr; property = property->NextSiblingElement())
-            {
-                if (property->Attribute("name") == std::string("startColumn"))
+            //TODO Check to see if this object has <properties>
+            if (e->FirstChildElement("properties") != nullptr) {
+                for (XMLElement *property = e->FirstChildElement()->FirstChildElement();
+                     property != nullptr; property = property->NextSiblingElement())
                 {
-                    startColumn = property->IntAttribute("value");
-                }
-                else if (property->Attribute("name") == std::string("startRow"))
-                {
-                    startRow = property->IntAttribute("value");
-                }
-                else if (property->Attribute("name") == std::string("textureID"))
-                {
-                    textureID = property->Attribute("value");
-                }
-                else
-                {
-                    std::cout << "Unknown Property value: " << property->Attribute("name") << std::endl;
+                    auto key = property->Attribute("name");
+                    auto value = property->Attribute("value");
+
+                    customProperties[key]=value;
                 }
             }
 
-            pGameObject->load(LoaderParams(x, y, width, height, textureID, startColumn, startRow));
-
-            // Terrible hack that probably breaks all sort of SOLID principals
-            //TODO Give this to all objects?
-            //TODO Player shouldn't be created here anyway
-            //if (e->Attribute("type") == std::string("Player"))
-            //{
-            //    dynamic_cast<GameObject *>
-            //}
-
-            //TODO If teleport, do this etc
-
-            if (e->Attribute("type") == std::string("Teleport")){
-                //TODO Load additional params?
-            }
+            pGameObject->load(x, y, width, height, customProperties);
 
             pObjectLayer->getGameObjects()->push_back(pGameObject);
         }

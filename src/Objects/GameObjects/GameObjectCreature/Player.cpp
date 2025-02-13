@@ -1,12 +1,8 @@
 #include "Player.h"
 #include "Managers/InputManager.h"
 
-Player::Player() = default;
-
-void Player::load(const LoaderParams &pParams)
-{
-    GameObject::load(pParams);
-    //TODO multiple by scale!
+void Player::load(int x, int y, int width, int height, const std::map<std::string, std::string> &pCustomProperties) {
+    GameObjectCreature::load(x, y, width, height, pCustomProperties);
     m_hitBox = new SDL_FRect{12, 44, 28, 28};
 }
 

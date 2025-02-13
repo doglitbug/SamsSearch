@@ -5,9 +5,9 @@
 
 class Player : public GameObjectCreature {
 public:
-    Player();
+    Player(){};
 
-    void load(const LoaderParams &pParams);
+    void load(int x, int y, int width, int height, const std::map<std::string, std::string> &pCustomProperties);
     void update(float deltaTime, GameObject *pPlayer = nullptr) override;
 
     /// @brief

@@ -18,7 +18,8 @@ public:
     void onExit() override;
 
 private:
-    void changeMap(std::string mapName);
+    //TODO Direction?
+    void changeMap(std::string mapName, float destX, float destY);
     void loadGame();
     void saveGame();
     void drawUI();

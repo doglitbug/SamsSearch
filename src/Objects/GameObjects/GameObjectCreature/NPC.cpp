@@ -1,8 +1,8 @@
 #include "NPC.h"
 
-void NPC::load(const LoaderParams &pParams) {
-    GameObject::load(pParams);
-    //m_hitBox = new SDL_Rect{12, 44, 28, 28};
+void NPC::load(int x, int y, int width, int height, const std::map<std::string, std::string> &pCustomProperties) {
+    GameObjectCreature::load(x, y, width, height, pCustomProperties);
+
     timeElapsed = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (8)));
 }
 
@@ -20,7 +20,6 @@ void NPC::update(float deltaTime, GameObject *pPlayer) {
 }
 
 Vector2D NPC::chooseRandomDirection() {
-
     float x, y;
     x = -1.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (2)));
     y = -1.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (2)));

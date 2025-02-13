@@ -3,6 +3,7 @@
 #include "../Managers/InputManager.h"
 #include "../Maps/MapParser.h"
 #include "GameObjectLayer.h"
+#include "GameObjects/GameObjectItem/Teleport.h"
 
 void PlayState::onEnter() {
     //TODO Determine if we are starting a new game or loading one?
@@ -10,9 +11,14 @@ void PlayState::onEnter() {
     //TODO Get these defaults from choose character screen/co-ords from map?
     //Create new player
     mPlayer = new Player();
-    mPlayer->load(LoaderParams(100, 100, 52, 72, "character2", 0, 0));
+    auto customProperties = std::map<std::string, std::string>();
+    customProperties["textureID"] = "character2";
+    customProperties["startColumn"] = "0";
+    customProperties["startRow"] = "0";
 
-    changeMap("Test");
+    mPlayer->load(100, 100, 52, 72, customProperties);
+
+    changeMap("Test", 14, 19);
 }
 
 void PlayState::update(float deltaTime) {
@@ -32,10 +38,16 @@ void PlayState::update(float deltaTime) {
             if(auto goc = dynamic_cast<GameObjectCreature*>(gameObject)){
                 goc->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
             }
+            //TODO Else we are a GO Item?
 
             //Check intersection with player
             SDL_FRect otherHitBox = gameObject->getWorldHitBox();
             if (SDL_HasRectIntersectionFloat(&playerHitBox, &otherHitBox)) {
+                //TODO IF type of teleport, do xyz else
+                if(auto tp = dynamic_cast<Teleport*>(gameObject)) {
+                    std::cout << "Teleport to " << tp->destMap << '\n';
+                    continue;
+                }
                 gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
             }
         }
@@ -91,15 +103,13 @@ SDL_Rect PlayState::getViewport() {
     return SDL_Rect{x, y, width, height};
 }
 
-void PlayState::changeMap(const std::string mapName) {
+void PlayState::changeMap(const std::string mapName, float destX, float destY) {
     if(pCurrentMap) {
         //TODO delete current map, GOs etc
     }
 
-    MapParser levelParser{};
-
     pCurrentMap = new MapTest();
-    levelParser.parseMap(pCurrentMap);
+    mPlayer->setPosition(Vector2D(destX, destY));
 }
 
 void PlayState::loadGame() {
