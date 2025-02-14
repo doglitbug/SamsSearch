@@ -240,7 +240,8 @@ void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObj
                 }
             }
 
-            pGameObject->load(x, y, width, height, customProperties);
+            CPO prop = CPO(customProperties);
+            pGameObject->load(x, y, width, height, prop);
 
             pObjectLayer->getGameObjects()->push_back(pGameObject);
         }

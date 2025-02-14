@@ -1,6 +1,6 @@
 #include "NPC.h"
 
-void NPC::load(int x, int y, int width, int height, const std::map<std::string, std::string> &pCustomProperties) {
+void NPC::load(int x, int y, int width, int height, CPO&pCustomProperties) {
     GameObjectCreature::load(x, y, width, height, pCustomProperties);
 
     timeElapsed = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (8)));

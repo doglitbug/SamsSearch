@@ -2,21 +2,21 @@
 
 #include <bits/parse_numbers.h>
 
-void GameObject::load(  const int x,
-                        const int y,
-                        const int width,
-                        const int height,
-                        const std::map<std::string, std::string> &pCustomProperties) {
+void GameObject::load(int x,
+                      int y,
+                      int width,
+                      int height,
+                      CPO &pCustomProperties) {
     m_position = Vector2D(static_cast<float>(x), static_cast<float>(y));
     m_width = width;
     m_height = height;
 
-    m_textureID = pCustomProperties.find("textureID")->second;
+    m_textureID = pCustomProperties.getString("textureID");
     //TODO Find or default
     m_direction = DIRECTION::SOUTH;
     m_currentFrame = 0;
-    m_startColumn = std::stoi(pCustomProperties.find("startColumn")->second);
-    m_startRow = std::stoi(pCustomProperties.find("startRow")->second);
+    m_startColumn = pCustomProperties.getInt("startColumn");
+    m_startRow = pCustomProperties.getInt("startRow");
 
     // TODO Use width and height to make a default?
     m_hitBox = nullptr;
@@ -32,8 +32,8 @@ void GameObject::drawSelf(SDL_Rect *pViewport) {
     if (m_position.getY() > (pViewport->y + pViewport->h)) return;
 
     AssetManager::get()->drawTextureFrame(m_textureID,
-                                          (int) m_position.getX()-pViewport->x,
-                                          (int) m_position.getY()-pViewport->y,
+                                          (int) m_position.getX() - pViewport->x,
+                                          (int) m_position.getY() - pViewport->y,
                                           m_width,
                                           m_height,
                                           m_startRow + m_direction,
@@ -64,5 +64,4 @@ GameObject::~GameObject() {
 }
 
 void GameObject::update(float deltaTime, GameObject *pPlayer) {
-
 }

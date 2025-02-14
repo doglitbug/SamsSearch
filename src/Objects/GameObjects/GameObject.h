@@ -17,7 +17,7 @@ public:
 
     virtual ~GameObject();
 
-    virtual void load(int x, int y, int width, int height, const std::map<std::string, std::string> &pCustomProperties);
+    virtual void load(int x, int y, int width, int height, CPO &pCustomProperties);
 
     void drawSelf(SDL_Rect *pViewport);
 

@@ -1,6 +1,6 @@
 #include "Dog.h"
 
-void Dog::load(int x, int y, int width, int height, const std::map<std::string, std::string> &pCustomProperties) {
+void Dog::load(int x, int y, int width, int height, CPO &pCustomProperties) {
     NPC::load(x, y, width, height, pCustomProperties);
     m_hitBox = new SDL_FRect{12, 44, 28, 28};
 }

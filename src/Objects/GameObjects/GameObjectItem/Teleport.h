@@ -9,7 +9,7 @@ public:
     Teleport() = default;
     ~Teleport() = default;
 
-    void load(int x, int y, int width, int height, const std::map<std::string, std::string> &pCustomProperties);
+    void load(int x, int y, int width, int height, CPO &pCustomProperties);
 public:
     /// @brief Name of the map we are moving the player to
     std::string destMap;

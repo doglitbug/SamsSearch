@@ -11,20 +11,22 @@ void PlayState::onEnter() {
     //TODO Get these defaults from choose character screen/co-ords from map?
     //Create new player
     mPlayer = new Player();
-    auto customProperties = std::map<std::string, std::string>();
-    customProperties["textureID"] = "character2";
-    customProperties["startColumn"] = "0";
-    customProperties["startRow"] = "0";
 
-    mPlayer->load(100, 100, 52, 72, customProperties);
 
-    changeMap("Test", 14, 19);
+    auto playerProp = std::map<std::string, std::string>();
+    playerProp["textureID"] = "character2";
+    playerProp["startColumn"] = "0";
+    playerProp["startRow"] = "0";
+
+    CPO prop = CPO(playerProp);
+    mPlayer->load(100, 100, 52, 72, prop);
+
+    changeMap("Test", 12*32, 19*32);
 }
 
 void PlayState::update(float deltaTime) {
-
     //TODO Only update object layer, at least until we have animations eg for water?
-    mPlayer->update(deltaTime);
+    mPlayer->update(deltaTime, nullptr);
     //TODO All dynamics need to do this?
     mPlayer->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
 
@@ -33,22 +35,25 @@ void PlayState::update(float deltaTime) {
     for (GameObjectLayer *layer: *pCurrentMap->getObjectLayers()) {
         layer->update(deltaTime, mPlayer);
 
-        for(auto *gameObject: *layer->getGameObjects()){
+        for (auto *gameObject: *layer->getGameObjects()) {
             //Check map collision here
-            if(auto goc = dynamic_cast<GameObjectCreature*>(gameObject)){
+            if (auto goc = dynamic_cast<GameObjectCreature *>(gameObject)) {
                 goc->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
             }
             //TODO Else we are a GO Item?
 
             //Check intersection with player
+            //TODO Change this to all dynamics so they dont over lap
             SDL_FRect otherHitBox = gameObject->getWorldHitBox();
             if (SDL_HasRectIntersectionFloat(&playerHitBox, &otherHitBox)) {
                 //TODO IF type of teleport, do xyz else
-                if(auto tp = dynamic_cast<Teleport*>(gameObject)) {
+                if (auto tp = dynamic_cast<Teleport *>(gameObject)) {
                     std::cout << "Teleport to " << tp->destMap << '\n';
+                    mPlayer->setPosition(Vector2D(tp->destX, tp->destY));
                     continue;
                 }
                 gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
+                //else do collision based stuff to stop over lapping
             }
         }
     }
@@ -104,7 +109,7 @@ SDL_Rect PlayState::getViewport() {
 }
 
 void PlayState::changeMap(const std::string mapName, float destX, float destY) {
-    if(pCurrentMap) {
+    if (pCurrentMap) {
         //TODO delete current map, GOs etc
     }
 
@@ -116,7 +121,7 @@ void PlayState::loadGame() {
     //TODO Let this function know which game/file to load
 }
 
-void PlayState::saveGame(){
+void PlayState::saveGame() {
     //TODO Save game state for later loading
 };
 
@@ -133,11 +138,9 @@ void PlayState::drawUI() {
     //or properly implement writeTextToScreen
     AssetManager::get()->createTextTexture(textWidth, 30, mapName, "Text", "mapName");
     AssetManager::get()->drawTexture("mapName", width / 2 - textWidth / 2, 0, 0, 0);
-
 }
 
-void PlayState::handleInput()
-{
+void PlayState::handleInput() {
     if (InputManager::get()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
         EngineStateManager::get()->getStateMachine()->pushState("PAUSE");
         return;
@@ -154,29 +157,19 @@ void PlayState::handleInput()
 
     //TODO Set velocity to zero first?
     //TODO Move all this to InputManager so that we just get the movement vector back and dont need to know about SDL Scan codes
-    if (InputManager::get()->isKeyDown(SDL_SCANCODE_RIGHT))
-    {
+    if (InputManager::get()->isKeyDown(SDL_SCANCODE_RIGHT)) {
         mPlayer->m_velocity.setX(1);
-    }
-    else if (InputManager::get()->isKeyDown(SDL_SCANCODE_LEFT))
-    {
+    } else if (InputManager::get()->isKeyDown(SDL_SCANCODE_LEFT)) {
         mPlayer->m_velocity.setX(-1);
-    }
-    else
-    {
+    } else {
         mPlayer->m_velocity.setX(0);
     }
 
-    if (InputManager::get()->isKeyDown(SDL_SCANCODE_DOWN))
-    {
+    if (InputManager::get()->isKeyDown(SDL_SCANCODE_DOWN)) {
         mPlayer->m_velocity.setY(1);
-    }
-    else if (InputManager::get()->isKeyDown(SDL_SCANCODE_UP))
-    {
+    } else if (InputManager::get()->isKeyDown(SDL_SCANCODE_UP)) {
         mPlayer->m_velocity.setY(-1);
-    }
-    else
-    {
+    } else {
         mPlayer->m_velocity.setY(0);
     }
 
