@@ -26,7 +26,7 @@ add_executable(SamsSearch
         src/Objects/GameObjects/GameObjectItem/Teleport.cpp
         src/Objects/GameObjects/GameObjectItem/Teleport.h
         src/Objects/GameObjects/GameObjectFactory.h
-        src/Objects/LoaderParams.h
+        src/Objects/UIObjects/LoaderParams.h
         src/Objects/GameObjects/GameObjectCreature/Player.cpp
         src/Objects/GameObjects/GameObjectCreature/Player.h
         src/Objects/GameObjects/GameObject.cpp
@@ -78,7 +78,7 @@ add_executable(SamsSearch
         src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.h
         src/Objects/GameObjects/GameObjectItem/GameObjectItem.cpp
         src/Objects/GameObjects/GameObjectItem/GameObjectItem.h
-        src/CPO.h)
+        src/Objects/GameObjects/CPO.h)
 
 find_package(ZLIB)
 

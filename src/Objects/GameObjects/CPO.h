@@ -15,15 +15,20 @@ public:
 
     ~CPO() = default;
 
-    bool getBool(std::string &name, bool defaultValue = false) {  try {
-        if (const auto it = m_properties.find(name); it != m_properties.end()) {
+    bool getBool(const std::string &name, const bool defaultValue = false) {
+        try {
+            if (const auto it = m_properties.find(name); it != m_properties.end()) {
             return strcmp(it->second.c_str(), "true");
         }
     } catch (...) {
     }
-        return defaultValue;}
+        return defaultValue;
+    }
+
     //color (a 32-bit color value)
+
     //file (a file reference, which is saved as a relative path)
+
     float getFloat(const std::string &name, const float defaultValue = 0.0f) {
         try {
             if (const auto it = m_properties.find(name); it != m_properties.end()) {
