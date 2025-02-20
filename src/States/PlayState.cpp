@@ -21,7 +21,7 @@ void PlayState::onEnter() {
     CPO prop = CPO(playerProp);
     mPlayer->load(100, 100, 52, 72, prop);
 
-    changeMap("Test", 12*32, 19*32);
+    changeMap("Test", 18*32, 2*32);
 }
 
 void PlayState::update(float deltaTime) {
@@ -114,6 +114,8 @@ void PlayState::changeMap(const std::string mapName, float destX, float destY) {
     }
 
     pCurrentMap = new MapTest();
+    pCurrentMap->load();
+    //TODO Import GOs
     mPlayer->setPosition(Vector2D(destX, destY));
 }
 

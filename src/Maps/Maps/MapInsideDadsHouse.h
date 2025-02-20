@@ -3,8 +3,8 @@
 #include "BaseMap.h"
 #include "MapParser.h"
 
-class MapTest : public BaseMap {
+class MapInsideDadsHouse : public BaseMap {
 public:
-    MapTest();
+    MapInsideDadsHouse();
     void load() override;
 };

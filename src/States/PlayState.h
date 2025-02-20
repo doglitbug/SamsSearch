@@ -29,6 +29,8 @@ private:
     /// @brief Get the viewport to draw within (basically camera position)
     SDL_Rect getViewport();
 
+    std::map<std::string, BaseMap *> m_maps;
+
     Player *mPlayer;
 
     //TODO Move

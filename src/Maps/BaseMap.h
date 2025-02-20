@@ -1,10 +1,8 @@
 #pragma once
 
-#include <iostream>
 #include <vector>
 #include "BaseLayer.h"
 #include "CollisionLayer.h"
-#include "Vector2D.h"
 #include "GameObjectLayer.h"
 
 struct TileSet
@@ -23,9 +21,7 @@ struct TileSet
 class BaseMap {
 public:
     BaseMap(){};
-
     ~BaseMap(){
-
         // Clean up layers here
         for (auto it = m_upperLayers.begin(); it != m_upperLayers.end();) {
                 it = m_upperLayers.erase(it);  // Returns iterator to the next element
@@ -71,6 +67,8 @@ public:
     int getHeight() const { return height; };
 
     std::string getName(){ return name;}
+
+    virtual void load(){};
 
 private:
     friend class MapParser;

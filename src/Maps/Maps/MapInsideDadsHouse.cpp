@@ -1,10 +1,10 @@
-#include "MapTest.h"
+#include "MapInsideDadsHouse.h"
 
-MapTest::MapTest() {
-    filename = "assets/maps/Temp.tmx";
+MapInsideDadsHouse::MapInsideDadsHouse() {
+    filename = "assets/maps/InsideDadsHouse.tmx";
 }
 
-void MapTest::load() {
+void MapInsideDadsHouse::load() {
     //TODO Place this into base class as all map will require it!
     MapParser levelParser{};
     levelParser.parseMap(this);
