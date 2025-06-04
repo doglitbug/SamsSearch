@@ -1,14 +1,11 @@
 #pragma once
 
-#include <vector>
-#include <iostream>
-
 #include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
 
-#include "../Objects/BaseObject.h"
 #include "../States/StateMachine.h"
-#include "../Vector2D.h"
+
+/// @brief Do we want to show object hit-boxes on screen?
+#define SHOW_HITBOX false
 
 class EngineStateManager {
 public:
@@ -62,7 +59,4 @@ private:
 
     bool m_bRunning;
     StateMachine *m_pGameStateMachine;
-
-    /// @brief Used to calculate camera position later on
-    Vector2D *m_playerLocation;
 };

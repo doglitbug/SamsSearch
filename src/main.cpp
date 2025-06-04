@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
 
     // TODO Move these parameters into the init method, as they will be loaded from m_settings and main.cpp doesn't need to know about them
     // TODO Which screen to launch on for those with multi monitor set ups
-    if (!EngineStateManager::get()->init("Sam's Search", 640, 480, false)) {
+    if (!EngineStateManager::get()->init("Sam's Search", 1280, 1024, false)) {
         std::cout << "Error starting EngineStateManager" << std::endl;
         return -1;
     }

@@ -1,7 +1,7 @@
 #include "MainMenuState.h"
 
 void MainMenuState::onEnter() {
-    if (SettingsManager::get()->getTitleMusicEnabled()) {
+    if (SettingsManager::getTitleMusicEnabled()) {
         AssetManager::get()->playMusic("main_menu");
     }
     //Title
@@ -23,18 +23,19 @@ void MainMenuState::update(float deltaTime) {
 
     //Reposition all game objects
     int index = 0;
-    int line = 0;
+
     //Title
     m_gameObjects[index++]->setPosition(leftSide - 453, middle - 100);
-    middle += 50;//Lower for large title
-    //Buttons
-    m_gameObjects[index++]->setPosition(leftSide - 100, middle + 75 * line++);
-    m_gameObjects[index++]->setPosition(leftSide - 100, middle + 75 * line++);
-    m_gameObjects[index++]->setPosition(leftSide - 100, middle + 75 * line++);
-    m_gameObjects[index++]->setPosition(leftSide - 100, middle + 75 * line++);
-    m_gameObjects[index++]->setPosition(leftSide - 100, middle + 75 * line++);
 
-    MenuState::update(deltaTime);
+    leftSide -= LABEL_WIDTH / 2;
+    //Buttons
+    m_gameObjects[index++]->setPosition(leftSide, middle + (ROW_HEIGHT + ROW_GAP) * index);
+    m_gameObjects[index++]->setPosition(leftSide, middle + (ROW_HEIGHT + ROW_GAP) * index);
+    m_gameObjects[index++]->setPosition(leftSide, middle + (ROW_HEIGHT + ROW_GAP) * index);
+    m_gameObjects[index++]->setPosition(leftSide, middle + (ROW_HEIGHT + ROW_GAP) * index);
+    m_gameObjects[index++]->setPosition(leftSide, middle + (ROW_HEIGHT + ROW_GAP) * index);
+
+    BaseMenuState::update(deltaTime);
 }
 
 void MainMenuState::onExit() {

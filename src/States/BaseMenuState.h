@@ -8,8 +8,17 @@
 #include "Objects/UIObjects/LabelBoolean.h"
 #include "Objects/UIObjects/LabelInteger.h"
 
+//Default sizes
+#define ROW_HEIGHT 50
+#define ROW_GAP 15
+
+#define BUTTON_WIDTH 200
+#define LABEL_WIDTH 200
+
+#define HEADER_WIDTH 700
+#define HEADER_HEIGHT 150
 /// @brief Base state for all menu states
-class MenuState : public BaseState
+class BaseMenuState : public BaseState
 {
 public:
     /// @brief Generate Title
@@ -25,26 +34,26 @@ public:
     /// @param text for the label
     /// @param width of label, default of 200
     /// @return
-    static UIObject *generateLabel(const std::string &text, int width = 200);
+    static UIObject *generateLabel(const std::string &text, int width = LABEL_WIDTH);
 
     /// @brief Generate a On/Off label
     /// @param link boolean function
     /// @param width of label, default of 200
     /// @return
-    static UIObject *generateLabel(bool (*link)(), int width = 200);
+    static UIObject *generateLabel(bool (*link)(), int width = LABEL_WIDTH);
 
     /// @brief Generate an integer label
     /// @param link integer function
     /// @param width of label, default of 200
     /// @return
-    static UIObject *generateLabel(int (*link)(), int width = 200);
+    static UIObject *generateLabel(int (*link)(), int width = LABEL_WIDTH);
 
     /// @brief Generate a clickable button
     /// @param text for the button
     /// @param callback function to run when clicked
     /// @param width width of button, default of 200
     /// @return
-    static UIObject *generateButton(const std::string &text, void (*callback)(), int width = 200);
+    static UIObject *generateButton(const std::string &text, void (*callback)(), int width = BUTTON_WIDTH);
 
 protected:
     /// @brief Do nothing, this is only to be used during development as a stub

@@ -1,18 +1,18 @@
 #include <regex>
-#include "LevelParser.h"
+#include "MapParser.h"
 #include "TileLayer.h"
 #include "zlib.h"
 #include "base64.h"
-#include "ObjectLayer.h"
+#include "GameObjectLayer.h"
 #include "Objects/GameObjects/GameObjectFactory.h"
 
-Level *LevelParser::parseLevel(const char *levelFile)
+void MapParser::parseMap(BaseMap *pMap)
 {
-    // Create an XML document and load the map XML
-    XMLDocument levelDocument = new XMLDocument(false, COLLAPSE_WHITESPACE);
-    levelDocument.LoadFile(levelFile);
+    auto mapFile = pMap->filename;
 
-    auto *pLevel = new Level();
+    // Create an XML document and load the map XML
+    XMLDocument levelDocument = XMLDocument(false, COLLAPSE_WHITESPACE);
+    levelDocument.LoadFile(mapFile.c_str());
 
     // Get the root node
     XMLElement *pRoot = levelDocument.RootElement();
@@ -25,40 +25,38 @@ Level *LevelParser::parseLevel(const char *levelFile)
     {
         if (e->Value() == std::string("properties"))
         {
-            parseAdditionalMapProperties(e, pLevel);
+            parseAdditionalMapProperties(e, pMap);
         }
         else if (e->Value() == std::string("tileset"))
         {
-            parseTilesets(e, pLevel->getTileSets());
+            parseTilesets(e, pMap->getTileSets());
         }
         else if (e->Value() == std::string("layer"))
         {
             std::string layerClass = e->Attribute("class");
 
             if (layerClass == "Lower") {
-                parseTileLayer(e, pLevel->getLowerLayers(), pLevel->getTileSets());
+                parseTileLayer(e, pMap->getLowerLayers(), pMap->getTileSets());
             } else if (layerClass == "Upper") {
-                parseTileLayer(e, pLevel->getUpperLayers(), pLevel->getTileSets());
+                parseTileLayer(e, pMap->getUpperLayers(), pMap->getTileSets());
             } else if (layerClass == "Collision") {
-                parseCollisionLayer(e, pLevel->getCollisionLayer());
+                parseCollisionLayer(e, pMap->getCollisionLayer());
             } else {
-                std::cout << "Unknown layer class" << std::endl;
+                std::cout << "Unknown layer class: " << layerClass << std::endl;
             }
         }
         else if (e->Value() == std::string("objectgroup"))
         {
-            parseObjectLayer(e, pLevel->getObjectLayers(), pLevel->getCollisionLayer());
+            parseObjectLayer(e, pMap->getObjectLayers());
         }
         else
         {
             std::cout << "Unknown value: " << e->Value() << std::endl;
         }
     }
-
-    return pLevel;
 }
 
-void LevelParser::parseTilesets(XMLElement *pTilesetRoot, std::vector<TileSet> *pTilesets)
+void MapParser::parseTilesets(XMLElement *pTilesetRoot, std::vector<TileSet> *pTilesets)
 {
     // First add the tileset to the texture manager (from image element)
     // Adjust source to point to correct location (swap '..' for 'assets'
@@ -81,7 +79,7 @@ void LevelParser::parseTilesets(XMLElement *pTilesetRoot, std::vector<TileSet> *
     pTilesets->push_back(tileset);
 }
 
-void LevelParser::parseAdditionalMapProperties(XMLElement *pPropertiesRoot, Level *pLevel)
+void MapParser::parseAdditionalMapProperties(XMLElement *pPropertiesRoot, BaseMap *pLevel)
 {
     for (XMLElement *e = pPropertiesRoot->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
@@ -102,8 +100,8 @@ void LevelParser::parseAdditionalMapProperties(XMLElement *pPropertiesRoot, Leve
     }
 }
 
-void LevelParser::parseTileLayer(XMLElement *pTileElement, std::vector<Layer *> *pLayers,
-                                 const std::vector<TileSet> *pTilesets) const
+void MapParser::parseTileLayer(XMLElement *pTileElement, std::vector<BaseLayer *> *pLayers,
+                               const std::vector<TileSet> *pTilesets) const
 {
     auto *pTileLayer = new TileLayer(m_tileSize, *pTilesets);
 
@@ -154,14 +152,14 @@ void LevelParser::parseTileLayer(XMLElement *pTileElement, std::vector<Layer *> 
     pLayers->push_back(pTileLayer);
 }
 
-void LevelParser::parseCollisionLayer(XMLElement *pTileElement, CollisionLayer *pCollisionLayer) const
+void MapParser::parseCollisionLayer(XMLElement *pCollisionElement, CollisionLayer *pCollisionLayer) const
 {
     // Tile Data
     std::vector<std::vector<int>> data;
     std::string decodedIDs;
     XMLElement *pDataNode;
 
-    for (XMLElement *e = pTileElement->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
+    for (XMLElement *e = pCollisionElement->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
         if (e->Value() == std::string("data"))
         {
@@ -197,27 +195,29 @@ void LevelParser::parseCollisionLayer(XMLElement *pTileElement, CollisionLayer *
         {
             // filled gids are not 1, due to ordering of tile sheets, walkable will be 1 or 0 at this stage (not 0.75 for mud etc)
             // TODO Figure how to change collision layer to have one way etc
+            // GID 1 = walkable, all else not walkable
             data[rows][cols] = gids[rows * m_width + cols] == 1 ? 0 : 1;
         }
     }
 
-    pCollisionLayer->setTileData(data);
+    pCollisionLayer->setCollisionData(data);
 }
 
 
 // ToDo BaseObject layers, do these need to be loaded from a save file for each level?
-void LevelParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<ObjectLayer *> *pLayers, CollisionLayer *pCollisionLayer) const
+void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObjectLayer *> *pLayers) const
 {
     // Create an object layer
-    auto *pObjectLayer = new ObjectLayer();
+    auto *pObjectLayer = new GameObjectLayer();
     for (XMLElement *e = pObjectElement->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
         if (e->Value() == std::string("object"))
         {
-            int x, y, width, height, startColumn, startRow;
-            std::string textureID;
+            int x, y, width, height;
 
-            // Get values on the object node
+            //, startColumn, startRow; std::string textureID;
+
+            // Get values on the object node (this will exist for all Game Objects)
             x = e->IntAttribute("x");
             y = e->IntAttribute("y");
             width = e->IntAttribute("width");
@@ -225,50 +225,29 @@ void LevelParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<Objec
 
             GameObject *pGameObject = GameObjectFactory::get()->create(e->Attribute("type"));
 
-            // Get the custom property values
-            // TODO Place all values into a map as each type of object will need different data?
-            // OR have these values load their own stuff, perhaps just override if need be
+            //Get additional properties that may be different for different GameObjects and place in a map
+            auto customProperties = std::map<std::string, std::string>();
 
-            for (XMLElement *property = e->FirstChildElement()->FirstChildElement();
-                 property != nullptr; property = property->NextSiblingElement())
-            {
-                if (property->Attribute("name") == std::string("startColumn"))
+            //TODO Check to see if this object has <properties>
+            if (e->FirstChildElement("properties") != nullptr) {
+                for (XMLElement *property = e->FirstChildElement()->FirstChildElement();
+                     property != nullptr; property = property->NextSiblingElement())
                 {
-                    startColumn = property->IntAttribute("value");
-                }
-                else if (property->Attribute("name") == std::string("startRow"))
-                {
-                    startRow = property->IntAttribute("value");
-                }
-                else if (property->Attribute("name") == std::string("textureID"))
-                {
-                    textureID = property->Attribute("value");
-                }
-                else
-                {
-                    std::cout << "Unknown Property value: " << property->Attribute("name") << std::endl;
+                    auto key = property->Attribute("name");
+                    auto value = property->Attribute("value");
+
+                    customProperties[key]=value;
                 }
             }
 
-            pGameObject->load(LoaderParams(x, y, width, height, textureID, startColumn, startRow));
-
-            pGameObject->setCollisionLayer(pCollisionLayer);
-
-            // Terrible hack that probably breaks all sort of SOLID principals
-            //TODO Give this to all objects?
-            //TODO Player shouldn't be created here anyway
-            //if (e->Attribute("type") == std::string("Player"))
-            //{
-            //    dynamic_cast<GameObject *>
-            //}
-
-            //TODO If teleport, do this etc
+            CPO prop = CPO(customProperties);
+            pGameObject->load(x, y, width, height, prop);
 
             pObjectLayer->getGameObjects()->push_back(pGameObject);
         }
         else
         {
-            std::cout << "Unknown ObjectLayer value: " << e->Value() << std::endl;
+            std::cout << "Unknown GameObjectLayer value: " << e->Value() << std::endl;
         }
     }
 

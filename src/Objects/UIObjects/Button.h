@@ -6,11 +6,9 @@
 class Button : public UIObject {
 public:
     Button() {};
-
     ~Button() {};
 
     void load(const LoaderParams &pParams) override;
-
     void update(float deltaTime) override;
 
     void setCallback(void(*callback)()) { m_callback = callback; }

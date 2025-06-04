@@ -7,7 +7,7 @@ include_directories(src)
 include_directories(src/ThirdParty/Base64)
 include_directories(src/Objects)
 include_directories(src/Objects/UIObjects)
-include_directories(src/Levels)
+include_directories(src/Maps)
 include_directories(src/Managers)
 include_directories(src/States)
 include_directories(src/ThirdParty/TinyXML)
@@ -23,25 +23,24 @@ add_executable(SamsSearch
         src/Objects/UIObjects/LabelBoolean.h
         src/Objects/UIObjects/LabelInteger.h
         src/Objects/UIObjects/Title.h
-        src/Objects/GameObjects/Teleport.cpp
-        src/Objects/GameObjects/Teleport.h
-        src/Objects/BaseObject.h
+        src/Objects/GameObjects/GameObjectItem/Teleport.cpp
+        src/Objects/GameObjects/GameObjectItem/Teleport.h
         src/Objects/GameObjects/GameObjectFactory.h
-        src/Objects/LoaderParams.h
-        src/Objects/GameObjects/Player.cpp
-        src/Objects/GameObjects/Player.h
+        src/Objects/UIObjects/LoaderParams.h
+        src/Objects/GameObjects/GameObjectCreature/Player.cpp
+        src/Objects/GameObjects/GameObjectCreature/Player.h
         src/Objects/GameObjects/GameObject.cpp
         src/Objects/GameObjects/GameObject.h
-        src/Levels/CollisionLayer.cpp
-        src/Levels/CollisionLayer.h
-        src/Levels/Layer.h
-        src/Levels/Level.h
-        src/Levels/LevelParser.cpp
-        src/Levels/LevelParser.h
-        src/Levels/ObjectLayer.cpp
-        src/Levels/ObjectLayer.h
-        src/Levels/TileLayer.cpp
-        src/Levels/TileLayer.h
+        src/Maps/CollisionLayer.cpp
+        src/Maps/CollisionLayer.h
+        src/Maps/BaseLayer.h
+        src/Maps/BaseMap.h
+        src/Maps/MapParser.cpp
+        src/Maps/MapParser.h
+        src/Maps/GameObjectLayer.cpp
+        src/Maps/GameObjectLayer.h
+        src/Maps/TileLayer.cpp
+        src/Maps/TileLayer.h
         src/Managers/AssetManager.cpp
         src/Managers/AssetManager.h
         src/Managers/EngineStateManager.cpp
@@ -55,8 +54,8 @@ add_executable(SamsSearch
         src/States/StateMachine.h
         src/States/MainMenuState.cpp
         src/States/MainMenuState.h
-        src/States/MenuState.cpp
-        src/States/MenuState.h
+        src/States/BaseMenuState.cpp
+        src/States/BaseMenuState.h
         src/States/PauseState.cpp
         src/States/PauseState.h
         src/States/PlayState.cpp
@@ -69,10 +68,19 @@ add_executable(SamsSearch
         src/Vector2D.h
         src/Objects/UIObjects/UIObject.h
         src/Objects/UIObjects/UIObject.cpp
-        src/Objects/GameObjects/NPC.h
-        src/Objects/GameObjects/NPC.cpp
-        src/Objects/GameObjects/Dog.cpp
-        src/Objects/GameObjects/Dog.h)
+        src/Objects/GameObjects/GameObjectCreature/NPC.h
+        src/Objects/GameObjects/GameObjectCreature/NPC.cpp
+        src/Objects/GameObjects/GameObjectCreature/Dog.cpp
+        src/Objects/GameObjects/GameObjectCreature/Dog.h
+        src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.cpp
+        src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.h
+        src/Objects/GameObjects/GameObjectItem/GameObjectItem.cpp
+        src/Objects/GameObjects/GameObjectItem/GameObjectItem.h
+        src/Objects/GameObjects/CPO.h
+        src/Maps/Maps/MapTest.h
+        src/Maps/Maps/MapTest.cpp
+        src/Maps/Maps/MapInsideDadsHouse.h
+        src/Maps/Maps/MapInsideDadsHouse.cpp)
 
 find_package(ZLIB)
 

@@ -1,81 +1,72 @@
 #pragma once
 
-#include "BaseObject.h"
-#include "Managers/AssetManager.h"
 #include "Managers/EngineStateManager.h"
 #include "Vector2D.h"
-#include "Levels/CollisionLayer.h"
+#include "CPO.h"
 
 enum INTERACT_TYPE {
-    //Walked or collided with each other
     TOUCH,
-    //Deliberate interaction eg used action button
-    INTERACT
+    INTERACT,
+    ATTACK
 };
 
-/// @brief BaseObject in GameWorld
-class GameObject : public BaseObject {
+/// @brief Object in GameWorld, Javidx9 calls this a Dynamic
+class GameObject {
 public:
     GameObject() = default;
-    ~GameObject();
 
-    void load(const LoaderParams &pParams) override;
-    void drawAt(SDL_Rect *pViewPort);
+    virtual ~GameObject();
+
+    virtual void load(int x, int y, int width, int height, CPO &pCustomProperties);
+
+    /// Draw this GameObject if visible
+    /// @param pViewport World/Camera viewport
+    void drawSelf(SDL_Rect *pViewport);
 
     /// @brief
     /// @see https://youtu.be/oJvJZNyW_rw?si=05JhdC_6xejzS-5V&t=523
     /// @see https://youtu.be/oJvJZNyW_rw?si=o1UPLNghN-7xtD30&t=1702
     /// @param deltaTime
-    void update(float deltaTime) override;
-
-    /// @brief Choose a direction to face based on movement vector
-    void faceDirection();
+    /// @param pPlayer
+    virtual void update(float deltaTime, GameObject *pPlayer = nullptr);
 
     /// @brief Called when another GameObject interacts with this one
     /// @param other GameObject that has interacted
-    virtual void onInteraction(GameObject* other, INTERACT_TYPE interactType);
+    /// @param interactType Type of interaction
+    virtual void onInteraction(GameObject *other, INTERACT_TYPE interactType);
 
-    void clean() override;
+    void clean();
 
-    /// @brief Set this objects collision layer
-    /// @param pCollisionLayer
-    void setCollisionLayer(CollisionLayer *pCollisionLayer) {
-        m_pCollisionLayer = pCollisionLayer;
-    }
-
-    /// @brief GameObject velocity
-    /// @todo Move this back to protected/private
-    Vector2D m_velocity;
+    [[nodiscard]] Vector2D getPosition() const { return m_position; }
+    void setPosition(const Vector2D &newPosition)  { m_position = newPosition; }
 
     void drawHitBox(SDL_Rect *pViewport);
 
-    /// @brief Objects hit-box for colliding with other objects
-    SDL_FRect *m_hitBox;
-
-    SDL_FRect *getWorldHitBox(){
-        if(!m_hitBox) return nullptr;
-        SDL_FRect *hitBoxLocation = new SDL_FRect();
-        hitBoxLocation->x = m_position.getX() + m_hitBox->x;
-        hitBoxLocation->y = m_position.getY() + m_hitBox->y ;
-        hitBoxLocation->w = m_hitBox->w;
-        hitBoxLocation->h = m_hitBox->h;
+    /// @brief Get hit-box in world co-ords
+    /// @return
+    SDL_FRect getWorldHitBox() {
+        SDL_FRect hitBoxLocation;
+        hitBoxLocation.x = m_position.getX() + m_hitBox->x;
+        hitBoxLocation.y = m_position.getY() + m_hitBox->y;
+        hitBoxLocation.w = m_hitBox->w;
+        hitBoxLocation.h = m_hitBox->h;
 
         return hitBoxLocation;
     }
 
 protected:
-
+    Vector2D m_position;
+    /// @brief Objects hit-box for colliding with other objects
+    SDL_FRect *m_hitBox;
     /// @brief Used to denote direction in sprite-sheet
     DIRECTION m_direction;
+    std::string m_textureID;
     /// @brief used to denote animation frame(column) in sprite-sheet
     int m_currentFrame;
-
+    /// @brief Starting column in the sprite sheet
     int m_startColumn;
+    /// @brief Starting row in the sprite sheet
     int m_startRow;
-
-    /// @brief Collision layer for moving around world
-    CollisionLayer *m_pCollisionLayer;
-
-private:
-    void checkMapCollision(float deltaTime);
+    int m_width;
+    int m_height;
 };
