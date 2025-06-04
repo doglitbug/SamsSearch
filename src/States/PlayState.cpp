@@ -1,9 +1,10 @@
 #include "PlayState.h"
 
 #include "../Managers/InputManager.h"
-#include "../Maps/MapParser.h"
 #include "GameObjectLayer.h"
 #include "GameObjects/GameObjectItem/Teleport.h"
+#include "Maps/MapTest.h"
+#include "Maps/Maps/MapInsideDadsHouse.h"
 
 void PlayState::onEnter() {
     //TODO Determine if we are starting a new game or loading one?
@@ -12,16 +13,15 @@ void PlayState::onEnter() {
     //Create new player
     mPlayer = new Player();
 
-
     auto playerProp = std::map<std::string, std::string>();
     playerProp["textureID"] = "character2";
     playerProp["startColumn"] = "0";
     playerProp["startRow"] = "0";
 
-    CPO prop = CPO(playerProp);
+    auto prop = CPO(playerProp);
     mPlayer->load(100, 100, 52, 72, prop);
 
-    changeMap("Test", 18*32, 2*32);
+    changeMap("InsideDadsHouse", 18*32, 2*32);
 }
 
 void PlayState::update(float deltaTime) {
@@ -109,12 +109,14 @@ SDL_Rect PlayState::getViewport() {
 }
 
 void PlayState::changeMap(const std::string mapName, float destX, float destY) {
-    if (pCurrentMap) {
-        //TODO delete current map, GOs etc
-    }
+   //TODO Check if we are changing to current map, probs just a local teleport
 
-    pCurrentMap = new MapTest();
-    pCurrentMap->load();
+    //Else close old map, and set new map active
+
+    pCurrentMap = new MapInsideDadsHouse();
+    //pCurrentMap = new MapTest();
+
+    pCurrentMap->onEnter();
     //TODO Import GOs
     mPlayer->setPosition(Vector2D(destX, destY));
 }

@@ -68,7 +68,11 @@ public:
 
     std::string getName(){ return name;}
 
-    virtual void load(){};
+    /// @brief Called when the player enters the map
+    virtual void onEnter(){};
+
+    /// @brief Called when the player leaves the map
+    virtual void onExit(){};
 
 private:
     friend class MapParser;

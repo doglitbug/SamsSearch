@@ -6,5 +6,5 @@
 class MapInsideDadsHouse : public BaseMap {
 public:
     MapInsideDadsHouse();
-    void load() override;
+    void onEnter() override;
 };

@@ -1,12 +1,9 @@
 #pragma once
 
-#include <iostream>
 #include "Objects/GameObjects/GameObjectCreature/Player.h"
 
 #include "BaseState.h"
 #include "BaseMap.h"
-
-#include "Maps/Maps/MapTest.h"
 
 /// @brief PlayState is the GameEngine
 class PlayState : public BaseState
@@ -18,20 +15,24 @@ public:
     void onExit() override;
 
 private:
-    //TODO Direction?
+    /// Move the player to a different map
+    /// @param mapName Map to move to
+    /// @param destX New x location
+    /// @param destY New y location
+    /// @todo Direction or assume South?
     void changeMap(std::string mapName, float destX, float destY);
+
     void loadGame();
     void saveGame();
     void drawUI();
     void handleInput();
 
     BaseMap *pCurrentMap;
+
     /// @brief Get the viewport to draw within (basically camera position)
     SDL_Rect getViewport();
 
     std::map<std::string, BaseMap *> m_maps;
 
     Player *mPlayer;
-
-    //TODO Move
 };

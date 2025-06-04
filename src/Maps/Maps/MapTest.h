@@ -6,5 +6,5 @@
 class MapTest : public BaseMap {
 public:
     MapTest();
-    void load() override;
+    void onEnter() override;
 };

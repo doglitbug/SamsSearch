@@ -5,7 +5,7 @@
 #include "../States/StateMachine.h"
 
 /// @brief Do we want to show object hit-boxes on screen?
-#define SHOW_HITBOX true
+#define SHOW_HITBOX false
 
 class EngineStateManager {
 public:

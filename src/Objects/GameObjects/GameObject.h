@@ -19,6 +19,8 @@ public:
 
     virtual void load(int x, int y, int width, int height, CPO &pCustomProperties);
 
+    /// Draw this GameObject if visible
+    /// @param pViewport World/Camera viewport
     void drawSelf(SDL_Rect *pViewport);
 
     /// @brief

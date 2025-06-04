@@ -72,13 +72,15 @@ add_executable(SamsSearch
         src/Objects/GameObjects/GameObjectCreature/NPC.cpp
         src/Objects/GameObjects/GameObjectCreature/Dog.cpp
         src/Objects/GameObjects/GameObjectCreature/Dog.h
-        src/Maps/Maps/MapTest.cpp
-        src/Maps/Maps/MapTest.h
         src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.cpp
         src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.h
         src/Objects/GameObjects/GameObjectItem/GameObjectItem.cpp
         src/Objects/GameObjects/GameObjectItem/GameObjectItem.h
-        src/Objects/GameObjects/CPO.h)
+        src/Objects/GameObjects/CPO.h
+        src/Maps/Maps/MapTest.h
+        src/Maps/Maps/MapTest.cpp
+        src/Maps/Maps/MapInsideDadsHouse.h
+        src/Maps/Maps/MapInsideDadsHouse.cpp)
 
 find_package(ZLIB)
 
