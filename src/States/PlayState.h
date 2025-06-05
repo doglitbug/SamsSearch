@@ -22,17 +22,24 @@ private:
     /// @todo Direction or assume South?
     void changeMap(std::string mapName, float destX, float destY);
 
+    /// Called when the player opts to load a saved game
     void loadGame();
+    /// Called when the player opts to save the game
     void saveGame();
+
     void drawUI();
     void handleInput();
 
+    /// The current map
     BaseMap *pCurrentMap;
-
-    /// @brief Get the viewport to draw within (basically camera position)
-    SDL_Rect getViewport();
-
+    /// All loaded maps
     std::map<std::string, BaseMap *> m_maps;
+    /// Current maps gameObjects
+    std::vector<GameObject *> m_gameObjects;
 
     Player *mPlayer;
+
+
+    /// Get the viewport to draw within (basically camera position)
+    SDL_Rect getViewport() const;
 };

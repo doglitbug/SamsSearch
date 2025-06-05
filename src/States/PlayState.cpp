@@ -7,6 +7,9 @@
 #include "Maps/Maps/MapInsideDadsHouse.h"
 
 void PlayState::onEnter() {
+    m_maps["InsideDadsHouse"] = new MapInsideDadsHouse();
+    m_maps["Test"] = new MapTest();
+
     //TODO Determine if we are starting a new game or loading one?
     //Set player position/details from map?
     //TODO Get these defaults from choose character screen/co-ords from map?
@@ -21,7 +24,7 @@ void PlayState::onEnter() {
     auto prop = CPO(playerProp);
     mPlayer->load(100, 100, 52, 72, prop);
 
-    changeMap("InsideDadsHouse", 18*32, 2*32);
+    changeMap("Test", 18 * 32, 2 * 32);
 }
 
 void PlayState::update(float deltaTime) {
@@ -37,7 +40,7 @@ void PlayState::update(float deltaTime) {
 
         for (auto *gameObject: *layer->getGameObjects()) {
             //Check map collision here
-            if (auto goc = dynamic_cast<GameObjectCreature *>(gameObject)) {
+            if (const auto goc = dynamic_cast<GameObjectCreature *>(gameObject)) {
                 goc->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
             }
             //TODO Else we are a GO Item?
@@ -47,9 +50,8 @@ void PlayState::update(float deltaTime) {
             SDL_FRect otherHitBox = gameObject->getWorldHitBox();
             if (SDL_HasRectIntersectionFloat(&playerHitBox, &otherHitBox)) {
                 //TODO IF type of teleport, do xyz else
-                if (auto tp = dynamic_cast<Teleport *>(gameObject)) {
-                    std::cout << "Teleport to " << tp->destMap << '\n';
-                    mPlayer->setPosition(Vector2D(tp->destX, tp->destY));
+                if (const auto tp = dynamic_cast<Teleport *>(gameObject)) {
+                    changeMap(tp->destMap, tp->destX, tp->destY);
                     continue;
                 }
                 gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
@@ -85,22 +87,28 @@ void PlayState::render() {
 
 void PlayState::onExit() {
     //TODO Ask to save here as we would only be exiting to the main menu
-    delete (pCurrentMap);
+    pCurrentMap = nullptr;
     delete (mPlayer);
+
+    for (auto it = m_maps.begin(); it != m_maps.end();) {
+        it = m_maps.erase(it); // Returns iterator to the next element
+    }
+    m_maps.clear();
+
     BaseState::onExit();
 }
 
-SDL_Rect PlayState::getViewport() {
-    int x, y, width, height;
+SDL_Rect PlayState::getViewport() const {
+    int width, height;
     EngineStateManager::get()->getWindowSize(&width, &height);
 
     //Set viewport position for x axis
-    x = mPlayer->getPosition().getX() - width / 2;
+    int x = mPlayer->getPosition().getX() - width / 2;
     if (x < 0) x = 0;
     //TODO Fix this
     //if (x > pCurrentMap->getWidth()*32 - width) x = pCurrentMap->getWidth()*32 - width;
 
-    y = mPlayer->getPosition().getY() - height / 2;
+    int y = mPlayer->getPosition().getY() - height / 2;
     if (y < 0) y = 0;
     //TODO Fix this
     //if (y + height > pCurrentMap->getHeight()) y = pCurrentMap->getHeight() - height;
@@ -109,15 +117,24 @@ SDL_Rect PlayState::getViewport() {
 }
 
 void PlayState::changeMap(const std::string mapName, float destX, float destY) {
-   //TODO Check if we are changing to current map, probs just a local teleport
+    //First map
+    if (!pCurrentMap) {
+        pCurrentMap = m_maps.find(mapName)->second;
+        pCurrentMap->onEnter(); //TODO Import GOs
 
-    //Else close old map, and set new map active
+        mPlayer->setPosition(Vector2D(destX, destY));
+        return;
+    }
 
-    pCurrentMap = new MapInsideDadsHouse();
-    //pCurrentMap = new MapTest();
 
-    pCurrentMap->onEnter();
-    //TODO Import GOs
+    //TODO Check if we are changing to current map, probs just a local teleport
+    if (mapName.compare(pCurrentMap->getFileName()) != 0) {
+        pCurrentMap->onExit();
+        pCurrentMap = m_maps.find(mapName)->second;
+        pCurrentMap->onEnter(); //TODO Import GOs
+    }
+
+    //Else teleport within same Map
     mPlayer->setPosition(Vector2D(destX, destY));
 }
 
