@@ -63,10 +63,45 @@ void InputManager::update() {
     }
 }
 
-void InputManager::clean() {
+void InputManager::clean() const {
     if (m_bJoysticksInitialised) {
        //TODO Actual code, as this was removed during SDL3 migration
     }
+}
+
+Vector2D InputManager::getMovement() {
+    Vector2D newVelocity = {0, 0};
+
+    // Movement
+    // Joysticks
+    /**
+    if (InputManager::get()->joysticksInitialised()) {
+        m_velocity.setX(InputManager::get()->xValue(0, 1));
+        m_velocity.setY(InputManager::get()->yValue(0, 1));
+    }
+    */
+
+
+    if (isKeyDown(SDL_SCANCODE_RIGHT)) {
+        newVelocity.setX(1);
+    } else if (isKeyDown(SDL_SCANCODE_LEFT)) {
+        newVelocity.setX(-1);
+    } else {
+        newVelocity.setX(0);
+    }
+
+    if (isKeyDown(SDL_SCANCODE_DOWN)) {
+        newVelocity.setY(1);
+    } else if (isKeyDown(SDL_SCANCODE_UP)) {
+        newVelocity.setY(-1);
+    } else {
+        newVelocity.setY(0);
+    }
+
+    // Pythagoras thou art a heartless bitch
+    newVelocity.normalize();
+
+    return newVelocity;
 }
 
 // TODO Turn this into a 2d array so we can subscript [joy][stick]->getX()?

@@ -22,7 +22,11 @@ public:
 
     void update();
 
-    void clean();
+    void clean() const;
+
+    ///
+    /// @return Normalized movement vector
+    Vector2D getMovement();
 
     // Joystick Handling
     void initializeJoysticks();
@@ -43,20 +47,24 @@ public:
     };
 
     void initializeMouse();
-
     bool getMouseButtonState(int buttonNumber);
-
     Vector2D* getMousePosition();
 
     // Keyboard handling
-
-
     bool isKeyDown(SDL_Scancode key);
 
 private:
     InputManager() {};
-
     ~InputManager() {};
+
+    // Mouse
+    std::vector<bool> m_mouseButtonStates;
+    void onMouseMove(SDL_Event &event);
+    void onMouseButtonChange(SDL_Event &event, bool state);
+
+    // Keyboard
+    const bool *m_keyStates;
+    void onKeyChange();
 
     // Joysticks
     std::vector<SDL_Joystick *> m_joysticks;
@@ -64,23 +72,6 @@ private:
     std::vector<std::pair<Vector2D *, Vector2D *>> m_joystickValues;
     std::vector<std::vector<bool>> m_buttonStates;
     const int m_joystickDeadZone = 10000; // ToDo Place in m_settings/options?
-
-    // Mouse
-    std::vector<bool> m_mouseButtonStates;
-
-    // ToDo Make this a pointer when inputManager is no longer a singleton?
-    Vector2D m_mousePosition;
-
-    // Keyboard
-    const bool *m_keyStates;
-
-    void onKeyChange();
-
     void onJoystickAxisMove(SDL_Event &event);
-
     void onJoystickButtonChange(SDL_Event &event, bool state);
-
-    void onMouseMove(SDL_Event &event);
-
-    void onMouseButtonChange(SDL_Event &event, bool state);
 };

@@ -29,8 +29,7 @@ bool EngineStateManager::init(const char *title, int width, int height, bool ful
 
     // Attempt to initialize SDL
     // TODO Only init subsystems that are needed, for example we couldn't use this on RISC OS on Raspberry Pi as there is no CD-ROM drive!
-    if (!SDL_Init(SDL_INIT_VIDEO))
-    {
+    if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
         std::cout << "SDL Init fail\n";
         return false;
     }
@@ -44,7 +43,7 @@ bool EngineStateManager::init(const char *title, int width, int height, bool ful
     }
 
     // Create the renderer
-    m_pRenderer = SDL_CreateRenderer(m_pWindow, NULL);
+    m_pRenderer = SDL_CreateRenderer(m_pWindow, nullptr);
     if (m_pRenderer == nullptr) // renderer init success
     {
         std::cout << "SDL Renderer init fail\n";

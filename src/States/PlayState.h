@@ -19,16 +19,16 @@ private:
     /// @param mapName Map to move to
     /// @param destX New x location
     /// @param destY New y location
-    /// @todo Direction or assume South?
-    void changeMap(std::string mapName, float destX, float destY);
+    /// @param direction New direction
+    void changeMap(const std::string& mapName, float destX, float destY, DIRECTION direction);
 
     /// Called when the player opts to load a saved game
-    void loadGame();
+    static void loadGame();
     /// Called when the player opts to save the game
-    void saveGame();
+    static void saveGame();
 
     void drawUI();
-    void handleInput();
+    void handleInput() const;
 
     /// The current map
     BaseMap *pCurrentMap;

@@ -9,8 +9,11 @@ public:
     Teleport() = default;
     ~Teleport() = default;
 
-    void load(int x, int y, int width, int height, CPO &pCustomProperties);
-public:
+    void load(int x, int y, int width, int height, CPO &pCustomProperties) override;
+
+    /// Draw nothing
+    void drawSelf(SDL_Rect *pViewport) override {};
+
     /// @brief Name of the map we are moving the player to
     std::string destMap;
     /// @brief The location to move to

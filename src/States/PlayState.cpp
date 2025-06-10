@@ -24,7 +24,7 @@ void PlayState::onEnter() {
     auto prop = CPO(playerProp);
     mPlayer->load(100, 100, 52, 72, prop);
 
-    changeMap("Test", 18 * 32, 2 * 32);
+    changeMap("Test", 18 * 32, 2 * 32, SOUTH);
 }
 
 void PlayState::update(float deltaTime) {
@@ -35,6 +35,7 @@ void PlayState::update(float deltaTime) {
 
     const SDL_FRect playerHitBox = mPlayer->getWorldHitBox();
 
+    //TODO Remove object layer and have only a map of dynamics?
     for (GameObjectLayer *layer: *pCurrentMap->getObjectLayers()) {
         layer->update(deltaTime, mPlayer);
 
@@ -51,7 +52,7 @@ void PlayState::update(float deltaTime) {
             if (SDL_HasRectIntersectionFloat(&playerHitBox, &otherHitBox)) {
                 //TODO IF type of teleport, do xyz else
                 if (const auto tp = dynamic_cast<Teleport *>(gameObject)) {
-                    changeMap(tp->destMap, tp->destX, tp->destY);
+                    changeMap(tp->destMap, tp->destX, tp->destY, tp->destDirection);
                     continue;
                 }
                 gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
@@ -103,12 +104,12 @@ SDL_Rect PlayState::getViewport() const {
     EngineStateManager::get()->getWindowSize(&width, &height);
 
     //Set viewport position for x axis
-    int x = mPlayer->getPosition().getX() - width / 2;
+    int x = mPlayer->m_position.getX() - width / 2;
     if (x < 0) x = 0;
     //TODO Fix this
     //if (x > pCurrentMap->getWidth()*32 - width) x = pCurrentMap->getWidth()*32 - width;
 
-    int y = mPlayer->getPosition().getY() - height / 2;
+    int y = mPlayer->m_position.getY() - height / 2;
     if (y < 0) y = 0;
     //TODO Fix this
     //if (y + height > pCurrentMap->getHeight()) y = pCurrentMap->getHeight() - height;
@@ -116,26 +117,26 @@ SDL_Rect PlayState::getViewport() const {
     return SDL_Rect{x, y, width, height};
 }
 
-void PlayState::changeMap(const std::string mapName, float destX, float destY) {
+void PlayState::changeMap(const std::string &mapName, const float destX, const float destY, const DIRECTION direction) {
     //First map
     if (!pCurrentMap) {
         pCurrentMap = m_maps.find(mapName)->second;
         pCurrentMap->onEnter(); //TODO Import GOs
 
-        mPlayer->setPosition(Vector2D(destX, destY));
+        mPlayer->m_position = Vector2D(destX, destY);
+        mPlayer->m_direction = direction;
         return;
     }
 
-
-    //TODO Check if we are changing to current map, probs just a local teleport
-    if (mapName.compare(pCurrentMap->getFileName()) != 0) {
+    //Check if we are changing to a different map
+    if (mapName != pCurrentMap->getFileName()) {
         pCurrentMap->onExit();
         pCurrentMap = m_maps.find(mapName)->second;
         pCurrentMap->onEnter(); //TODO Import GOs
     }
 
-    //Else teleport within same Map
-    mPlayer->setPosition(Vector2D(destX, destY));
+    mPlayer->m_position = Vector2D(destX, destY);
+    mPlayer->m_direction = direction;
 }
 
 void PlayState::loadGame() {
@@ -152,49 +153,20 @@ void PlayState::drawUI() {
     int width, height;
     EngineStateManager::get()->getWindowSize(&width, &height);
 
-    std::string mapName = pCurrentMap->getName();
+    const std::string mapName = pCurrentMap->getName();
     //TODO Make this better by measuring correctly
-    int textWidth = (int) mapName.length() * 16;
+    const int textWidth = static_cast<int>(mapName.length()) * 16;
     //TODO Overwrite this texture with the new map name on change map...
     //or properly implement writeTextToScreen
     AssetManager::get()->createTextTexture(textWidth, 30, mapName, "Text", "mapName");
     AssetManager::get()->drawTexture("mapName", width / 2 - textWidth / 2, 0, 0, 0);
 }
 
-void PlayState::handleInput() {
+void PlayState::handleInput() const {
     if (InputManager::get()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
         EngineStateManager::get()->getStateMachine()->pushState("PAUSE");
         return;
     }
 
-    // Movement
-    // Joysticks
-    /**
-    if (InputManager::get()->joysticksInitialised()) {
-        m_velocity.setX(InputManager::get()->xValue(0, 1));
-        m_velocity.setY(InputManager::get()->yValue(0, 1));
-    }
-*/
-
-    //TODO Set velocity to zero first?
-    //TODO Move all this to InputManager so that we just get the movement vector back and dont need to know about SDL Scan codes
-    if (InputManager::get()->isKeyDown(SDL_SCANCODE_RIGHT)) {
-        mPlayer->m_velocity.setX(1);
-    } else if (InputManager::get()->isKeyDown(SDL_SCANCODE_LEFT)) {
-        mPlayer->m_velocity.setX(-1);
-    } else {
-        mPlayer->m_velocity.setX(0);
-    }
-
-    if (InputManager::get()->isKeyDown(SDL_SCANCODE_DOWN)) {
-        mPlayer->m_velocity.setY(1);
-    } else if (InputManager::get()->isKeyDown(SDL_SCANCODE_UP)) {
-        mPlayer->m_velocity.setY(-1);
-    } else {
-        mPlayer->m_velocity.setY(0);
-    }
-
-    // Pythagoras thou art a heartless bitch
-    mPlayer->m_velocity.normalize();
-    mPlayer->m_velocity *= mPlayer->speed;
+    mPlayer->m_velocity = InputManager::get()->getMovement() *= mPlayer->speed;
 }
