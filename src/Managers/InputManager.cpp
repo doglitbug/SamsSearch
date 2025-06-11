@@ -2,11 +2,11 @@
 
 void InputManager::initializeJoysticks() {
     if (SDL_InitSubSystem(SDL_INIT_JOYSTICK)) {
-        int i, num_joysticks;
+        int num_joysticks;
         SDL_JoystickID *joysticks = SDL_GetJoysticks(&num_joysticks);
         if (joysticks) {
-            for (i = 0; i < num_joysticks; ++i) {
-                SDL_JoystickID instance_id = joysticks[i];
+            for (int i = 0; i < num_joysticks; ++i) {
+                const SDL_JoystickID instance_id = joysticks[i];
                 const char *name = SDL_GetJoystickNameForID(instance_id);
                 const char *path = SDL_GetJoystickPathForID(instance_id);
 
@@ -69,7 +69,7 @@ void InputManager::clean() const {
     }
 }
 
-Vector2D InputManager::getMovement() {
+Vector2D InputManager::getMovement() const {
     Vector2D newVelocity = {0, 0};
 
     // Movement
@@ -106,7 +106,7 @@ Vector2D InputManager::getMovement() {
 
 // TODO Turn this into a 2d array so we can subscript [joy][stick]->getX()?
 // See https://wiki.libsdl.org/SDL2/SDL_JoystickNumAxes and https://wiki.libsdl.org/SDL2/SDL_JoystickGetAxis
-int InputManager::xValue(int joy, int stick) {
+int InputManager::xValue(const int joy, const int stick) const {
     if (!m_bJoysticksInitialised)
         return 0;
     switch (stick) {
@@ -119,7 +119,7 @@ int InputManager::xValue(int joy, int stick) {
     }
 }
 
-int InputManager::yValue(int joy, int stick) {
+int InputManager::yValue(const int joy, const int stick) const {
     if (!m_bJoysticksInitialised)
         return 0;
     switch (stick) {
@@ -132,7 +132,7 @@ int InputManager::yValue(int joy, int stick) {
     }
 }
 
-bool InputManager::getButtonState(int joy, int buttonNumber) {
+bool InputManager::getButtonState(const int joy, const int buttonNumber) {
     return m_buttonStates[joy][buttonNumber];
 }
 
@@ -143,7 +143,7 @@ void InputManager::initializeMouse() {
     m_mousePosition = Vector2D(0, 0);
 }
 
-bool InputManager::getMouseButtonState(int buttonNumber) {
+bool InputManager::getMouseButtonState(const int buttonNumber) {
     return m_mouseButtonStates[buttonNumber];
 }
 
@@ -151,7 +151,7 @@ Vector2D *InputManager::getMousePosition() {
     return &m_mousePosition;
 }
 
-bool InputManager::isKeyDown(SDL_Scancode key) {
+bool InputManager::isKeyDown(const SDL_Scancode key) const {
     if (!m_keyStates)
         return false;
     return m_keyStates[key] == 1;

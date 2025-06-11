@@ -26,16 +26,16 @@ public:
 
     ///
     /// @return Normalized movement vector
-    Vector2D getMovement();
+    Vector2D getMovement() const;
 
     // Joystick Handling
     void initializeJoysticks();
 
-    bool joysticksInitialised() { return m_bJoysticksInitialised; }
+    bool joysticksInitialised() const { return m_bJoysticksInitialised; }
 
-    int xValue(int joy, int stick);
+    int xValue(int joy, int stick) const;
 
-    int yValue(int joy, int stick);
+    int yValue(int joy, int stick) const;
 
     bool getButtonState(int joy, int buttonNumber);
 
@@ -51,13 +51,14 @@ public:
     Vector2D* getMousePosition();
 
     // Keyboard handling
-    bool isKeyDown(SDL_Scancode key);
+    bool isKeyDown(SDL_Scancode key) const;
 
 private:
     InputManager() {};
     ~InputManager() {};
 
     // Mouse
+    Vector2D m_mousePosition;
     std::vector<bool> m_mouseButtonStates;
     void onMouseMove(SDL_Event &event);
     void onMouseButtonChange(SDL_Event &event, bool state);

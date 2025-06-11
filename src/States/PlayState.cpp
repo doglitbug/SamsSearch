@@ -160,6 +160,9 @@ void PlayState::drawUI() {
     //or properly implement writeTextToScreen
     AssetManager::get()->createTextTexture(textWidth, 30, mapName, "Text", "mapName");
     AssetManager::get()->drawTexture("mapName", width / 2 - textWidth / 2, 0, 0, 0);
+
+    //TODO Now that it is drawn, we can delete the texture (it nees sto be deleted so that different map names work
+    AssetManager::get()->deleteTexture("mapName");
 }
 
 void PlayState::handleInput() const {
