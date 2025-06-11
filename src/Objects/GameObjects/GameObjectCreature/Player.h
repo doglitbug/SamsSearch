@@ -9,10 +9,6 @@ public:
 
     void load(int x, int y, int width, int height, CPO &pCustomProperties);
     void update(float deltaTime, GameObject *pPlayer = nullptr) override;
-
-    /// @brief
-    /// @todo move back to protected/private
-    float const speed = 20.0f;
 };
 
 class PlayerCreator : public BaseCreator {

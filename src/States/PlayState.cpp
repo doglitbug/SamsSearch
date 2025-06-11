@@ -1,12 +1,10 @@
 #include "PlayState.h"
 
-#include "../Managers/InputManager.h"
-#include "GameObjectLayer.h"
-#include "GameObjects/GameObjectItem/Teleport.h"
-#include "Maps/MapTest.h"
-#include "Maps/Maps/MapInsideDadsHouse.h"
-
 void PlayState::onEnter() {
+    //GameObjectFactory::get()->registerType("Player", new PlayerCreator());
+    GameObjectFactory::get()->registerType("Teleport", new TeleportCreator());
+    GameObjectFactory::get()->registerType("Dog", new DogCreator());
+
     m_maps["InsideDadsHouse"] = new MapInsideDadsHouse();
     m_maps["Test"] = new MapTest();
 
@@ -53,6 +51,7 @@ void PlayState::update(float deltaTime) {
                 //TODO IF type of teleport, do xyz else
                 if (const auto tp = dynamic_cast<Teleport *>(gameObject)) {
                     changeMap(tp->destMap, tp->destX, tp->destY, tp->destDirection);
+                    AssetManager::get()->playSound("Enter door");
                     continue;
                 }
                 gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
@@ -155,13 +154,13 @@ void PlayState::drawUI() {
 
     const std::string mapName = pCurrentMap->getName();
     //TODO Make this better by measuring correctly
-    const int textWidth = static_cast<int>(mapName.length()) * 16;
+    const int textWidth = static_cast<int>(mapName.length()) * 32;
     //TODO Overwrite this texture with the new map name on change map...
     //or properly implement writeTextToScreen
-    AssetManager::get()->createTextTexture(textWidth, 30, mapName, "Text", "mapName");
-    AssetManager::get()->drawTexture("mapName", width / 2 - textWidth / 2, 0, 0, 0);
+    AssetManager::get()->createTextTexture(textWidth, 60, mapName, "Text32", "mapName");
+    AssetManager::get()->drawTexture("mapName", width / 2 - textWidth / 2, 0, textWidth, 60);
 
-    //TODO Now that it is drawn, we can delete the texture (it nees sto be deleted so that different map names work
+    //TODO Now that it is drawn, we can delete the texture (it needs to be deleted so that different map names work)
     AssetManager::get()->deleteTexture("mapName");
 }
 
@@ -171,5 +170,5 @@ void PlayState::handleInput() const {
         return;
     }
 
-    mPlayer->m_velocity = InputManager::get()->getMovement() *= mPlayer->speed;
+    mPlayer->m_velocity = InputManager::get()->getMovement() *= mPlayer->m_speed;
 }

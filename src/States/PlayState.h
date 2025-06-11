@@ -1,9 +1,13 @@
 #pragma once
 
-#include "Objects/GameObjects/GameObjectCreature/Player.h"
-
+#include "../Managers/InputManager.h"
+#include "GameObjects/GameObjectCreature/Player.h"
+#include "GameObjects/GameObjectCreature/Dog.h"
 #include "BaseState.h"
 #include "BaseMap.h"
+#include "GameObjects/GameObjectItem/Teleport.h"
+#include "Maps/MapInsideDadsHouse.h"
+#include "Maps/MapTest.h"
 
 /// @brief PlayState is the GameEngine
 class PlayState : public BaseState
@@ -38,7 +42,6 @@ private:
     std::vector<GameObject *> m_gameObjects;
 
     Player *mPlayer;
-
 
     /// Get the viewport to draw within (basically camera position)
     SDL_Rect getViewport() const;

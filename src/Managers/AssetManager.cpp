@@ -115,13 +115,13 @@ void AssetManager::addBorderToExistingTexture(const std::string &textureID, floa
     SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
 
     //Add 4 rectangles to it
-    auto top = new SDL_FRect{0, 0, width, size};
+    const auto top = new SDL_FRect{0, 0, width, size};
     SDL_RenderFillRect(m_pRenderer, top);
-    auto bottom = new SDL_FRect{0, height - size, width, height};
+    const auto bottom = new SDL_FRect{0, height - size, width, height};
     SDL_RenderFillRect(m_pRenderer, bottom);
-    auto left = new SDL_FRect{0, size, size, height - size};
+    const auto left = new SDL_FRect{0, size, size, height - size};
     SDL_RenderFillRect(m_pRenderer, left);
-    auto right = new SDL_FRect{width - size, size, width, height - size};
+    const auto right = new SDL_FRect{width - size, size, width, height - size};
     SDL_RenderFillRect(m_pRenderer, right);
 
     delete top;
@@ -134,10 +134,7 @@ void AssetManager::addBorderToExistingTexture(const std::string &textureID, floa
 }
 
 
-void AssetManager::drawTexture(const std::string &id, float x, float y, float width, float height) {
-    if (width==0) {
-        SDL_GetTextureSize(m_textureMap[id], &width, &height);
-    }
+void AssetManager::drawTexture(const std::string &id, const float x, const float y, const float width, const float height) {
     SDL_FRect srcRect;
     SDL_FRect destRect;
     srcRect.x = 0;
@@ -249,7 +246,7 @@ void AssetManager::setMusicVolume(int volume) {
 }
 
 void AssetManager::setGameVolume(int volume) {
-    int newVolume = (volume / 100.0f) * MIX_MAX_VOLUME;
+    const int newVolume = (volume / 100.0f) * MIX_MAX_VOLUME;
     Mix_Volume(-1, newVolume);
 }
 
@@ -259,8 +256,7 @@ bool AssetManager::loadSound(const std::string &filename, const std::string &id)
         return true;
     }
 
-    auto *pSound = Mix_LoadWAV(filename.c_str());
-    if (pSound) {
+      if (auto *pSound = Mix_LoadWAV(filename.c_str())) {
         m_sound[id] = pSound;
         return true;
     }

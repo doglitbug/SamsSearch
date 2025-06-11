@@ -14,6 +14,8 @@ public:
     float m_speed;
     /// @brief Used for next think (so we are not thinking 60 times a second
     float timeElapsed;
+    /// @brief Used for next action (so we don't bark 60 times a second when being petted)
+    float timeSinceLastAction;
 
     void checkMapCollision(float deltaTime, const CollisionLayer &m_pCollisionLayer);
 };

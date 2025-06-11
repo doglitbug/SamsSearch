@@ -108,7 +108,7 @@ void SettingsState::s_menuGameVolumeDown() {
     value -= GAMEVOLUMESCALE;
     if (value < 0) { value = 0; }
     SettingsManager::get()->setGameVolume(value);
-    AssetManager::get()->playSound("glass-breaking");
+    AssetManager::get()->playSound("Menu audio check");
 }
 
 void SettingsState::s_menuGameVolumeUp() {
@@ -116,7 +116,7 @@ void SettingsState::s_menuGameVolumeUp() {
     value += GAMEVOLUMESCALE;
     if (value > 100) { value = 100; }
     SettingsManager::get()->setGameVolume(value);
-    AssetManager::get()->playSound("glass-breaking");
+    AssetManager::get()->playSound("Menu audio check");
 }
 
 void SettingsState::s_menuSaveSettings() {

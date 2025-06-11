@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
             SDL_Delay(static_cast<int>(DELAY_TIME - frameTime));
         }
 
-        deltaTime = (SDL_GetTicks() - frameStart) / 100.0f;
+        deltaTime = (SDL_GetTicks() - frameStart) / 1000.0f;
     }
     EngineStateManager::get()->clean();
     return 0;

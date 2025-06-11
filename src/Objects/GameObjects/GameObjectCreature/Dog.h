@@ -9,9 +9,12 @@ public:
     Dog() = default;
     ~Dog() = default;
 
-    void load(int x, int y, int width, int height, CPO &pCustomProperties);
+    void load(int x, int y, int width, int height, CPO &pCustomProperties) override;
     void onInteraction(GameObject *other, INTERACT_TYPE interactType) override;
     void update(float deltaTime, GameObject *pPlayer) override;
+
+private:
+    float m_timeBetweenBarks = 4.0f;
 };
 
 class DogCreator : public BaseCreator {
