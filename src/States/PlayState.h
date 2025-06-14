@@ -1,11 +1,14 @@
 #pragma once
 
-#include "../Managers/InputManager.h"
+//Ignore anything that is greyed out, it will be used by the engine
+
+#include "Managers/InputManager.h"
 #include "GameObjects/GameObjectCreature/Player.h"
 #include "GameObjects/GameObjectCreature/Dog.h"
-#include "BaseState.h"
-#include "BaseMap.h"
+#include "GameObjects/GameObjectCreature/Cat.h"
 #include "GameObjects/GameObjectItem/Teleport.h"
+
+#include "BaseMap.h"
 #include "Maps/MapInsideDadsHouse.h"
 #include "Maps/MapTest.h"
 
@@ -31,7 +34,7 @@ private:
     /// Called when the player opts to save the game
     static void saveGame();
 
-    void drawUI();
+    void drawUI() const;
     void handleInput() const;
 
     /// The current map

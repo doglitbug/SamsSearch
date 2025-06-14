@@ -4,6 +4,7 @@ void PlayState::onEnter() {
     //GameObjectFactory::get()->registerType("Player", new PlayerCreator());
     GameObjectFactory::get()->registerType("Teleport", new TeleportCreator());
     GameObjectFactory::get()->registerType("Dog", new DogCreator());
+    GameObjectFactory::get()->registerType("Cat", new CatCreator());
 
     m_maps["InsideDadsHouse"] = new MapInsideDadsHouse();
     m_maps["Test"] = new MapTest();
@@ -146,7 +147,7 @@ void PlayState::saveGame() {
     //TODO Save game state for later loading
 };
 
-void PlayState::drawUI() {
+void PlayState::drawUI() const {
     //TODO Make this better by caching this crap?
 
     int width, height;

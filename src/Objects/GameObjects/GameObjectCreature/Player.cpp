@@ -5,9 +5,9 @@ void Player::load(const int x, const int y, const int width, const int height, C
     GameObjectCreature::load(x, y, width, height, pCustomProperties);
     m_hitBox = new SDL_FRect{12, 44, 28, 28};
     m_speed = 150.0f;
-    AssetManager::get()->loadSound("assets/sounds/chiptunes/action-and-game/NFF-quick-move.wav", "Enter door");
-    AssetManager::get()->loadSound("assets/sounds/chiptunes/fantasy-and-magic/NFF-finger-snap.wav", "Footstep");
-    AssetManager::get()->loadSound("assets/sounds/chiptunes/fantasy-and-magic/NFF-finger-snap-02.wav", "Footstep2");
+    AssetManager::get()->loadSound("assets/sounds/leohpaz/Farm/Ambient/Barn_Door_Open.wav", "Enter door");
+    AssetManager::get()->loadSound("assets/sounds/leohpaz/TrueHeros/Human/Step_dirt_1.wav", "Footstep");
+    AssetManager::get()->loadSound("assets/sounds/leohpaz/TrueHeros/Human/Step_dirt_3.wav", "Footstep2");
 }
 
 void Player::update(const float deltaTime, GameObject *pPlayer)
@@ -22,7 +22,7 @@ void Player::update(const float deltaTime, GameObject *pPlayer)
     //TODO Check for running?
     //TODO Add sneakers as an item to remove this annoying sound
     if (m_velocity.length() > 0.5f & timeElapsed > 0.25f) {
-        if (random() % 10 > 8) {
+        if (random() % 10 > 5) {
             AssetManager::get()->playSound("Footstep");
         } else {
             AssetManager::get()->playSound("Footstep2");
