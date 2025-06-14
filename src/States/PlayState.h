@@ -1,9 +1,16 @@
 #pragma once
 
-#include "Objects/GameObjects/GameObjectCreature/Player.h"
+//Ignore anything that is greyed out, it will be used by the engine
 
-#include "BaseState.h"
+#include "Managers/InputManager.h"
+#include "GameObjects/GameObjectCreature/Player.h"
+#include "GameObjects/GameObjectCreature/Dog.h"
+#include "GameObjects/GameObjectCreature/Cat.h"
+#include "GameObjects/GameObjectItem/Teleport.h"
+
 #include "BaseMap.h"
+#include "Maps/MapInsideDadsHouse.h"
+#include "Maps/MapTest.h"
 
 /// @brief PlayState is the GameEngine
 class PlayState : public BaseState
@@ -19,20 +26,26 @@ private:
     /// @param mapName Map to move to
     /// @param destX New x location
     /// @param destY New y location
-    /// @todo Direction or assume South?
-    void changeMap(std::string mapName, float destX, float destY);
+    /// @param direction New direction
+    void changeMap(const std::string& mapName, float destX, float destY, DIRECTION direction);
 
-    void loadGame();
-    void saveGame();
-    void drawUI();
-    void handleInput();
+    /// Called when the player opts to load a saved game
+    static void loadGame();
+    /// Called when the player opts to save the game
+    static void saveGame();
 
+    void drawUI() const;
+    void handleInput() const;
+
+    /// The current map
     BaseMap *pCurrentMap;
-
-    /// @brief Get the viewport to draw within (basically camera position)
-    SDL_Rect getViewport();
-
+    /// All loaded maps
     std::map<std::string, BaseMap *> m_maps;
+    /// Current maps gameObjects
+    std::vector<GameObject *> m_gameObjects;
 
     Player *mPlayer;
+
+    /// Get the viewport to draw within (basically camera position)
+    SDL_Rect getViewport() const;
 };

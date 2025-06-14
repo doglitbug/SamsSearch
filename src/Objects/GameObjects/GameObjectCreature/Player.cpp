@@ -1,17 +1,32 @@
 #include "Player.h"
 #include "Managers/InputManager.h"
 
-void Player::load(int x, int y, int width, int height, CPO &pCustomProperties) {
+void Player::load(const int x, const int y, const int width, const int height, CPO &pCustomProperties) {
     GameObjectCreature::load(x, y, width, height, pCustomProperties);
     m_hitBox = new SDL_FRect{12, 44, 28, 28};
+    m_speed = 150.0f;
+    AssetManager::get()->loadSound("assets/sounds/leohpaz/Farm/Ambient/Barn_Door_Open.wav", "Enter door");
+    AssetManager::get()->loadSound("assets/sounds/leohpaz/TrueHeros/Human/Step_dirt_1.wav", "Footstep");
+    AssetManager::get()->loadSound("assets/sounds/leohpaz/TrueHeros/Human/Step_dirt_3.wav", "Footstep2");
 }
 
-void Player::update(float deltaTime, GameObject *pPlayer)
+void Player::update(const float deltaTime, GameObject *pPlayer)
 {
-    int frames[] = {0, 1, 2, 1};
-
-    //TODO Refactor this to a next think type of thing?
-    m_currentFrame = frames[int((SDL_GetTicks() / 25) % sizeof(frames) / sizeof(frames[0]))];
+    constexpr int frames[] = {0, 1, 2, 1};
+    m_currentFrame = frames[static_cast<int>((SDL_GetTicks() / 25) % sizeof(frames) / sizeof(frames[0]))];
 
     faceDirection();
+
+    timeElapsed += deltaTime;
+
+    //TODO Check for running?
+    //TODO Add sneakers as an item to remove this annoying sound
+    if (m_velocity.length() > 0.5f & timeElapsed > 0.25f) {
+        if (random() % 10 > 5) {
+            AssetManager::get()->playSound("Footstep");
+        } else {
+            AssetManager::get()->playSound("Footstep2");
+        }
+        timeElapsed = 0.0f;
+    }
 }

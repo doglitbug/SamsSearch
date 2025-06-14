@@ -17,7 +17,6 @@ public:
 
     // Singleton
     AssetManager(AssetManager &other) = delete;
-
     void operator=(const AssetManager &) = delete;
 
     /// @brief Attach renderer to static instance
@@ -35,7 +34,6 @@ public:
     /// @param text text to write
     /// @param fontID font to use
     /// @param textureID textureID to save as
-    /// @param pRenderer renderer to use
     /// @return Creation success
     /// @note ToDo text alignment, multiline, background colour, background image optional, text colour, size from xml file?
     bool createTextTexture(int width, int height, const std::string &text, const std::string &fontID,
@@ -84,9 +82,10 @@ public:
     /// @brief Delete a texture
     /// @param id
     void deleteTexture(const std::string &id);
-    // endregion
+    /// endregion
 
-    // region Audio
+    ///region Audio
+
     /// @brief Load a music file
     /// @param filename
     /// @param id
@@ -117,11 +116,10 @@ public:
 
     /// @brief Play a loaded sound
     /// @param id of sound to play
-    /// @param loop how many times to loop, defaults to no extra loops (once)
+    /// @param loops how many times to loop, defaults to no extra loops (once)
     /// @param channel to play on, defaults to -1 for next available channel
     void playSound(const std::string &id, int loops = 0, int channel = -1);
-
-    // endregion
+    ///endregion
 
     // End game
     void clean();

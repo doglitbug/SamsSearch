@@ -72,6 +72,8 @@ add_executable(SamsSearch
         src/Objects/GameObjects/GameObjectCreature/NPC.cpp
         src/Objects/GameObjects/GameObjectCreature/Dog.cpp
         src/Objects/GameObjects/GameObjectCreature/Dog.h
+        src/Objects/GameObjects/GameObjectCreature/Cat.cpp
+        src/Objects/GameObjects/GameObjectCreature/Cat.h
         src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.cpp
         src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.h
         src/Objects/GameObjects/GameObjectItem/GameObjectItem.cpp

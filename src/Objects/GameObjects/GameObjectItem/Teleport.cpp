@@ -8,6 +8,5 @@ void Teleport::load(const int x, const int y, const int width, const int height,
     destMap = pCustomProperties.getString("destMap","Missing map name");
     destX = pCustomProperties.getFloat("destX");
     destY = pCustomProperties.getFloat("destY");
-    //TODO Actually read from map
-    destDirection = DIRECTION::SOUTH;
+    destDirection = static_cast<DIRECTION>(pCustomProperties.getInt("destDirection", DIRECTION::SOUTH));
 }

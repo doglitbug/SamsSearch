@@ -21,7 +21,7 @@ public:
 
     /// Draw this GameObject if visible
     /// @param pViewport World/Camera viewport
-    void drawSelf(SDL_Rect *pViewport);
+    virtual void drawSelf(SDL_Rect *pViewport);
 
     /// @brief
     /// @see https://youtu.be/oJvJZNyW_rw?si=05JhdC_6xejzS-5V&t=523
@@ -35,10 +35,14 @@ public:
     /// @param interactType Type of interaction
     virtual void onInteraction(GameObject *other, INTERACT_TYPE interactType);
 
-    void clean();
+    void clean() const;
 
-    [[nodiscard]] Vector2D getPosition() const { return m_position; }
-    void setPosition(const Vector2D &newPosition)  { m_position = newPosition; }
+    //Public because we need to both set and get these
+
+    /// @brief World position
+    Vector2D m_position;
+    /// @brief Used to denote direction in sprite-sheet
+    DIRECTION m_direction;
 
     void drawHitBox(SDL_Rect *pViewport);
 
@@ -55,11 +59,10 @@ public:
     }
 
 protected:
-    Vector2D m_position;
+
     /// @brief Objects hit-box for colliding with other objects
     SDL_FRect *m_hitBox;
-    /// @brief Used to denote direction in sprite-sheet
-    DIRECTION m_direction;
+
     std::string m_textureID;
     /// @brief used to denote animation frame(column) in sprite-sheet
     int m_currentFrame;

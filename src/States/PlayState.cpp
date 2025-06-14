@@ -1,12 +1,14 @@
 #include "PlayState.h"
 
-#include "../Managers/InputManager.h"
-#include "GameObjectLayer.h"
-#include "GameObjects/GameObjectItem/Teleport.h"
-#include "Maps/MapTest.h"
-#include "Maps/Maps/MapInsideDadsHouse.h"
-
 void PlayState::onEnter() {
+    //GameObjectFactory::get()->registerType("Player", new PlayerCreator());
+    GameObjectFactory::get()->registerType("Teleport", new TeleportCreator());
+    GameObjectFactory::get()->registerType("Dog", new DogCreator());
+    GameObjectFactory::get()->registerType("Cat", new CatCreator());
+
+    m_maps["InsideDadsHouse"] = new MapInsideDadsHouse();
+    m_maps["Test"] = new MapTest();
+
     //TODO Determine if we are starting a new game or loading one?
     //Set player position/details from map?
     //TODO Get these defaults from choose character screen/co-ords from map?
@@ -21,7 +23,7 @@ void PlayState::onEnter() {
     auto prop = CPO(playerProp);
     mPlayer->load(100, 100, 52, 72, prop);
 
-    changeMap("InsideDadsHouse", 18*32, 2*32);
+    changeMap("Test", 18 * 32, 2 * 32, SOUTH);
 }
 
 void PlayState::update(float deltaTime) {
@@ -32,12 +34,13 @@ void PlayState::update(float deltaTime) {
 
     const SDL_FRect playerHitBox = mPlayer->getWorldHitBox();
 
+    //TODO Remove object layer and have only a map of dynamics?
     for (GameObjectLayer *layer: *pCurrentMap->getObjectLayers()) {
         layer->update(deltaTime, mPlayer);
 
         for (auto *gameObject: *layer->getGameObjects()) {
             //Check map collision here
-            if (auto goc = dynamic_cast<GameObjectCreature *>(gameObject)) {
+            if (const auto goc = dynamic_cast<GameObjectCreature *>(gameObject)) {
                 goc->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
             }
             //TODO Else we are a GO Item?
@@ -47,9 +50,9 @@ void PlayState::update(float deltaTime) {
             SDL_FRect otherHitBox = gameObject->getWorldHitBox();
             if (SDL_HasRectIntersectionFloat(&playerHitBox, &otherHitBox)) {
                 //TODO IF type of teleport, do xyz else
-                if (auto tp = dynamic_cast<Teleport *>(gameObject)) {
-                    std::cout << "Teleport to " << tp->destMap << '\n';
-                    mPlayer->setPosition(Vector2D(tp->destX, tp->destY));
+                if (const auto tp = dynamic_cast<Teleport *>(gameObject)) {
+                    changeMap(tp->destMap, tp->destX, tp->destY, tp->destDirection);
+                    AssetManager::get()->playSound("Enter door");
                     continue;
                 }
                 gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
@@ -85,22 +88,28 @@ void PlayState::render() {
 
 void PlayState::onExit() {
     //TODO Ask to save here as we would only be exiting to the main menu
-    delete (pCurrentMap);
+    pCurrentMap = nullptr;
     delete (mPlayer);
+
+    for (auto it = m_maps.begin(); it != m_maps.end();) {
+        it = m_maps.erase(it); // Returns iterator to the next element
+    }
+    m_maps.clear();
+
     BaseState::onExit();
 }
 
-SDL_Rect PlayState::getViewport() {
-    int x, y, width, height;
+SDL_Rect PlayState::getViewport() const {
+    int width, height;
     EngineStateManager::get()->getWindowSize(&width, &height);
 
     //Set viewport position for x axis
-    x = mPlayer->getPosition().getX() - width / 2;
+    int x = mPlayer->m_position.getX() - width / 2;
     if (x < 0) x = 0;
     //TODO Fix this
     //if (x > pCurrentMap->getWidth()*32 - width) x = pCurrentMap->getWidth()*32 - width;
 
-    y = mPlayer->getPosition().getY() - height / 2;
+    int y = mPlayer->m_position.getY() - height / 2;
     if (y < 0) y = 0;
     //TODO Fix this
     //if (y + height > pCurrentMap->getHeight()) y = pCurrentMap->getHeight() - height;
@@ -108,17 +117,26 @@ SDL_Rect PlayState::getViewport() {
     return SDL_Rect{x, y, width, height};
 }
 
-void PlayState::changeMap(const std::string mapName, float destX, float destY) {
-   //TODO Check if we are changing to current map, probs just a local teleport
+void PlayState::changeMap(const std::string &mapName, const float destX, const float destY, const DIRECTION direction) {
+    //First map
+    if (!pCurrentMap) {
+        pCurrentMap = m_maps.find(mapName)->second;
+        pCurrentMap->onEnter(); //TODO Import GOs
 
-    //Else close old map, and set new map active
+        mPlayer->m_position = Vector2D(destX, destY);
+        mPlayer->m_direction = direction;
+        return;
+    }
 
-    pCurrentMap = new MapInsideDadsHouse();
-    //pCurrentMap = new MapTest();
+    //Check if we are changing to a different map
+    if (mapName != pCurrentMap->getFileName()) {
+        pCurrentMap->onExit();
+        pCurrentMap = m_maps.find(mapName)->second;
+        pCurrentMap->onEnter(); //TODO Import GOs
+    }
 
-    pCurrentMap->onEnter();
-    //TODO Import GOs
-    mPlayer->setPosition(Vector2D(destX, destY));
+    mPlayer->m_position = Vector2D(destX, destY);
+    mPlayer->m_direction = direction;
 }
 
 void PlayState::loadGame() {
@@ -129,55 +147,29 @@ void PlayState::saveGame() {
     //TODO Save game state for later loading
 };
 
-void PlayState::drawUI() {
+void PlayState::drawUI() const {
     //TODO Make this better by caching this crap?
 
     int width, height;
     EngineStateManager::get()->getWindowSize(&width, &height);
 
-    std::string mapName = pCurrentMap->getName();
+    const std::string mapName = pCurrentMap->getName();
     //TODO Make this better by measuring correctly
-    int textWidth = (int) mapName.length() * 16;
+    const int textWidth = static_cast<int>(mapName.length()) * 32;
     //TODO Overwrite this texture with the new map name on change map...
     //or properly implement writeTextToScreen
-    AssetManager::get()->createTextTexture(textWidth, 30, mapName, "Text", "mapName");
-    AssetManager::get()->drawTexture("mapName", width / 2 - textWidth / 2, 0, 0, 0);
+    AssetManager::get()->createTextTexture(textWidth, 60, mapName, "Text32", "mapName");
+    AssetManager::get()->drawTexture("mapName", width / 2 - textWidth / 2, 0, textWidth, 60);
+
+    //TODO Now that it is drawn, we can delete the texture (it needs to be deleted so that different map names work)
+    AssetManager::get()->deleteTexture("mapName");
 }
 
-void PlayState::handleInput() {
+void PlayState::handleInput() const {
     if (InputManager::get()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
         EngineStateManager::get()->getStateMachine()->pushState("PAUSE");
         return;
     }
 
-    // Movement
-    // Joysticks
-    /**
-    if (InputManager::get()->joysticksInitialised()) {
-        m_velocity.setX(InputManager::get()->xValue(0, 1));
-        m_velocity.setY(InputManager::get()->yValue(0, 1));
-    }
-*/
-
-    //TODO Set velocity to zero first?
-    //TODO Move all this to InputManager so that we just get the movement vector back and dont need to know about SDL Scan codes
-    if (InputManager::get()->isKeyDown(SDL_SCANCODE_RIGHT)) {
-        mPlayer->m_velocity.setX(1);
-    } else if (InputManager::get()->isKeyDown(SDL_SCANCODE_LEFT)) {
-        mPlayer->m_velocity.setX(-1);
-    } else {
-        mPlayer->m_velocity.setX(0);
-    }
-
-    if (InputManager::get()->isKeyDown(SDL_SCANCODE_DOWN)) {
-        mPlayer->m_velocity.setY(1);
-    } else if (InputManager::get()->isKeyDown(SDL_SCANCODE_UP)) {
-        mPlayer->m_velocity.setY(-1);
-    } else {
-        mPlayer->m_velocity.setY(0);
-    }
-
-    // Pythagoras thou art a heartless bitch
-    mPlayer->m_velocity.normalize();
-    mPlayer->m_velocity *= mPlayer->speed;
+    mPlayer->m_velocity = InputManager::get()->getMovement() *= mPlayer->m_speed;
 }

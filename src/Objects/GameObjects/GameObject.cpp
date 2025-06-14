@@ -1,7 +1,5 @@
 #include "GameObject.h"
 
-#include <bits/parse_numbers.h>
-
 void GameObject::load(int x,
                       int y,
                       int width,
@@ -39,6 +37,7 @@ void GameObject::drawSelf(SDL_Rect *pViewport) {
                                           m_startRow + m_direction,
                                           m_startColumn + m_currentFrame);
 
+    //TODO Move out of this function!
     if (SHOW_HITBOX && m_hitBox) {
         SDL_FRect hitBoxLocation;
         hitBoxLocation.x = m_position.getX() + m_hitBox->x - pViewport->x;
@@ -55,7 +54,7 @@ void GameObject::onInteraction(GameObject *other, INTERACT_TYPE interactionType)
     std::cout << "I was touched!" << std::endl;
 }
 
-void GameObject::clean() {
+void GameObject::clean() const {
     delete m_hitBox;
 }
 

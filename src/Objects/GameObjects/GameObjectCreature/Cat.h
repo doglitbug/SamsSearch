@@ -4,21 +4,21 @@
 #include "Objects/GameObjects/GameObjectFactory.h"
 #include "NPC.h"
 
-class Dog : public NPC {
+class Cat : public NPC {
 public:
-    Dog() = default;
-    ~Dog() = default;
+    Cat() = default;
+    ~Cat() = default;
 
     void load(int x, int y, int width, int height, CPO &pCustomProperties) override;
     void onInteraction(GameObject *other, INTERACT_TYPE interactType) override;
     void update(float deltaTime, GameObject *pPlayer) override;
 
 private:
-    float m_timeBetweenBarks = 4.0f;
+    float m_timeBetweenMeows = 4.0f;
 };
 
-class DogCreator : public BaseCreator {
+class CatCreator : public BaseCreator {
     GameObject *createGameObject() override {
-        return new Dog();
+        return new Cat();
     }
 };

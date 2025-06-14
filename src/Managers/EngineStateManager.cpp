@@ -11,11 +11,7 @@
 
 #include "Objects/GameObjects/GameObjectCreature/Player.h"
 #include "Objects/GameObjects/GameObjectItem/Teleport.h"
-#include "Objects/GameObjects/GameObjectCreature/NPC.h"
 #include "Objects/GameObjects/GameObjectCreature/Dog.h"
-
-#include <algorithm>
-
 
 bool EngineStateManager::init(const char *title, int width, int height, bool fullscreen)
 {
@@ -29,8 +25,7 @@ bool EngineStateManager::init(const char *title, int width, int height, bool ful
 
     // Attempt to initialize SDL
     // TODO Only init subsystems that are needed, for example we couldn't use this on RISC OS on Raspberry Pi as there is no CD-ROM drive!
-    if (!SDL_Init(SDL_INIT_VIDEO))
-    {
+    if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
         std::cout << "SDL Init fail\n";
         return false;
     }
@@ -44,7 +39,7 @@ bool EngineStateManager::init(const char *title, int width, int height, bool ful
     }
 
     // Create the renderer
-    m_pRenderer = SDL_CreateRenderer(m_pWindow, NULL);
+    m_pRenderer = SDL_CreateRenderer(m_pWindow, nullptr);
     if (m_pRenderer == nullptr) // renderer init success
     {
         std::cout << "SDL Renderer init fail\n";
@@ -70,6 +65,7 @@ bool EngineStateManager::init(const char *title, int width, int height, bool ful
     //TODO Move loading to a startup State? (video etc)
     //Preload assets
     AssetManager::get()->loadFont("PressStart2P-vaV7.ttf", "Text", 16);
+    AssetManager::get()->loadFont("PressStart2P-vaV7.ttf", "Text32", 32);
     AssetManager::get()->loadFont("PressStart2P-vaV7.ttf", "Header", 64);
 
     //Load the background textures for the title image
@@ -90,18 +86,16 @@ bool EngineStateManager::init(const char *title, int width, int height, bool ful
 
     //Preload main menu audio
     AssetManager::get()->loadMusic("assets/music/chiptunes/CGE-title-theme.flac", "main_menu");
-    AssetManager::get()->loadSound("assets/sounds/chiptunes/action-and-game/NFF-glass-breaking.wav", "glass-breaking");
+    AssetManager::get()->loadSound("assets/sounds/chiptunes/action-and-game/NFF-glass-breaking.wav", "Menu audio check");
+
+    //Preload other stuff
+
 
     //Add all states
     m_pGameStateMachine = new StateMachine();
 
     m_pGameStateMachine->registerState("MAINMENU", new MainMenuState());
     m_pGameStateMachine->registerState("PLAY", new PlayState());
-
-    //TODO Move elsewhere, should this be in the PlayState?
-    GameObjectFactory::get()->registerType("Player", new PlayerCreator());
-    GameObjectFactory::get()->registerType("Teleport", new TeleportCreator());
-    GameObjectFactory::get()->registerType("Dog", new DogCreator());
 
     m_pGameStateMachine->registerState("PAUSE", new PauseState());
     m_pGameStateMachine->registerState("SETTINGS", new SettingsState());

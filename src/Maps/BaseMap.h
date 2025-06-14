@@ -67,6 +67,7 @@ public:
     int getHeight() const { return height; };
 
     std::string getName(){ return name;}
+    std::string getFileName(){ return filename;}
 
     /// @brief Called when the player enters the map
     virtual void onEnter(){};
