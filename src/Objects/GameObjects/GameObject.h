@@ -59,7 +59,6 @@ public:
     }
 
 protected:
-
     /// @brief Objects hit-box for colliding with other objects
     SDL_FRect *m_hitBox;
 

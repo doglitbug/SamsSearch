@@ -82,6 +82,7 @@ bool EngineStateManager::init(const char *title, int width, int height, bool ful
 
     //Preload sprite sheets until we get a better way of doing this:
     AssetManager::get()->loadTexture("assets/images/characters/chara2.png", "character2");
+    AssetManager::get()->loadTexture("assets/images/characters/tf_char2_MV.png", "tf_char2");
     AssetManager::get()->loadTexture("assets/images/characters/animals1.png", "animals1");
 
     //Preload main menu audio

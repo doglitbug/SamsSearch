@@ -4,7 +4,7 @@
 #include <string>
 #include <utility>
 
-/// @brief Custom Properties parsing object
+/// @brief Custom Properties parsing object (parameters from Tiled)
 class CPO {
 public:
     CPO() = default;

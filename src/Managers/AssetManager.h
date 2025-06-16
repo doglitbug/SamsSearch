@@ -2,11 +2,21 @@
 
 #include <string>
 #include <map>
+#include <vector>
+#include <iostream>
 
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_mixer/SDL_mixer.h>
+
+struct image {
+    std::string m_textureID;
+    int m_column;
+    int m_row;
+    int m_width;
+    int m_height;
+};
 
 class AssetManager {
 public:
@@ -26,7 +36,11 @@ public:
     }
 
     // Fonts/text
-    bool loadFont(const std::string &filename, const std::string &fontID, int size);
+    /// @brief Load a font at the specified size
+    /// @param filename
+    /// @param fontID
+    /// @param size
+    void loadFont(const std::string &filename, const std::string &fontID, int size);
 
     /// @brief Create a texture with the specified text on it
     /// @param width
@@ -34,18 +48,30 @@ public:
     /// @param text text to write
     /// @param fontID font to use
     /// @param textureID textureID to save as
-    /// @return Creation success
     /// @note ToDo text alignment, multiline, background colour, background image optional, text colour, size from xml file?
-    bool createTextTexture(int width, int height, const std::string &text, const std::string &fontID,
+    void createTextTexture(int width, int height, const std::string &text, const std::string &fontID,
                            const std::string &textureID);
 
-    // region Images
-    bool loadTexture(const std::string &filename, const std::string &id);
+    /// @brief TODO
+    /// @param characterName
+    /// @param face
+    /// @param dialog
+    /// @param fontID
+    /// @return Pointer to the created texture
+    SDL_Texture *createDialogue(const std::string &characterName,
+                                const image &face,
+                                const std::vector<std::string> &dialog,
+                                const std::string &fontID);
+
+    // Images
+    /// @brief Load a texture file
+    /// @param filename
+    /// @param id
+    void loadTexture(const std::string &filename, const std::string &id);
 
     /// @brief Add a border to an existing texture
     /// @param textureID texture
     /// @param size width of border
-    /// @param pRenderer renderer to use
     void addBorderToExistingTexture(const std::string &textureID, float size);
 
     /// @brief
@@ -82,10 +108,8 @@ public:
     /// @brief Delete a texture
     /// @param id
     void deleteTexture(const std::string &id);
-    /// endregion
 
-    ///region Audio
-
+    // Audio
     /// @brief Load a music file
     /// @param filename
     /// @param id
@@ -102,7 +126,7 @@ public:
     static void stopMusic();
 
     /// @brief Stop playing menu music
-    void stopMenuMusic();
+    void stopMenuMusic() const;
 
     /// @brief Set music volume
     /// @param volume as a percentage
@@ -119,7 +143,6 @@ public:
     /// @param loops how many times to loop, defaults to no extra loops (once)
     /// @param channel to play on, defaults to -1 for next available channel
     void playSound(const std::string &id, int loops = 0, int channel = -1);
-    ///endregion
 
     // End game
     void clean();

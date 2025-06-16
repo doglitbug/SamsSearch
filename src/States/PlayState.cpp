@@ -26,7 +26,7 @@ void PlayState::onEnter() {
     changeMap("Test", 18 * 32, 2 * 32, SOUTH);
 }
 
-void PlayState::update(float deltaTime) {
+void PlayState::update(const float deltaTime) {
     //TODO Only update object layer, at least until we have animations eg for water?
     mPlayer->update(deltaTime, nullptr);
     //TODO All dynamics need to do this?
@@ -163,6 +163,23 @@ void PlayState::drawUI() const {
 
     //TODO Now that it is drawn, we can delete the texture (it needs to be deleted so that different map names work)
     AssetManager::get()->deleteTexture("mapName");
+
+    //TODO Change this to reference the short name that is the key in the loaded map dictionary
+    if (pCurrentMap->getName()=="The outside world") {
+        const std::vector<std::string> dialogLines = {
+            "Hello",
+            " ",
+            "Have you been inside yet?",
+            "You need to find your shoes",
+            "and as usual, turn off your damn light!"
+        };
+
+        const image playerFace{"tf_char2", 0, 0, 144, 144};
+
+        const auto dialog = AssetManager::get()->createDialogue("Samuel", playerFace, dialogLines, "Text");
+        AssetManager::get()->drawTexture("dialog", 0, height - 164, width, 164);
+        AssetManager::get()->deleteTexture("dialog");
+    }
 }
 
 void PlayState::handleInput() const {
