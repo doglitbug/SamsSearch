@@ -100,7 +100,7 @@ void AssetManager::createTextTexture(const int width, const int height, const st
     SDL_SetRenderTarget(m_pRenderer, nullptr);
 }
 
-SDL_Texture *AssetManager::createDialogue(const std::string &characterName, const image &face,
+SDL_Texture *AssetManager::createDialogue(const std::string &characterName, const sprite &face,
                                           const std::vector<std::string> &dialog, const std::string &fontID) {
     constexpr int border = 10;
     constexpr int height = 164;

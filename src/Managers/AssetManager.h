@@ -10,12 +10,14 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_mixer/SDL_mixer.h>
 
-struct image {
-    std::string m_textureID;
-    int m_column;
-    int m_row;
+/// @brief An individual sprite from a sprite sheet
+/// @param m_textureID
+struct sprite {
+    std::string m_textureID;//TODO Change to pointer?
     int m_width;
     int m_height;
+    int m_column = 0;
+    int m_row = 0;
 };
 
 class AssetManager {
@@ -59,7 +61,7 @@ public:
     /// @param fontID
     /// @return Pointer to the created texture
     SDL_Texture *createDialogue(const std::string &characterName,
-                                const image &face,
+                                const sprite &face,
                                 const std::vector<std::string> &dialog,
                                 const std::string &fontID);
 
@@ -82,8 +84,8 @@ public:
     /// @param height
     void drawTexture(const std::string &id, float x, float y, float width, float height);
 
-    /// @brief
-    /// @param id
+    /// @brief Draw a sprite from a sprite sheet
+    /// @param id Sheet name
     /// @param x position on screen
     /// @param y position on screen
     /// @param width

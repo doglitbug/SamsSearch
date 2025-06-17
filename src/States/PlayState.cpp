@@ -174,9 +174,9 @@ void PlayState::drawUI() const {
             "and as usual, turn off your damn light!"
         };
 
-        const image playerFace{"tf_char2", 0, 0, 144, 144};
+        const sprite dialogFace{"tf_char2", 144, 144};
 
-        const auto dialog = AssetManager::get()->createDialogue("Samuel", playerFace, dialogLines, "Text");
+        const auto dialog = AssetManager::get()->createDialogue("Samuel", dialogFace, dialogLines, "Text");
         AssetManager::get()->drawTexture("dialog", 0, height - 164, width, 164);
         AssetManager::get()->deleteTexture("dialog");
     }
