@@ -205,7 +205,7 @@ void MapParser::parseCollisionLayer(XMLElement *pCollisionElement, CollisionLaye
 
 
 // ToDo BaseObject layers, do these need to be loaded from a save file for each level?
-void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObjectLayer *> *pLayers) const
+void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObjectLayer *> *pLayers)
 {
     // Create an object layer
     auto *pObjectLayer = new GameObjectLayer();
@@ -213,15 +213,11 @@ void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObj
     {
         if (e->Value() == std::string("object"))
         {
-            int x, y, width, height;
-
-            //, startColumn, startRow; std::string textureID;
-
-            // Get values on the object node (this will exist for all Game Objects)
-            x = e->IntAttribute("x");
-            y = e->IntAttribute("y");
-            width = e->IntAttribute("width");
-            height = e->IntAttribute("height");
+            // Get values on the object node (these will exist for all Game Objects)
+            const int x = e->IntAttribute("x");
+            const int y = e->IntAttribute("y");
+            const int width = e->IntAttribute("width");
+            const int height = e->IntAttribute("height");
 
             GameObject *pGameObject = GameObjectFactory::get()->create(e->Attribute("type"));
 
@@ -233,14 +229,14 @@ void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObj
                 for (XMLElement *property = e->FirstChildElement()->FirstChildElement();
                      property != nullptr; property = property->NextSiblingElement())
                 {
-                    auto key = property->Attribute("name");
-                    auto value = property->Attribute("value");
+                    const auto key = property->Attribute("name");
+                    const auto value = property->Attribute("value");
 
                     customProperties[key]=value;
                 }
             }
 
-            CPO prop = CPO(customProperties);
+            auto prop = CPO(customProperties);
             pGameObject->load(x, y, width, height, prop);
 
             pObjectLayer->getGameObjects()->push_back(pGameObject);

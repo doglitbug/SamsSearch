@@ -12,12 +12,16 @@
 
 /// @brief An individual sprite from a sprite sheet
 /// @param m_textureID
+/// @param m_width Width of sprite
+/// @param m_height Height of sprite
+/// @param m_column Column of sprite, default 0
+/// @param m_row Row of sprite, default 0
 struct sprite {
-    std::string m_textureID;//TODO Change to pointer?
-    int m_width;
-    int m_height;
-    int m_column = 0;
-    int m_row = 0;
+    std::string textureID; //TODO Change to pointer?
+    int width;
+    int height;
+    int column = 0;
+    int row = 0;
 };
 
 class AssetManager {
@@ -85,14 +89,12 @@ public:
     void drawTexture(const std::string &id, float x, float y, float width, float height);
 
     /// @brief Draw a sprite from a sprite sheet
-    /// @param id Sheet name
+    /// @param sprite Sprite to draw
     /// @param x position on screen
     /// @param y position on screen
-    /// @param width
-    /// @param height
-    /// @param currentRow
-    /// @param currentColumn
-    void drawTextureFrame(const std::string &id, float x, float y, float width, float height, int currentRow, int currentColumn);
+    /// @param extraRow Additional row for animation, default 0
+    /// @param extraColumn Additional column for animation, default 0
+    void drawSprite(const sprite &sprite, float x, float y, int extraRow = 0, int extraColumn = 0);
 
     /// @brief Draw a tile from a sprite sheet
     /// @param id texture ID

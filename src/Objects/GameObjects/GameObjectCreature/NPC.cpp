@@ -16,20 +16,20 @@ void NPC::update(const float deltaTime, GameObject *pPlayer) {
 
     if (timeElapsed > 5.0f) {
         m_velocity = chooseRandomDirection();
+        m_velocity*=m_speed;
         timeElapsed = 0.0f;
     }
 
     faceDirection();
 }
 
-Vector2D NPC::chooseRandomDirection() const {
+Vector2D NPC::chooseRandomDirection() {
     const float x = -1.0f + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (2)));
     const float y = -1.0f + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (2)));
 
     auto direction = Vector2D(x, y);
 
     direction.normalize();
-    direction *= m_speed;
 
     return direction;
 }

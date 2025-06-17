@@ -11,7 +11,8 @@ public:
 
     void load(int x, int y, int width, int height, CPO &pCustomProperties) override;
     void update(float deltaTime, GameObject *pPlayer) override;
+
 private:
     //Various default behaviours to be placed here
-    Vector2D chooseRandomDirection() const;
+    static Vector2D chooseRandomDirection();
 };

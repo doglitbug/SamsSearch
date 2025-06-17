@@ -122,24 +122,24 @@ SDL_Texture *AssetManager::createDialogue(const std::string &characterName, cons
     SDL_RenderClear(m_pRenderer);
 
     //Check we have a face image
-    if (face.m_textureID != "") {
-        offset += face.m_width;
+    if (face.textureID != "") {
+        offset += face.width;
         //Draw face
         SDL_FRect dstRect;
         SDL_FRect srcRect;
 
-        srcRect.x = face.m_column*face.m_width;
-        srcRect.y = face.m_row*face.m_height;
-        srcRect.w = face.m_width;
-        srcRect.h = face.m_height;
+        srcRect.x = face.column * face.width;
+        srcRect.y = face.row * face.height;
+        srcRect.w = face.width;
+        srcRect.h = face.height;
 
 
         dstRect.x = border;
         dstRect.y = border;
-        dstRect.w = face.m_width;
-        dstRect.h = face.m_height;
+        dstRect.w = face.width;
+        dstRect.h = face.height;
 
-        SDL_RenderTexture(m_pRenderer, m_textureMap[face.m_textureID], &srcRect, &dstRect);
+        SDL_RenderTexture(m_pRenderer, m_textureMap[face.textureID], &srcRect, &dstRect);
     }
 
     constexpr auto textColor = SDL_Color{0xFF, 0xFF, 0xFF};
@@ -249,18 +249,19 @@ void AssetManager::drawTexture(const std::string &id, const float x, const float
     SDL_RenderTexture(m_pRenderer, m_textureMap[id], &srcRect, &destRect);
 }
 
-void AssetManager::drawTextureFrame(const std::string &id, const float x, const float y, const float width,
-                                    const float height, const int currentRow,
-                                    const int currentColumn) {
+void AssetManager::drawSprite(const sprite &sprite,
+                                    const float x, const float y,
+                                    const int extraRow,
+                                    const int extraColumn) {
     SDL_FRect srcRect;
     SDL_FRect destRect;
-    srcRect.x = width * static_cast<float>(currentColumn);
-    srcRect.y = height * static_cast<float>(currentRow);
-    srcRect.w = destRect.w = width;
-    srcRect.h = destRect.h = height;
+    srcRect.x = sprite.width * static_cast<float>(sprite.column + extraColumn);
+    srcRect.y = sprite.height * static_cast<float>(sprite.row + extraRow);
+    srcRect.w = destRect.w = sprite.width;
+    srcRect.h = destRect.h = sprite.height;
     destRect.x = x;
     destRect.y = y;
-    SDL_RenderTexture(m_pRenderer, m_textureMap[id], &srcRect, &destRect);
+    SDL_RenderTexture(m_pRenderer, m_textureMap[sprite.textureID], &srcRect, &destRect);
 }
 
 void AssetManager::drawTile(const std::string &id, int margin, int spacing, int x, int y, int width, int height,

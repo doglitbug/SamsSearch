@@ -9,12 +9,17 @@ void GameObject::load(int x,
     m_width = width;
     m_height = height;
 
-    m_textureID = pCustomProperties.getString("textureID");
+    m_sprite = sprite{
+        pCustomProperties.getString("textureID"),
+        width,
+        height,
+        pCustomProperties.getInt("startColumn"),
+        pCustomProperties.getInt("startRow")
+    };
+
     //TODO Find or default
     m_direction = DIRECTION::SOUTH;
     m_currentFrame = 0;
-    m_startColumn = pCustomProperties.getInt("startColumn");
-    m_startRow = pCustomProperties.getInt("startRow");
 
     // TODO Use width and height to make a default?
     m_hitBox = nullptr;
@@ -29,13 +34,11 @@ void GameObject::drawSelf(SDL_Rect *pViewport) {
     if ((m_position.getY() + m_height) < pViewport->y) return;
     if (m_position.getY() > (pViewport->y + pViewport->h)) return;
 
-    AssetManager::get()->drawTextureFrame(m_textureID,
-                                          (int) m_position.getX() - pViewport->x,
-                                          (int) m_position.getY() - pViewport->y,
-                                          m_width,
-                                          m_height,
-                                          m_startRow + m_direction,
-                                          m_startColumn + m_currentFrame);
+    AssetManager::get()->drawSprite(m_sprite,
+                                    (int) m_position.getX() - pViewport->x,
+                                    (int) m_position.getY() - pViewport->y,
+                                    m_direction,
+                                    m_currentFrame);
 
     //TODO Move out of this function!
     if (SHOW_HITBOX && m_hitBox) {
