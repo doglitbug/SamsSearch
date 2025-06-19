@@ -38,8 +38,6 @@ add_executable(SamsSearch
         src/Maps/BaseMap.h
         src/Maps/MapParser.cpp
         src/Maps/MapParser.h
-        src/Maps/GameObjectLayer.cpp
-        src/Maps/GameObjectLayer.h
         src/Maps/TileLayer.cpp
         src/Maps/TileLayer.h
         src/Managers/AssetManager.cpp

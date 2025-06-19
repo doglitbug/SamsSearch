@@ -40,32 +40,30 @@ void PlayState::update(const float deltaTime) {
 
     const SDL_FRect playerHitBox = mPlayer->getWorldHitBox();
 
-    //TODO Remove object layer and have only a map of dynamics?
-    for (GameObjectLayer *layer: *pCurrentMap->getObjectLayers()) {
-        layer->update(deltaTime, mPlayer);
+    for (auto *gameObject: *pCurrentMap->getGameObjects()) {
+        gameObject->update(deltaTime, mPlayer);
 
-        for (auto *gameObject: *layer->getGameObjects()) {
-            //Check map collision here
-            if (const auto goc = dynamic_cast<GameObjectCreature *>(gameObject)) {
-                goc->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
-            }
-            //TODO Else we are a GO Item?
+        //Check map collision here
+        if (const auto goc = dynamic_cast<GameObjectCreature *>(gameObject)) {
+            goc->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
+        }
+        //TODO Else we are a GO Item?
 
-            //Check intersection with player
-            //TODO Change this to all dynamics so they dont over lap
-            SDL_FRect otherHitBox = gameObject->getWorldHitBox();
-            if (SDL_HasRectIntersectionFloat(&playerHitBox, &otherHitBox)) {
-                //TODO IF type of teleport, do xyz else
-                if (const auto tp = dynamic_cast<Teleport *>(gameObject)) {
-                    changeMap(tp->destMap, tp->destX, tp->destY, tp->destDirection);
-                    AssetManager::get()->playSound("Enter door");
-                    continue;
-                }
-                gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
-                //else do collision based stuff to stop over lapping
+        //Check intersection with player
+        //TODO Change this to all dynamics so they dont over lap
+        SDL_FRect otherHitBox = gameObject->getWorldHitBox();
+        if (SDL_HasRectIntersectionFloat(&playerHitBox, &otherHitBox)) {
+            //TODO IF type of teleport, do xyz else
+            if (const auto tp = dynamic_cast<Teleport *>(gameObject)) {
+                changeMap(tp->destMap, tp->destX, tp->destY, tp->destDirection);
+                AssetManager::get()->playSound("Enter door");
+                continue;
             }
+            gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
+            //else do collision based stuff to stop over lapping
         }
     }
+
 
     //TODO Disable if in cutscene
     handleInput();
@@ -84,7 +82,7 @@ void PlayState::render() {
     //6. Ignore collision layer
 
     for (BaseLayer *layer: *pCurrentMap->getLowerLayers()) { layer->render(&pViewport); }
-    for (BaseLayer *layer: *pCurrentMap->getObjectLayers()) { layer->render(&pViewport); }
+    for (GameObject *gameObject: *pCurrentMap->getGameObjects()) { gameObject->drawSelf(&pViewport); }
     //Draw player on top of everyone!
     mPlayer->drawSelf(&pViewport);
     for (BaseLayer *layer: *pCurrentMap->getUpperLayers()) { layer->render(&pViewport); }
@@ -101,7 +99,7 @@ void PlayState::onExit() {
         it = m_maps.erase(it); // Returns iterator to the next element
     }
     m_maps.clear();
-
+    //TODO Delete GOs
     BaseState::onExit();
 }
 
@@ -195,7 +193,6 @@ void PlayState::handleInput() {
         const Sprite dialogFace{"tf_char2", 144, 144};
 
         m_commandProcessor.AddCommand(new cmdShowDialog(dialogFace, dialogLines));
-
     }
 
     mPlayer->m_velocity = InputManager::get()->getMovement() *= mPlayer->m_speed;

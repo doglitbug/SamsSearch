@@ -3,7 +3,6 @@
 #include "TileLayer.h"
 #include "zlib.h"
 #include "base64.h"
-#include "GameObjectLayer.h"
 #include "Objects/GameObjects/GameObjectFactory.h"
 
 void MapParser::parseMap(BaseMap *pMap)
@@ -47,7 +46,7 @@ void MapParser::parseMap(BaseMap *pMap)
         }
         else if (e->Value() == std::string("objectgroup"))
         {
-            parseObjectLayer(e, pMap->getObjectLayers());
+            parseObjectLayer(e, pMap->getGameObjects());
         }
         else
         {
@@ -205,10 +204,8 @@ void MapParser::parseCollisionLayer(XMLElement *pCollisionElement, CollisionLaye
 
 
 // ToDo BaseObject layers, do these need to be loaded from a save file for each level?
-void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObjectLayer *> *pLayers)
+void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObject *> *pGameObjects)
 {
-    // Create an object layer
-    auto *pObjectLayer = new GameObjectLayer();
     for (XMLElement *e = pObjectElement->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
         if (e->Value() == std::string("object"))
@@ -239,13 +236,11 @@ void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObj
             auto prop = CPO(customProperties);
             pGameObject->load(x, y, width, height, prop);
 
-            pObjectLayer->getGameObjects()->push_back(pGameObject);
+            pGameObjects->push_back(pGameObject);
         }
         else
         {
             std::cout << "Unknown GameObjectLayer value: " << e->Value() << std::endl;
         }
     }
-
-    pLayers->push_back(pObjectLayer);
 }

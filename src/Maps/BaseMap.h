@@ -2,8 +2,8 @@
 
 #include <vector>
 #include "BaseLayer.h"
+#include "GameObjects/GameObject.h"
 #include "CollisionLayer.h"
-#include "GameObjectLayer.h"
 
 struct TileSet
 {
@@ -27,8 +27,9 @@ public:
                 it = m_upperLayers.erase(it);  // Returns iterator to the next element
         }
 
-        for (auto it = m_objectLayers.begin(); it != m_objectLayers.end();) {
-            it = m_objectLayers.erase(it);  // Returns iterator to the next element
+        //TODO Is the player in here?
+        for (auto it = m_gameObjects.begin(); it != m_gameObjects.end();) {
+            it = m_gameObjects.erase(it);  // Returns iterator to the next element
         }
 
         for (auto it = m_lowerLayers.begin(); it != m_lowerLayers.end();) {
@@ -46,8 +47,8 @@ public:
         return &m_lowerLayers;
     }
 
-    std::vector<GameObjectLayer*>* getObjectLayers(){
-        return &m_objectLayers;
+    std::vector<GameObject*>* getGameObjects(){
+        return &m_gameObjects;
     }
 
     std::vector<BaseLayer*>* getUpperLayers(){
@@ -80,9 +81,9 @@ private:
 
     std::vector<TileSet> m_tileSets;
     std::vector<BaseLayer*>  m_lowerLayers;
-    std::vector<GameObjectLayer*>  m_objectLayers;
     std::vector<BaseLayer*>  m_upperLayers;
     CollisionLayer m_collisionLayer;
+    std::vector<GameObject *> m_gameObjects;
 
     int width;
     int height;

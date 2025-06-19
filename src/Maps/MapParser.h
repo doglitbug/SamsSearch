@@ -14,7 +14,7 @@ private:
 
     void parseTileLayer(XMLElement *pTileElement, std::vector<BaseLayer*> *pLayers, const std::vector<TileSet>* pTilesets) const;
     void parseCollisionLayer(XMLElement *pCollisionElement, CollisionLayer *pCollisionLayer) const;
-    static void parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObjectLayer *> *pLayers);
+    static void parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObject *> *pGameObjects);
 
     int m_tileSize = 0;
     int m_width = 0;
