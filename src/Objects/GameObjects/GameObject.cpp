@@ -9,7 +9,7 @@ void GameObject::load(int x,
     m_width = width;
     m_height = height;
 
-    m_sprite = sprite{
+    m_sprite = Sprite{
         pCustomProperties.getString("textureID"),
         width,
         height,
@@ -53,7 +53,7 @@ void GameObject::drawSelf(SDL_Rect *pViewport) {
     }
 }
 
-void GameObject::onInteraction(GameObject *other, INTERACT_TYPE interactionType) {
+void GameObject::onInteraction(GameObject *other, INTERACT_TYPE interactType) {
     std::cout << "I was touched!" << std::endl;
 }
 

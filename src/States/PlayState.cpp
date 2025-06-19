@@ -27,6 +27,12 @@ void PlayState::onEnter() {
 }
 
 void PlayState::update(const float deltaTime) {
+    //CutScene
+    if (!m_commandProcessor.UserControl()) {
+        m_commandProcessor.ProcessCommands(deltaTime);
+        return;
+    }
+
     //TODO Only update object layer, at least until we have animations eg for water?
     mPlayer->update(deltaTime, nullptr);
     //TODO All dynamics need to do this?
@@ -149,7 +155,6 @@ void PlayState::saveGame() {
 
 void PlayState::drawUI() const {
     //TODO Make this better by caching this crap?
-
     int width, height;
     EngineStateManager::get()->getWindowSize(&width, &height);
 
@@ -164,8 +169,21 @@ void PlayState::drawUI() const {
     //TODO Now that it is drawn, we can delete the texture (it needs to be deleted so that different map names work)
     AssetManager::get()->deleteTexture("mapName");
 
-    //TODO Change this to reference the short name that is the key in the loaded map dictionary
-    if (pCurrentMap->getName()=="The outside world") {
+    //Draw Dialog now if we have any.
+    //This is placed here to stop it being overwritten!
+    if (m_commandProcessor.showingDialog()) {
+        EngineStateManager::get()->getWindowSize(&width, &height);
+        AssetManager::get()->drawTexture("dialog", 0, height - 164, width, 164);
+    }
+}
+
+void PlayState::handleInput() {
+    if (InputManager::get()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
+        EngineStateManager::get()->getStateMachine()->pushState("PAUSE");
+        return;
+    }
+
+    if (InputManager::get()->isKeyDown(SDL_SCANCODE_Z)) {
         const std::vector<std::string> dialogLines = {
             "Hello",
             " ",
@@ -174,18 +192,10 @@ void PlayState::drawUI() const {
             "and as usual, turn off your damn light!"
         };
 
-        const sprite dialogFace{"tf_char2", 144, 144};
+        const Sprite dialogFace{"tf_char2", 144, 144};
 
-        const auto dialog = AssetManager::get()->createDialogue("Samuel", dialogFace, dialogLines, "Text");
-        AssetManager::get()->drawTexture("dialog", 0, height - 164, width, 164);
-        AssetManager::get()->deleteTexture("dialog");
-    }
-}
+        m_commandProcessor.AddCommand(new cmdShowDialog(dialogFace, dialogLines));
 
-void PlayState::handleInput() const {
-    if (InputManager::get()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
-        EngineStateManager::get()->getStateMachine()->pushState("PAUSE");
-        return;
     }
 
     mPlayer->m_velocity = InputManager::get()->getMovement() *= mPlayer->m_speed;

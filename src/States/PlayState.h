@@ -12,6 +12,8 @@
 #include "Maps/MapInsideDadsHouse.h"
 #include "Maps/MapTest.h"
 
+#include "CommandProcessor.h"
+
 /// @brief PlayState is the GameEngine
 class PlayState : public BaseState
 {
@@ -34,8 +36,11 @@ private:
     /// Called when the player opts to save the game
     static void saveGame();
 
+    /// Scripting engine
+    CommandProcessor m_commandProcessor;
+
     void drawUI() const;
-    void handleInput() const;
+    void handleInput();
 
     /// The current map
     BaseMap *pCurrentMap;

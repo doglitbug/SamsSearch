@@ -8,6 +8,7 @@ include_directories(src/ThirdParty/Base64)
 include_directories(src/Objects)
 include_directories(src/Objects/UIObjects)
 include_directories(src/Maps)
+include_directories(src/CutScenes)
 include_directories(src/Managers)
 include_directories(src/States)
 include_directories(src/ThirdParty/TinyXML)
@@ -82,7 +83,10 @@ add_executable(SamsSearch
         src/Maps/Maps/MapTest.h
         src/Maps/Maps/MapTest.cpp
         src/Maps/Maps/MapInsideDadsHouse.h
-        src/Maps/Maps/MapInsideDadsHouse.cpp)
+        src/Maps/Maps/MapInsideDadsHouse.cpp
+        src/CutScenes/CommandProcessor.cpp
+        src/CutScenes/CommandProcessor.h
+        src/CutScenes/Commands.cpp)
 
 find_package(ZLIB)
 

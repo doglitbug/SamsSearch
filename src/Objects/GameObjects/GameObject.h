@@ -62,7 +62,7 @@ protected:
     /// @brief Objects hit-box for colliding with other objects
     SDL_FRect *m_hitBox;
 
-    sprite m_sprite;
+    Sprite m_sprite;
 
     /// @brief used to denote animation frame(column) in sprite-sheet
     int m_currentFrame;

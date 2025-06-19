@@ -16,7 +16,7 @@
 /// @param m_height Height of sprite
 /// @param m_column Column of sprite, default 0
 /// @param m_row Row of sprite, default 0
-struct sprite {
+struct Sprite {
     std::string textureID; //TODO Change to pointer?
     int width;
     int height;
@@ -65,7 +65,7 @@ public:
     /// @param fontID
     /// @return Pointer to the created texture
     SDL_Texture *createDialogue(const std::string &characterName,
-                                const sprite &face,
+                                const Sprite &face,
                                 const std::vector<std::string> &dialog,
                                 const std::string &fontID);
 
@@ -94,7 +94,7 @@ public:
     /// @param y position on screen
     /// @param extraRow Additional row for animation, default 0
     /// @param extraColumn Additional column for animation, default 0
-    void drawSprite(const sprite &sprite, float x, float y, int extraRow = 0, int extraColumn = 0);
+    void drawSprite(const Sprite &sprite, float x, float y, int extraRow = 0, int extraColumn = 0);
 
     /// @brief Draw a tile from a sprite sheet
     /// @param id texture ID
