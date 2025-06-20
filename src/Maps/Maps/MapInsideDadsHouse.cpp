@@ -1,4 +1,5 @@
 #include "MapInsideDadsHouse.h"
+#include "MapParser.h"
 
 MapInsideDadsHouse::MapInsideDadsHouse() {
     filename = "assets/maps/InsideDadsHouse.tmx";

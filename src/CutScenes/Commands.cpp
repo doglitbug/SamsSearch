@@ -22,8 +22,23 @@ void cmdShowDialog::update(float deltaTime) {
     }
 }
 
+//Wait
+cmdWait::cmdWait(const float duration) {
+    m_duration = std::max(duration, 0.0f);
+    m_timeSoFar = 0.0f;
+}
+
+void cmdWait::update(const float deltaTime) {
+    m_timeSoFar += deltaTime;
+
+    if (m_timeSoFar >= m_duration) {
+        completed = true;
+    }
+}
+
+
 //MoveTo
-cmdMoveTo::cmdMoveTo(GameObject *gameObjectCreature, const float x, const float y, float duration) {
+cmdMoveTo::cmdMoveTo(GameObject *gameObjectCreature, const float x, const float y, const float duration) {
     m_gameObject = gameObjectCreature;
     m_endPosition = {x, y};
     m_duration = duration;

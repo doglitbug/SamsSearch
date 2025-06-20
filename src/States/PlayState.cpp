@@ -193,6 +193,8 @@ void PlayState::handleInput() {
         const Sprite dialogFace{"tf_char2", 144, 144};
 
         m_commandProcessor.AddCommand(new cmdShowDialog(dialogFace, dialogLines));
+        m_commandProcessor.AddCommand(new cmdWait(5.0));
+
     }
 
     mPlayer->m_velocity = InputManager::get()->getMovement() *= mPlayer->m_speed;

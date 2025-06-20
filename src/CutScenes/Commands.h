@@ -55,3 +55,18 @@ private:
     float m_duration;
     float m_timeSoFar;
 };
+
+class cmdWait :public Command {
+    public:
+    /// Wait for a specified amount of time (in seconds)
+    /// @param duration Amount of time to wait
+    explicit cmdWait(float duration);
+    ~cmdWait() override {};
+
+    void update(float deltaTime) override;
+
+    private:
+    float m_duration;
+    float m_timeSoFar;
+};
+
