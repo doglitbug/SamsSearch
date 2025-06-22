@@ -7,6 +7,7 @@
 #include "GameObjects/GameObjectCreature/Dog.h"
 #include "GameObjects/GameObjectCreature/Cat.h"
 #include "GameObjects/GameObjectItem/Teleport.h"
+#include "GameObjects/GameObjectItem/Sign.h"
 
 #include "BaseMap.h"
 #include "Maps/MapInsideDadsHouse.h"

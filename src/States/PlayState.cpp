@@ -7,6 +7,7 @@ void PlayState::onEnter() {
     GameObjectFactory::get()->registerType("Teleport", new TeleportCreator());
     GameObjectFactory::get()->registerType("Dog", new DogCreator());
     GameObjectFactory::get()->registerType("Cat", new CatCreator());
+    GameObjectFactory::get()->registerType("Sign", new SignCreator());
 
     m_maps["InsideDadsHouse"] = new MapInsideDadsHouse();
     m_maps["Test"] = new MapTest();

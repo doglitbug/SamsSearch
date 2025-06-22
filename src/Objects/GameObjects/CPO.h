@@ -1,6 +1,7 @@
 #pragma once
 #include <cstring>
 #include <map>
+#include <sstream>
 #include <string>
 #include <utility>
 
@@ -59,6 +60,28 @@ public:
         return defaultValue;
     }
 
+    std::vector<std::string> getStrings(const std::string &name, std::vector<std::string> defaultValue = {}) {
+        try {
+            if (const auto it = m_properties.find(name); it != m_properties.end()) {
+                return splitString(it->second);
+            }
+        } catch (...) {
+        }
+        return defaultValue;
+    }
+
 private:
     std::map<std::string, std::string> m_properties;
+
+    static std::vector<std::string> splitString(const std::string& input, const char delimiter = '\n') {
+        std::vector<std::string> result;
+        std::istringstream ss(input);
+        std::string token;
+
+        while (std::getline(ss, token, delimiter)) {
+            result.push_back(token);
+        }
+
+        return result;
+    }
 };

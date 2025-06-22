@@ -84,7 +84,9 @@ add_executable(SamsSearch
         src/Maps/Maps/MapInsideDadsHouse.cpp
         src/CutScenes/CommandProcessor.cpp
         src/CutScenes/CommandProcessor.h
-        src/CutScenes/Commands.cpp)
+        src/CutScenes/Commands.cpp
+        src/Objects/GameObjects/GameObjectItem/Sign.cpp
+        src/Objects/GameObjects/GameObjectItem/Sign.h)
 
 find_package(ZLIB)
 
