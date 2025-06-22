@@ -7,10 +7,10 @@
 
 void MapParser::parseMap(BaseMap *pMap)
 {
-    auto mapFile = pMap->filename;
+    const auto mapFile = pMap->filename;
 
     // Create an XML document and load the map XML
-    XMLDocument levelDocument = XMLDocument(false, COLLAPSE_WHITESPACE);
+    auto levelDocument = XMLDocument(false, COLLAPSE_WHITESPACE);
     levelDocument.LoadFile(mapFile.c_str());
 
     // Get the root node
@@ -19,6 +19,9 @@ void MapParser::parseMap(BaseMap *pMap)
     m_tileSize = pRoot->IntAttribute("tilewidth");
     m_width = pRoot->IntAttribute("width");
     m_height = pRoot->IntAttribute("height");
+
+    pMap->width=m_width;
+    pMap->height=m_height;
 
     for (XMLElement *e = pRoot->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
@@ -201,7 +204,6 @@ void MapParser::parseCollisionLayer(XMLElement *pCollisionElement, CollisionLaye
 
     pCollisionLayer->setCollisionData(data);
 }
-
 
 // ToDo BaseObject layers, do these need to be loaded from a save file for each level?
 void MapParser::parseObjectLayer(XMLElement *pObjectElement, std::vector<GameObject *> *pGameObjects)

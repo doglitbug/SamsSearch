@@ -56,7 +56,7 @@ private:
     float m_timeSoFar;
 };
 
-class cmdWait :public Command {
+class cmdWait final :public Command {
     public:
     /// Wait for a specified amount of time (in seconds)
     /// @param duration Amount of time to wait

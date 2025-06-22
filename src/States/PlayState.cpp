@@ -1,5 +1,7 @@
 #include "PlayState.h"
 
+#include <algorithm>
+
 void PlayState::onEnter() {
     //GameObjectFactory::get()->registerType("Player", new PlayerCreator());
     GameObjectFactory::get()->registerType("Teleport", new TeleportCreator());
@@ -83,7 +85,7 @@ void PlayState::render() {
 
     for (BaseLayer *layer: *pCurrentMap->getLowerLayers()) { layer->render(&pViewport); }
     for (GameObject *gameObject: *pCurrentMap->getGameObjects()) { gameObject->drawSelf(&pViewport); }
-    //Draw player on top of everyone!
+    //Draw player on top of everyone else
     mPlayer->drawSelf(&pViewport);
     for (BaseLayer *layer: *pCurrentMap->getUpperLayers()) { layer->render(&pViewport); }
 
@@ -104,21 +106,32 @@ void PlayState::onExit() {
 }
 
 SDL_Rect PlayState::getViewport() const {
-    int width, height;
-    EngineStateManager::get()->getWindowSize(&width, &height);
+    int windowWidth, windowHeight;
+    EngineStateManager::get()->getWindowSize(&windowWidth, &windowHeight);
 
-    //Set viewport position for x axis
-    int x = mPlayer->m_position.getX() - width / 2;
-    if (x < 0) x = 0;
-    //TODO Fix this
-    //if (x > pCurrentMap->getWidth()*32 - width) x = pCurrentMap->getWidth()*32 - width;
+    //Set viewport position for-x axis
+    const int mapWidth = pCurrentMap->getWidth() * 32;
+    int x = mPlayer->m_position.getX() - windowWidth / 2;
 
-    int y = mPlayer->m_position.getY() - height / 2;
-    if (y < 0) y = 0;
-    //TODO Fix this
-    //if (y + height > pCurrentMap->getHeight()) y = pCurrentMap->getHeight() - height;
+    // Clamp the value of x within valid bounds
+    if (mapWidth <= windowWidth) {
+        x = 0;  // The Map is smaller than or equal to the window
+    } else {
+        x = std::clamp(x, 0, mapWidth - windowWidth);
+    }
 
-    return SDL_Rect{x, y, width, height};
+    //Set viewport for y-axis
+    const int mapHeight = pCurrentMap->getHeight() * 32;
+    int y = mPlayer->m_position.getY() - windowHeight / 2;
+
+    // Clamp the value of y within valid bounds
+    if (mapHeight <= windowHeight) {
+        y = 0;  // The Map is smaller than or equal to the window
+    } else {
+        y = std::clamp(y, 0, mapHeight - windowHeight);
+    }
+
+    return SDL_Rect{x, y, windowWidth, windowHeight};
 }
 
 void PlayState::changeMap(const std::string &mapName, const float destX, const float destY, const DIRECTION direction) {
@@ -194,7 +207,6 @@ void PlayState::handleInput() {
 
         m_commandProcessor.AddCommand(new cmdShowDialog(dialogFace, dialogLines));
         m_commandProcessor.AddCommand(new cmdWait(5.0));
-
     }
 
     mPlayer->m_velocity = InputManager::get()->getMovement() *= mPlayer->m_speed;
