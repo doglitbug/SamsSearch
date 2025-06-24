@@ -20,9 +20,9 @@ public:
 
     bool init(const char *title, int width, int height, bool fullscreen);
 
-    void render();
+    void render() const;
 
-    void update(float deltaTime);
+    void update(float deltaTime) const;
 
     static void handleEvents();
 
@@ -44,7 +44,7 @@ public:
      */
     void getWindowSize(int *width, int *height) { SDL_GetCurrentRenderOutputSize(m_pRenderer, width, height); }
 
-    void clean();
+    void clean() const;
 
 private:
     EngineStateManager() {}

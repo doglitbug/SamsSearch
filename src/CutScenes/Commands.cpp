@@ -13,10 +13,8 @@ void cmdShowDialog::start() {
 }
 
 void cmdShowDialog::update(float deltaTime) {
-
-
     //TODO If player hits action button
-    if (InputManager::get()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
+    if (InputManager::get()->getKeyDown(SDL_SCANCODE_ESCAPE) || InputManager::get()->getButtonDown(SDL_GAMEPAD_BUTTON_SOUTH)) {
         completed = true;
         AssetManager::get()->deleteTexture("dialog");
     }

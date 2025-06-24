@@ -1,13 +1,9 @@
 #pragma once
 
-#include <iostream>
 #include <vector>
-
 #include <SDL3/SDL.h>
-
-#include "EngineStateManager.h"
 #include "../Vector2D.h"
-
+#include "EngineStateManager.h"
 
 class InputManager {
 public:
@@ -17,27 +13,19 @@ public:
     };
 
     InputManager(InputManager &other) = delete;
-
     void operator=(const InputManager &) = delete;
 
     void update();
-
     void clean() const;
 
     ///
-    /// @return Normalized movement vector
+    /// @return Normalized movement vector based on user input
     Vector2D getMovement() const;
 
     // Joystick Handling
-    void initializeJoysticks();
-
-    bool joysticksInitialised() const { return m_bJoysticksInitialised; }
-
-    int xValue(int joy, int stick) const;
-
-    int yValue(int joy, int stick) const;
-
-    bool getButtonState(int joy, int buttonNumber);
+    void initializeGamepads();
+    bool getButtonDown(SDL_GamepadButton buttonNumber) const;
+    bool gamepadInUse() const { return m_bGamepad; }
 
     // Mouse handling
     enum mouse_buttons {
@@ -51,7 +39,7 @@ public:
     Vector2D* getMousePosition();
 
     // Keyboard handling
-    bool isKeyDown(SDL_Scancode key) const;
+    bool getKeyDown(SDL_Scancode key) const;
 
 private:
     InputManager() {};
@@ -60,19 +48,17 @@ private:
     // Mouse
     Vector2D m_mousePosition;
     std::vector<bool> m_mouseButtonStates;
-    void onMouseMove(SDL_Event &event);
-    void onMouseButtonChange(SDL_Event &event, bool state);
+    void onMouseMove(const SDL_Event &event);
+    void onMouseButtonChange(const SDL_Event &event);
 
     // Keyboard
     const bool *m_keyStates;
     void onKeyChange();
 
     // Joysticks
-    std::vector<SDL_Joystick *> m_joysticks;
-    bool m_bJoysticksInitialised;
-    std::vector<std::pair<Vector2D *, Vector2D *>> m_joystickValues;
-    std::vector<std::vector<bool>> m_buttonStates;
-    const int m_joystickDeadZone = 10000; // ToDo Place in m_settings/options?
-    void onJoystickAxisMove(SDL_Event &event);
-    void onJoystickButtonChange(SDL_Event &event, bool state);
+    /// @brief are we using a GamePad?
+    bool m_bGamepad;
+    SDL_Gamepad *m_gamepad;
+    std::vector<bool> m_buttonStates;
+    void onButtonChange(const SDL_Event &event);
 };

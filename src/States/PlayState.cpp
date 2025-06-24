@@ -182,7 +182,7 @@ void PlayState::drawUI() const {
     AssetManager::get()->deleteTexture("mapName");
 
     //Draw Dialog now if we have any.
-    //This is placed here to stop it being overwritten!
+    //This is placed here to stop it being overwritten on screen!
     if (m_commandProcessor.showingDialog()) {
         EngineStateManager::get()->getWindowSize(&width, &height);
         AssetManager::get()->drawTexture("dialog", 0, height - 164, width, 164);
@@ -190,24 +190,24 @@ void PlayState::drawUI() const {
 }
 
 void PlayState::handleInput() {
-    if (InputManager::get()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
+    if (InputManager::get()->getKeyDown(SDL_SCANCODE_ESCAPE) || InputManager::get()->getButtonDown(SDL_GAMEPAD_BUTTON_START)) {
         EngineStateManager::get()->getStateMachine()->pushState("PAUSE");
         return;
     }
 
-    if (InputManager::get()->isKeyDown(SDL_SCANCODE_Z)) {
+    if (InputManager::get()->getKeyDown(SDL_SCANCODE_Z)) {
         const std::vector<std::string> dialogLines = {
             "Hello",
-            " ",
             "Have you been inside yet?",
             "You need to find your shoes",
-            "and as usual, turn off your damn light!"
+            "and as usual, turn off your damn light!",
+            "Press A to continue"
         };
 
         const Sprite dialogFace{"tf_char2", 144, 144};
 
         m_commandProcessor.AddCommand(new cmdShowDialog(dialogFace, dialogLines));
-        m_commandProcessor.AddCommand(new cmdWait(5.0));
+        m_commandProcessor.AddCommand(new cmdWait(2.5));
     }
 
     mPlayer->m_velocity = InputManager::get()->getMovement() *= mPlayer->m_speed;

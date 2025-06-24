@@ -58,7 +58,7 @@ bool EngineStateManager::init(const char *title, int width, int height, bool ful
         return false;
     }
 
-    InputManager::get()->initializeJoysticks();
+    InputManager::get()->initializeGamepads();
     InputManager::get()->initializeMouse();
 
 
@@ -106,8 +106,7 @@ bool EngineStateManager::init(const char *title, int width, int height, bool ful
     return true;
 }
 
-void EngineStateManager::render()
-{
+void EngineStateManager::render() const {
     //TODO Set this color in the state?
     SDL_SetRenderDrawColor(m_pRenderer, 25, 25, 25, 255);
     SDL_RenderClear(m_pRenderer);
@@ -115,8 +114,7 @@ void EngineStateManager::render()
     SDL_RenderPresent(m_pRenderer);
 }
 
-void EngineStateManager::update(float deltaTime)
-{
+void EngineStateManager::update(float deltaTime) const {
     m_pGameStateMachine->update(deltaTime);
     Vector2D *p_mousePos = InputManager::get()->getMousePosition();
 }
@@ -126,8 +124,7 @@ void EngineStateManager::handleEvents()
     InputManager::get()->update();
 }
 
-void EngineStateManager::clean()
-{
+void EngineStateManager::clean() const {
     std::cout << "Cleaning game\n";
 
     AssetManager::get()->clean();
