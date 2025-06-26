@@ -102,8 +102,9 @@ void AssetManager::createTextTexture(const int width, const int height, const st
 
 SDL_Texture *AssetManager::createDialogue(const std::string &characterName, const Sprite &face,
                                           const std::vector<std::string> &dialog, const std::string &fontID) {
-    constexpr int border = 10;
-    constexpr int height = 164;
+    constexpr int border = 4;
+    //TODO Make this a set height always?
+    const int height = face.height + 2 * border;
     int offset = border * 2;
 
 
@@ -237,7 +238,8 @@ void AssetManager::addBorderToExistingTexture(const std::string &textureID, cons
     SDL_SetRenderTarget(m_pRenderer, nullptr);
 }
 
-void AssetManager::drawTexture(const std::string &id, const float x, const float y, const float width, const float height) {
+void AssetManager::drawTexture(const std::string &id, const float x, const float y, const float width,
+                               const float height) {
     SDL_FRect srcRect;
     SDL_FRect destRect;
     srcRect.x = 0;
@@ -250,9 +252,9 @@ void AssetManager::drawTexture(const std::string &id, const float x, const float
 }
 
 void AssetManager::drawSprite(const Sprite &sprite,
-                                    const float x, const float y,
-                                    const int extraRow,
-                                    const int extraColumn) {
+                              const float x, const float y,
+                              const int extraRow,
+                              const int extraColumn) {
     SDL_FRect srcRect;
     SDL_FRect destRect;
     srcRect.x = sprite.width * static_cast<float>(sprite.column + extraColumn);
@@ -325,12 +327,12 @@ void AssetManager::setGameVolume(const int volume) {
 }
 
 bool AssetManager::loadSound(const std::string &filename, const std::string &id) {
-      //Check to see if this has been loaded already
+    //Check to see if this has been loaded already
     if (m_sound.find(id) != m_sound.end()) {
         return true;
     }
 
-      if (auto *pSound = Mix_LoadWAV(filename.c_str())) {
+    if (auto *pSound = Mix_LoadWAV(filename.c_str())) {
         m_sound[id] = pSound;
         return true;
     }
