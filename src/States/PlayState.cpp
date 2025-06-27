@@ -30,7 +30,7 @@ void PlayState::onEnter() {
 }
 
 void PlayState::update(const float deltaTime) {
-    //CutScene
+    //CutScene/Dialog
     if (!m_commandProcessor.UserControl()) {
         m_commandProcessor.ProcessCommands(deltaTime);
         return;
@@ -68,7 +68,7 @@ void PlayState::update(const float deltaTime) {
     }
 
 
-    //TODO Disable if in cutscene
+    //Disabled if in cutscene
     handleInput();
 }
 
@@ -103,6 +103,7 @@ void PlayState::onExit() {
     }
     m_maps.clear();
     //TODO Delete GOs
+    //TODO OnExit for all maps?
     BaseState::onExit();
 }
 
@@ -185,7 +186,10 @@ void PlayState::drawUI() const {
     //This is placed here to stop it being overwritten on screen!
     if (m_commandProcessor.showingDialog()) {
         EngineStateManager::get()->getWindowSize(&width, &height);
-        AssetManager::get()->drawTexture("dialog", 0, height - 164, width, 164);
+
+        float dialogHeight;
+        AssetManager::get()->getTextureSize("dialog", nullptr, &dialogHeight);
+        AssetManager::get()->drawTexture("dialog", 0, height - dialogHeight);
     }
 }
 

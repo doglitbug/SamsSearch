@@ -4,7 +4,7 @@ void CommandProcessor::AddCommand(Command *command) {
     m_commands.push_back(command);
 }
 
-void CommandProcessor::ProcessCommands(const float deltaTime){
+void CommandProcessor::ProcessCommands(const float deltaTime) {
     if (m_commands.empty()) {
         return;
     }
@@ -30,7 +30,8 @@ bool CommandProcessor::showingDialog() const {
     }
 
     if (const auto tp = dynamic_cast<cmdShowDialog *>(m_commands.front())) {
-        return true;
+        if (tp->started && !tp->completed)
+            return true;
     }
     return false;
 }

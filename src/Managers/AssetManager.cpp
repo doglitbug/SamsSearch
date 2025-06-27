@@ -102,7 +102,7 @@ void AssetManager::createTextTexture(const int width, const int height, const st
 
 SDL_Texture *AssetManager::createDialogue(const std::string &characterName, const Sprite &face,
                                           const std::vector<std::string> &dialog, const std::string &fontID) {
-    constexpr int border = 4;
+    constexpr int border = 30;
     //TODO Make this a set height always?
     const int height = face.height + 2 * border;
     int offset = border * 2;
@@ -145,13 +145,13 @@ SDL_Texture *AssetManager::createDialogue(const std::string &characterName, cons
 
     constexpr auto textColor = SDL_Color{0xFF, 0xFF, 0xFF};
 
-    int linePosition = border * 2;
+    int linePosition = border + 5;
     for (const auto line: dialog) {
         SDL_Surface *pTextSurface = TTF_RenderText_Blended(gFont, line.c_str(), 0, textColor);
         SDL_Texture *pTextTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTextSurface);
         SDL_DestroySurface(pTextSurface);
 
-        // Get size of the text texture
+        // Get the size of the text texture
         float textWidth, textHeight;
         SDL_GetTextureSize(pTextTexture, &textWidth, &textHeight);
 
@@ -178,6 +178,16 @@ SDL_Texture *AssetManager::createDialogue(const std::string &characterName, cons
     addBorderToExistingTexture("dialog", border);
 
     return dialogTexture;
+}
+
+void AssetManager::getTextureSize(const std::string &textureID, float *width, float *height) {
+    if (m_textureMap.find(textureID) == m_textureMap.end()) {
+        SDL_Log("Texture not found: %s", textureID);
+        return;
+    }
+
+    //Get texture details
+    SDL_GetTextureSize(m_textureMap[textureID], width, height);
 }
 
 #pragma endregion
@@ -209,8 +219,9 @@ void AssetManager::addBorderToExistingTexture(const std::string &textureID, cons
     //TODO Refactor this mess to use SDL_RenderFillRects
 
     //Check texture exists
-    if (m_textureMap.find(textureID) != m_textureMap.end()) {
-        //TODO Panic
+    if (m_textureMap.find(textureID) == m_textureMap.end()) {
+        SDL_Log("Texture not found: %s", textureID);
+        return;
     }
 
     //Get texture details
@@ -238,8 +249,11 @@ void AssetManager::addBorderToExistingTexture(const std::string &textureID, cons
     SDL_SetRenderTarget(m_pRenderer, nullptr);
 }
 
-void AssetManager::drawTexture(const std::string &id, const float x, const float y, const float width,
-                               const float height) {
+void AssetManager::drawTexture(const std::string &id, const float x, const float y,  float width,  float height) {
+    if (width == 0.0f) {
+        getTextureSize(id, &width, &height);
+    }
+
     SDL_FRect srcRect;
     SDL_FRect destRect;
     srcRect.x = 0;

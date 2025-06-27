@@ -91,11 +91,36 @@ Vector2D InputManager::getMovement() const {
     return newVelocity;
 }
 
-bool InputManager::getButtonDown(const SDL_GamepadButton buttonNumber) const {
+bool InputManager::getButtonDown(const SDL_GamepadButton button) const {
     //Allow us to check if a button is pressed without first checking if there is an active gamepad
     if (!m_bGamepad) return false;
 
-    return m_buttonStates[buttonNumber];
+    return m_buttonStates[button];
+}
+
+std::string InputManager::getButtonLabel(const SDL_GamepadButton button) const {
+    if (!m_bGamepad) return "";
+
+    switch (SDL_GetGamepadButtonLabel(m_gamepad, button)) {
+        case SDL_GAMEPAD_BUTTON_LABEL_A:
+            return "A";
+        case SDL_GAMEPAD_BUTTON_LABEL_B:
+            return "B";
+        case SDL_GAMEPAD_BUTTON_LABEL_X:
+            return "X";
+        case SDL_GAMEPAD_BUTTON_LABEL_Y:
+            return "Y";
+        case SDL_GAMEPAD_BUTTON_LABEL_CROSS:
+            return "X";
+        case SDL_GAMEPAD_BUTTON_LABEL_CIRCLE:
+            return "O";
+        case SDL_GAMEPAD_BUTTON_LABEL_SQUARE:
+            return "Square";
+        case SDL_GAMEPAD_BUTTON_LABEL_TRIANGLE:
+            return "Triangle";
+        default:
+            return "Non face key!";
+    }
 }
 
 void InputManager::initializeMouse() {
@@ -120,6 +145,8 @@ bool InputManager::getKeyDown(const SDL_Scancode key) const {
 }
 
 void InputManager::onButtonChange(const SDL_Event &event) {
+    SDL_Log("Pressed %s", getButtonLabel(static_cast<SDL_GamepadButton>(event.gbutton.button))
+            .c_str());
     m_buttonStates[event.gbutton.button] = event.gbutton.down;
 }
 

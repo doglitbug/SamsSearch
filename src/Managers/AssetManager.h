@@ -69,6 +69,12 @@ public:
                                 const std::vector<std::string> &dialog,
                                 const std::string &fontID);
 
+    /// @brief Get the height of a loaded texture, used for aligning to bottom of screen
+    /// @param textureID Texture to query
+    /// @param width Width
+    /// @param height Height
+    void getTextureSize(const std::string &textureID, float *width, float *height);
+
     // Images
     /// @brief Load a texture file
     /// @param filename
@@ -77,16 +83,16 @@ public:
 
     /// @brief Add a border to an existing texture
     /// @param textureID texture
-    /// @param size width of border
+    /// @param size width of a border
     void addBorderToExistingTexture(const std::string &textureID, float size);
 
-    /// @brief
+    /// @brief Draw a texture to the given position
     /// @param id
     /// @param x position on screen
     /// @param y position on screen
-    /// @param width
-    /// @param height
-    void drawTexture(const std::string &id, float x, float y, float width, float height);
+    /// @param width optional width, if missing or set to zero, will use texture size
+    /// @param height optional height, if missing or set to zero, will use texture size
+    void drawTexture(const std::string &id, float x, float y, float width = 0.0f, float height = 0.0f);
 
     /// @brief Draw a sprite from a sprite sheet
     /// @param sprite Sprite to draw

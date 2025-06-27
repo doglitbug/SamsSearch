@@ -24,8 +24,13 @@ public:
 
     // Joystick Handling
     void initializeGamepads();
-    bool getButtonDown(SDL_GamepadButton buttonNumber) const;
+    bool getButtonDown(SDL_GamepadButton button) const;
     bool gamepadInUse() const { return m_bGamepad; }
+
+    /// #
+    /// @param button
+    /// @return
+    std::string getButtonLabel(SDL_GamepadButton button) const;
 
     // Mouse handling
     enum mouse_buttons {

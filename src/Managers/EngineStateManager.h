@@ -42,7 +42,7 @@ public:
      * @param height
      * @todo Account for SDL_Scale factor if using?
      */
-    void getWindowSize(int *width, int *height) { SDL_GetCurrentRenderOutputSize(m_pRenderer, width, height); }
+    void getWindowSize(int *width, int *height) const { SDL_GetCurrentRenderOutputSize(m_pRenderer, width, height); }
 
     void clean() const;
 
