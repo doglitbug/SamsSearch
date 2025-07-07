@@ -124,14 +124,12 @@ void EngineStateManager::handleEvents()
     InputManager::get()->update();
 }
 
-void EngineStateManager::clean() const {
+void EngineStateManager::clean() {
     std::cout << "Cleaning game\n";
 
     AssetManager::get()->clean();
     InputManager::get()->clean();
     //SettingsManager::get()->clean();
 
-    SDL_DestroyWindow(m_pWindow);
-    SDL_DestroyRenderer(m_pRenderer);
-    SDL_Quit();
+
 }

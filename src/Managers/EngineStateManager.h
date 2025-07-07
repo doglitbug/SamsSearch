@@ -37,14 +37,14 @@ public:
     [[nodiscard]] float getScale() const { return m_scale; }
     
     /**
-     * @brief Get size of the screen in pixels, either windowed or full screen
+     * @brief Get the size of the screen in pixels, either windowed or full screen
      * @param width
      * @param height
      * @todo Account for SDL_Scale factor if using?
      */
     void getWindowSize(int *width, int *height) const { SDL_GetCurrentRenderOutputSize(m_pRenderer, width, height); }
 
-    void clean() const;
+    static void clean() ;
 
 private:
     EngineStateManager() {}
