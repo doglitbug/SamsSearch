@@ -102,7 +102,7 @@ void AssetManager::createTextTexture(const int width, const int height, const st
 
 SDL_Texture *AssetManager::createDialogue(const std::string &characterName, const Sprite &face,
                                           const std::vector<std::string> &dialog, const std::string &fontID) {
-    constexpr int border = 30;
+    constexpr int border = 5;
     //TODO Make this a set height always?
     const int height = face.height + 2 * border;
     int offset = border * 2;

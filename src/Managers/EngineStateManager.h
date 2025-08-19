@@ -26,13 +26,13 @@ public:
 
     static void handleEvents();
 
-    bool running() const { return m_bRunning; }
+    [[nodiscard]] bool running() const { return m_bRunning; }
 
     void quit() { m_bRunning = false; }
 
     [[nodiscard]] SDL_Renderer *getRenderer() const { return m_pRenderer; }
 
-    StateMachine *getStateMachine() { return m_pGameStateMachine; }
+    [[nodiscard]] StateMachine *getStateMachine() const { return m_pGameStateMachine; }
 
     [[nodiscard]] float getScale() const { return m_scale; }
     
