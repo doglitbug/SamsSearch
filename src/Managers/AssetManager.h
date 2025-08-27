@@ -165,8 +165,10 @@ private:
     SDL_Renderer *m_pRenderer;
     std::map<std::string, SDL_Texture *> m_textureMap;
     std::map<std::string, TTF_Font *> m_fontMap;
-    std::map<std::string, Mix_Music *> m_music;
+    std::map<std::string, MIX_Audio *> m_music;
     std::string m_currentMusic;
 
-    std::map<std::string, Mix_Chunk *> m_sound;
+    std::map<std::string, MIX_Audio *> m_sound;
+
+    MIX_Mixer *m_pMixer;
 };

@@ -3,7 +3,7 @@
 #include "EngineStateManager.h"
 
 AssetManager::AssetManager() {
-    Mix_OpenAudio(0, nullptr);
+    m_pMixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
     //Set volumes!
     //TODO Load from Settings?
     Mix_Volume(-1, 5);
@@ -27,7 +27,7 @@ void AssetManager::clean() {
     for (auto &[id, chunk]: m_sound) {
         Mix_FreeChunk(m_sound[id]);
     }
-    Mix_CloseAudio();
+    MIX_DestroyMixer(m_pMixer);
 }
 
 #pragma region Fonts
