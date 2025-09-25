@@ -133,18 +133,18 @@ public:
 
     /// @brief Stop all music
     /// @note TODO Only stop if not menu music?
-    static void stopMusic();
+    void stopMusic();
 
     /// @brief Stop playing menu music
-    void stopMenuMusic() const;
+    void stopTitleMusic();
 
     /// @brief Set music volume
     /// @param volume as a percentage
-    static void setMusicVolume(int volume);
+    void setMusicVolume(int volume);
 
     /// @brief Set game volume
     /// @param volume as a percentage
-    static void setGameVolume(int volume);
+    void setGameVolume(int volume);
 
     bool loadSound(const std::string &filename, const std::string &id);
 
@@ -171,4 +171,6 @@ private:
     std::map<std::string, MIX_Audio *> m_sound;
 
     MIX_Mixer *m_pMixer;
+    MIX_Track *m_pMusicTrack;
+    MIX_Track *m_pSoundTrack;
 };

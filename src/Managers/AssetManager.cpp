@@ -1,13 +1,25 @@
 #include "AssetManager.h"
 
 #include "EngineStateManager.h"
+#include "SettingsManager.h"
 
 AssetManager::AssetManager() {
+    //TODO Cancel using Audio or quit if this fails?
+    if (!MIX_Init()) {
+        SDL_Log("MIX_Init failed: %s", SDL_GetError());
+    }
+
     m_pMixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+    //Create music track
+    m_pMusicTrack = MIX_CreateTrack(m_pMixer);
+    //Create sound track
+    //TODO Pool this for overlapping sounds in future
+    m_pSoundTrack = MIX_CreateTrack(m_pMixer);
+
     //Set volumes!
-    //TODO Load from Settings?
-    Mix_Volume(-1, 5);
-    Mix_VolumeMusic(10);
+    //TODO Load from Settings
+    MIX_SetTrackGain(m_pMusicTrack, SettingsManager::get()->getMusicVolume());
+    MIX_SetTrackGain(m_pSoundTrack, 1.0f);
 }
 
 void AssetManager::clean() {
@@ -22,12 +34,13 @@ void AssetManager::clean() {
 
     //Audio
     for (auto &[id, music]: m_music) {
-        Mix_FreeMusic(m_music[id]);
+        MIX_DestroyAudio(m_music[id]);
     }
     for (auto &[id, chunk]: m_sound) {
-        Mix_FreeChunk(m_sound[id]);
+        MIX_DestroyAudio(m_sound[id]);
     }
     MIX_DestroyMixer(m_pMixer);
+    MIX_Quit();
 }
 
 #pragma region Fonts
@@ -182,7 +195,7 @@ SDL_Texture *AssetManager::createDialogue(const std::string &characterName, cons
 
 void AssetManager::getTextureSize(const std::string &textureID, float *width, float *height) {
     if (m_textureMap.find(textureID) == m_textureMap.end()) {
-        SDL_Log("Texture not found: %s", textureID);
+        SDL_Log("Texture not found: %s", textureID.c_str());
         return;
     }
 
@@ -220,7 +233,7 @@ void AssetManager::addBorderToExistingTexture(const std::string &textureID, cons
 
     //Check texture exists
     if (m_textureMap.find(textureID) == m_textureMap.end()) {
-        SDL_Log("Texture not found: %s", textureID);
+        SDL_Log("Texture not found: %s", textureID.c_str());
         return;
     }
 
@@ -249,7 +262,7 @@ void AssetManager::addBorderToExistingTexture(const std::string &textureID, cons
     SDL_SetRenderTarget(m_pRenderer, nullptr);
 }
 
-void AssetManager::drawTexture(const std::string &id, const float x, const float y,  float width,  float height) {
+void AssetManager::drawTexture(const std::string &id, const float x, const float y, float width, float height) {
     if (width == 0.0f) {
         getTextureSize(id, &width, &height);
     }
@@ -307,7 +320,7 @@ bool AssetManager::loadMusic(const std::string &filename, const std::string &id)
         return true;
     }
 
-    if (Mix_Music *pMusic = Mix_LoadMUS(filename.c_str())) {
+    if (MIX_Audio *pMusic = MIX_LoadAudio(m_pMixer, filename.c_str(), true)) {
         m_music[id] = pMusic;
         return true;
     }
@@ -316,28 +329,27 @@ bool AssetManager::loadMusic(const std::string &filename, const std::string &id)
 }
 
 void AssetManager::playMusic(const std::string &id, int loop) {
-    Mix_PlayMusic(m_music[id], loop);
+    MIX_SetTrackAudio(m_pMusicTrack, m_music[id]);
+    MIX_PlayTrack(m_pMusicTrack, -1);
     m_currentMusic = id;
 }
 
 void AssetManager::stopMusic() {
-    Mix_HaltMusic();
+    MIX_StopTrack(m_pMusicTrack, 0);
 }
 
-void AssetManager::stopMenuMusic() const {
+void AssetManager::stopTitleMusic() {
     if (m_currentMusic == "main_menu") {
         stopMusic();
     }
 }
 
 void AssetManager::setMusicVolume(const int volume) {
-    const int newVolume = (volume / 100.0f) * MIX_MAX_VOLUME;
-    Mix_VolumeMusic(newVolume);
+    MIX_SetTrackGain(m_pMusicTrack, static_cast<float>(volume) / 100.0f);
 }
 
 void AssetManager::setGameVolume(const int volume) {
-    const int newVolume = (volume / 100.0f) * MIX_MAX_VOLUME;
-    Mix_Volume(-1, newVolume);
+    MIX_SetTrackGain(m_pSoundTrack, static_cast<float>(volume) / 100.0f);
 }
 
 bool AssetManager::loadSound(const std::string &filename, const std::string &id) {
@@ -346,7 +358,7 @@ bool AssetManager::loadSound(const std::string &filename, const std::string &id)
         return true;
     }
 
-    if (auto *pSound = Mix_LoadWAV(filename.c_str())) {
+    if (auto *pSound = MIX_LoadAudio(m_pMixer, filename.c_str(), true)) {
         m_sound[id] = pSound;
         return true;
     }
@@ -359,7 +371,9 @@ void AssetManager::playSound(const std::string &id, int loops, int channel) {
         std::cout << "Could not find sound: " << id << std::endl;
         return;
     }
-    Mix_PlayChannel(channel, m_sound[id], loops);
+
+    MIX_SetTrackAudio(m_pSoundTrack, m_sound[id]);
+    MIX_PlayTrack(m_pSoundTrack, 0);
 }
 
 #pragma endregion

@@ -87,7 +87,7 @@ bool EngineStateManager::init(const char *title, int width, int height, bool ful
 
     //Preload main menu audio
     AssetManager::get()->loadMusic("assets/music/chiptunes/CGE-title-theme.flac", "main_menu");
-    AssetManager::get()->loadSound("assets/sounds/chiptunes/action-and-game/NFF-glass-breaking.wav", "Menu audio check");
+    AssetManager::get()->loadSound("assets/sounds/leohpaz/Inventory/Managing/Unequip.wav", "Menu audio check");
 
     //Preload other stuff
 
