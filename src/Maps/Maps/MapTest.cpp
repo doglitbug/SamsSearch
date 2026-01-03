@@ -1,4 +1,5 @@
 #include "MapTest.h"
+#include "MapParser.h"
 
 MapTest::MapTest() {
     filename = "assets/maps/Temp.tmx";

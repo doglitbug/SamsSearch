@@ -18,7 +18,7 @@ public:
 private:
     int m_tileSize;
 
-    TileSet getTileSetByID(int tileID);
+    TileSet getTileSetByID(int tileID) const;
 
     const std::vector<TileSet> &m_tileSets;
     std::vector<std::vector<int>> m_tileIDs;

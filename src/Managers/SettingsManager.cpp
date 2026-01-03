@@ -13,7 +13,7 @@ void SettingsManager::loadSettings() {
 
     if (inFile) {
         //TODO Catch any errors?
-        inFile.read((char *) &m_settings, sizeof(m_settings));
+        inFile.read(reinterpret_cast<char *>(&m_settings), sizeof(m_settings));
     } else {
         resetSettings();
     }
@@ -36,7 +36,7 @@ void SettingsManager::saveSettings() {
     outFile.open(std::string(filepath) + "settings", std::ios::binary);
 
     if (outFile) {
-        outFile.write((char *) &m_settings, sizeof(m_settings));
+        outFile.write(reinterpret_cast<char *>(&m_settings), sizeof(m_settings));
     } else {
         std::cout << "Error writing to file" << std::endl;
     }
@@ -49,5 +49,5 @@ void SettingsManager::resetSettings() {
     setTitleMusicEnabled(true);
     setGameMusicEnabled(true);
     setMusicVolume(50);
-    setGameVolume(70);
+    setGameVolume(75);
 }

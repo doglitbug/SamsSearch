@@ -11,7 +11,7 @@ UIObject *BaseMenuState::generateButton(const std::string &text, void (*callback
     Button *button = new Button();
     AssetManager::get()->createTextTexture(width, ROW_HEIGHT, text, "Text", "btn_" + text);
     AssetManager::get()->addBorderToExistingTexture("btn_" + text, 2);
-    button->load(LoaderParams(0, 0, width, ROW_HEIGHT, "btn_" + text, 0, 0));
+    button->load(LoaderParams(0, 0, width, ROW_HEIGHT, "btn_" + text));
     button->setCallback(callback);
     return button;
 }

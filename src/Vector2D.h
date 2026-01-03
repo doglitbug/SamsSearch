@@ -9,20 +9,20 @@ public:
         m_y = 0.0f;
     }
 
-    Vector2D(float x, float y) : m_x(x), m_y(y) {}
+    Vector2D(const float x, const float y) : m_x(x), m_y(y) {}
 
-    float getX() { return m_x; }
+    float getX() const { return m_x; }
 
-    float getY() { return m_y; }
+    float getY() const { return m_y; }
 
-    void setX(float x) {
+    void setX(const float x) {
         m_x = x;
     }
 
-    void setY(float y) { m_y = y; }
+    void setY(const float y) { m_y = y; }
 
     // Length
-    float length() { return sqrt(m_x * m_x + m_y * m_y); }
+    float length() const { return sqrt(m_x * m_x + m_y * m_y); }
 
     // Addition
     Vector2D operator+(const Vector2D &v2) const {
@@ -36,11 +36,11 @@ public:
     }
 
     //Multiplication my a scalar
-    Vector2D operator*(float scalar) {
+    Vector2D operator*(const float scalar) const {
         return Vector2D(m_x * scalar, m_y * scalar);
     }
 
-    Vector2D &operator*=(float scalar) {
+    Vector2D &operator*=(const float scalar) {
         m_x *= scalar;
         m_y *= scalar;
         return *this;
@@ -58,12 +58,14 @@ public:
     }
 
     // Division by a scalar
-    // TODO Check for division by zero
-    Vector2D operator/(float scalar) {
+    Vector2D operator/(const float scalar) const {
+        if (scalar == 0.0f) {
+            return Vector2D(0.0f, 0.0f);
+        }
         return Vector2D(m_x / scalar, m_y / scalar);
     }
 
-    Vector2D &operator/=(float scalar) {
+    Vector2D &operator/=(const float scalar) {
         m_x /= scalar;
         m_y /= scalar;
         return *this;
@@ -71,7 +73,7 @@ public:
 
     // Normalization
     void normalize() {
-        float len = length();
+        const float len = length();//Cache value
         if (len > 0) // we never want to attempt to divide by 0
         {
             (*this) *= 1 / len;
@@ -84,6 +86,7 @@ private:
 };
 
 /// @brief Facing direction, aligns with row in character sheets
+/// @todo move elsewhere?
 enum DIRECTION {
     NORTH = 3,
     EAST = 2,

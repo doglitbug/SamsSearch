@@ -36,9 +36,9 @@ public:
     }
 
     GameObject *create(const std::string &ID) {
-        auto it = m_creators.find(ID);
+        const auto it = m_creators.find(ID);
         if (it == m_creators.end()) {
-            std::cout << "Could not find type: " << ID << std::endl;
+            std::cout << "Could not find map object type: " << ID << std::endl;
             return nullptr;
         }
 

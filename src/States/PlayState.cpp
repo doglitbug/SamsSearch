@@ -1,10 +1,13 @@
 #include "PlayState.h"
 
+#include <algorithm>
+
 void PlayState::onEnter() {
     //GameObjectFactory::get()->registerType("Player", new PlayerCreator());
     GameObjectFactory::get()->registerType("Teleport", new TeleportCreator());
     GameObjectFactory::get()->registerType("Dog", new DogCreator());
     GameObjectFactory::get()->registerType("Cat", new CatCreator());
+    GameObjectFactory::get()->registerType("Sign", new SignCreator());
 
     m_maps["InsideDadsHouse"] = new MapInsideDadsHouse();
     m_maps["Test"] = new MapTest();
@@ -26,7 +29,13 @@ void PlayState::onEnter() {
     changeMap("Test", 18 * 32, 2 * 32, SOUTH);
 }
 
-void PlayState::update(float deltaTime) {
+void PlayState::update(const float deltaTime) {
+    //CutScene/Dialog
+    if (!m_commandProcessor.UserControl()) {
+        m_commandProcessor.ProcessCommands(deltaTime);
+        return;
+    }
+
     //TODO Only update object layer, at least until we have animations eg for water?
     mPlayer->update(deltaTime, nullptr);
     //TODO All dynamics need to do this?
@@ -34,34 +43,32 @@ void PlayState::update(float deltaTime) {
 
     const SDL_FRect playerHitBox = mPlayer->getWorldHitBox();
 
-    //TODO Remove object layer and have only a map of dynamics?
-    for (GameObjectLayer *layer: *pCurrentMap->getObjectLayers()) {
-        layer->update(deltaTime, mPlayer);
+    for (auto *gameObject: *pCurrentMap->getGameObjects()) {
+        gameObject->update(deltaTime, mPlayer);
 
-        for (auto *gameObject: *layer->getGameObjects()) {
-            //Check map collision here
-            if (const auto goc = dynamic_cast<GameObjectCreature *>(gameObject)) {
-                goc->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
-            }
-            //TODO Else we are a GO Item?
+        //Check map collision here
+        if (const auto goc = dynamic_cast<GameObjectCreature *>(gameObject)) {
+            goc->checkMapCollision(deltaTime, pCurrentMap->getCollisionLayer()[0]);
+        }
+        //TODO Else we are a GO Item?
 
-            //Check intersection with player
-            //TODO Change this to all dynamics so they dont over lap
-            SDL_FRect otherHitBox = gameObject->getWorldHitBox();
-            if (SDL_HasRectIntersectionFloat(&playerHitBox, &otherHitBox)) {
-                //TODO IF type of teleport, do xyz else
-                if (const auto tp = dynamic_cast<Teleport *>(gameObject)) {
-                    changeMap(tp->destMap, tp->destX, tp->destY, tp->destDirection);
-                    AssetManager::get()->playSound("Enter door");
-                    continue;
-                }
-                gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
-                //else do collision based stuff to stop over lapping
+        //Check intersection with player
+        //TODO Change this to all dynamics so they dont over lap
+        SDL_FRect otherHitBox = gameObject->getWorldHitBox();
+        if (SDL_HasRectIntersectionFloat(&playerHitBox, &otherHitBox)) {
+            //TODO IF type of teleport, do xyz else
+            if (const auto tp = dynamic_cast<Teleport *>(gameObject)) {
+                changeMap(tp->destMap, tp->destX, tp->destY, tp->destDirection);
+                AssetManager::get()->playSound("Enter door");
+                continue;
             }
+            gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
+            //else do collision based stuff to stop over lapping
         }
     }
 
-    //TODO Disable if in cutscene
+
+    //Disabled if in cutscene
     handleInput();
 }
 
@@ -78,8 +85,8 @@ void PlayState::render() {
     //6. Ignore collision layer
 
     for (BaseLayer *layer: *pCurrentMap->getLowerLayers()) { layer->render(&pViewport); }
-    for (BaseLayer *layer: *pCurrentMap->getObjectLayers()) { layer->render(&pViewport); }
-    //Draw player on top of everyone!
+    for (GameObject *gameObject: *pCurrentMap->getGameObjects()) { gameObject->drawSelf(&pViewport); }
+    //Draw player on top of everyone else
     mPlayer->drawSelf(&pViewport);
     for (BaseLayer *layer: *pCurrentMap->getUpperLayers()) { layer->render(&pViewport); }
 
@@ -95,26 +102,38 @@ void PlayState::onExit() {
         it = m_maps.erase(it); // Returns iterator to the next element
     }
     m_maps.clear();
-
+    //TODO Delete GOs
+    //TODO OnExit for all maps?
     BaseState::onExit();
 }
 
 SDL_Rect PlayState::getViewport() const {
-    int width, height;
-    EngineStateManager::get()->getWindowSize(&width, &height);
+    int windowWidth, windowHeight;
+    EngineStateManager::get()->getWindowSize(&windowWidth, &windowHeight);
 
-    //Set viewport position for x axis
-    int x = mPlayer->m_position.getX() - width / 2;
-    if (x < 0) x = 0;
-    //TODO Fix this
-    //if (x > pCurrentMap->getWidth()*32 - width) x = pCurrentMap->getWidth()*32 - width;
+    //Set viewport position for-x axis
+    const int mapWidth = pCurrentMap->getWidth() * 32;
+    int x = mPlayer->m_position.getX() - windowWidth / 2;
 
-    int y = mPlayer->m_position.getY() - height / 2;
-    if (y < 0) y = 0;
-    //TODO Fix this
-    //if (y + height > pCurrentMap->getHeight()) y = pCurrentMap->getHeight() - height;
+    // Clamp the value of x within valid bounds
+    if (mapWidth <= windowWidth) {
+        x = 0;  // The Map is smaller than or equal to the window
+    } else {
+        x = std::clamp(x, 0, mapWidth - windowWidth);
+    }
 
-    return SDL_Rect{x, y, width, height};
+    //Set viewport for y-axis
+    const int mapHeight = pCurrentMap->getHeight() * 32;
+    int y = mPlayer->m_position.getY() - windowHeight / 2;
+
+    // Clamp the value of y within valid bounds
+    if (mapHeight <= windowHeight) {
+        y = 0;  // The Map is smaller than or equal to the window
+    } else {
+        y = std::clamp(y, 0, mapHeight - windowHeight);
+    }
+
+    return SDL_Rect{x, y, windowWidth, windowHeight};
 }
 
 void PlayState::changeMap(const std::string &mapName, const float destX, const float destY, const DIRECTION direction) {
@@ -149,7 +168,6 @@ void PlayState::saveGame() {
 
 void PlayState::drawUI() const {
     //TODO Make this better by caching this crap?
-
     int width, height;
     EngineStateManager::get()->getWindowSize(&width, &height);
 
@@ -163,12 +181,37 @@ void PlayState::drawUI() const {
 
     //TODO Now that it is drawn, we can delete the texture (it needs to be deleted so that different map names work)
     AssetManager::get()->deleteTexture("mapName");
+
+    //Draw Dialog now if we have any.
+    //This is placed here to stop it being overwritten on screen!
+    if (m_commandProcessor.showingDialog()) {
+        EngineStateManager::get()->getWindowSize(&width, &height);
+
+        float dialogHeight;
+        AssetManager::get()->getTextureSize("dialog", nullptr, &dialogHeight);
+        AssetManager::get()->drawTexture("dialog", 0, height - dialogHeight);
+    }
 }
 
-void PlayState::handleInput() const {
-    if (InputManager::get()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
+void PlayState::handleInput() {
+    if (InputManager::get()->getKeyDown(SDL_SCANCODE_ESCAPE) || InputManager::get()->getButtonDown(SDL_GAMEPAD_BUTTON_START)) {
         EngineStateManager::get()->getStateMachine()->pushState("PAUSE");
         return;
+    }
+
+    if (InputManager::get()->getKeyDown(SDL_SCANCODE_Z)) {
+        const std::vector<std::string> dialogLines = {
+            "Hello",
+            "Have you been inside yet?",
+            "You need to find your shoes",
+            "and as usual, turn off your damn light!",
+            "Press A to continue"
+        };
+
+        const Sprite dialogFace{"tf_char2", 144, 144};
+
+        m_commandProcessor.AddCommand(new cmdShowDialog(dialogFace, dialogLines));
+        m_commandProcessor.AddCommand(new cmdWait(2.5));
     }
 
     mPlayer->m_velocity = InputManager::get()->getMovement() *= mPlayer->m_speed;

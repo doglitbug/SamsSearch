@@ -10,20 +10,18 @@ void TileLayer::update(float deltaTime) {
 }
 
 void TileLayer::render(SDL_Rect *pViewport) {
-    int xTile, yTile, xTileOffset, yTileOffset;
-
     //TODO Move this to Settings, and only recalculate it when screen size/scale changes rather than here?
     int m_numColumns = pViewport->w / m_tileSize;
     int m_numRows = pViewport->h / m_tileSize;
 
-    xTile = pViewport->x / m_tileSize;
-    yTile = pViewport->y / m_tileSize;
-    xTileOffset = pViewport->x % m_tileSize;
-    yTileOffset = pViewport->y % m_tileSize;
+    const int xTile = pViewport->x / m_tileSize;
+    const int yTile = pViewport->y / m_tileSize;
+    const int xTileOffset = pViewport->x % m_tileSize;
+    const int yTileOffset = pViewport->y % m_tileSize;
 
     //Add 1 to overdraw and smooth out tiles 'popping in'
-    for (int i = 0; i < m_numRows+1; i++) {
-        for (int j = 0; j < m_numColumns+1; j++) {
+    for (int i = 0; i <= m_numRows+1; i++) {
+        for (int j = 0; j <= m_numColumns+1; j++) {
             int id = getID(j + xTile, i + yTile);
             if (id == 0) {
                 continue;
@@ -39,7 +37,7 @@ void TileLayer::render(SDL_Rect *pViewport) {
     }
 }
 
-TileSet TileLayer::getTileSetByID(int tileID) {
+TileSet TileLayer::getTileSetByID(const int tileID) const {
     for (int i = 0; i < m_tileSets.size(); i++) {
         if (i + 1 <= m_tileSets.size() - 1) {
             if (tileID >= m_tileSets[i].firstgid && tileID < m_tileSets[i + 1].firstgid) {

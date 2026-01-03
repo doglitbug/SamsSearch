@@ -4,7 +4,7 @@
 #include "Objects/GameObjects/GameObject.h"
 #include "GameObjectItem.h"
 
-class Teleport : public GameObjectItem {
+class Teleport final : public GameObjectItem {
 public:
     Teleport() = default;
     ~Teleport() = default;

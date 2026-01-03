@@ -3,6 +3,7 @@
 #include "SDL3/SDL.h"
 #include "AssetManager.h"
 
+//Any chance to this struct will probably require deleting the settings already on disk!
 struct settings {
     bool titleMusicEnabled;
     bool gameMusicEnabled;
@@ -35,23 +36,23 @@ public:
 
     void setTitleMusicEnabled(bool enabled) {
         m_settings.titleMusicEnabled = enabled;
-        if (!enabled) AssetManager::get()->stopMenuMusic();
+        if (!enabled) AssetManager::get()->stopTitleMusic();
     }
 
     static bool getGameMusicEnabled() { return get()->m_settings.gameMusicEnabled; };
 
-    void setGameMusicEnabled(bool enabled) { m_settings.gameMusicEnabled = enabled; }
+    void setGameMusicEnabled(const bool enabled) { m_settings.gameMusicEnabled = enabled; }
 
     static int getMusicVolume() { return get()->m_settings.musicVolume; };
 
-    void setMusicVolume(int volume) {
+    void setMusicVolume(const int volume) {
         m_settings.musicVolume = volume;
         AssetManager::get()->setMusicVolume(volume);
     };
 
     static int getGameVolume() { return get()->m_settings.gameVolume; };
 
-    void setGameVolume(int volume) {
+    void setGameVolume(const int volume) {
         m_settings.gameVolume = volume;
         AssetManager::get()->setGameVolume(volume);
     };

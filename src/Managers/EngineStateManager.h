@@ -20,31 +20,31 @@ public:
 
     bool init(const char *title, int width, int height, bool fullscreen);
 
-    void render();
+    void render() const;
 
-    void update(float deltaTime);
+    void update(float deltaTime) const;
 
     static void handleEvents();
 
-    bool running() const { return m_bRunning; }
+    [[nodiscard]] bool running() const { return m_bRunning; }
 
     void quit() { m_bRunning = false; }
 
     [[nodiscard]] SDL_Renderer *getRenderer() const { return m_pRenderer; }
 
-    StateMachine *getStateMachine() { return m_pGameStateMachine; }
+    [[nodiscard]] StateMachine *getStateMachine() const { return m_pGameStateMachine; }
 
     [[nodiscard]] float getScale() const { return m_scale; }
     
     /**
-     * @brief Get size of the screen in pixels, either windowed or full screen
+     * @brief Get the size of the screen in pixels, either windowed or full screen
      * @param width
      * @param height
      * @todo Account for SDL_Scale factor if using?
      */
-    void getWindowSize(int *width, int *height) { SDL_GetCurrentRenderOutputSize(m_pRenderer, width, height); }
+    void getWindowSize(int *width, int *height) const { SDL_GetCurrentRenderOutputSize(m_pRenderer, width, height); }
 
-    void clean();
+    static void clean() ;
 
 private:
     EngineStateManager() {}

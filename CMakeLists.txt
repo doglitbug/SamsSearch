@@ -8,6 +8,7 @@ include_directories(src/ThirdParty/Base64)
 include_directories(src/Objects)
 include_directories(src/Objects/UIObjects)
 include_directories(src/Maps)
+include_directories(src/CutScenes)
 include_directories(src/Managers)
 include_directories(src/States)
 include_directories(src/ThirdParty/TinyXML)
@@ -37,8 +38,6 @@ add_executable(SamsSearch
         src/Maps/BaseMap.h
         src/Maps/MapParser.cpp
         src/Maps/MapParser.h
-        src/Maps/GameObjectLayer.cpp
-        src/Maps/GameObjectLayer.h
         src/Maps/TileLayer.cpp
         src/Maps/TileLayer.h
         src/Managers/AssetManager.cpp
@@ -82,7 +81,12 @@ add_executable(SamsSearch
         src/Maps/Maps/MapTest.h
         src/Maps/Maps/MapTest.cpp
         src/Maps/Maps/MapInsideDadsHouse.h
-        src/Maps/Maps/MapInsideDadsHouse.cpp)
+        src/Maps/Maps/MapInsideDadsHouse.cpp
+        src/CutScenes/CommandProcessor.cpp
+        src/CutScenes/CommandProcessor.h
+        src/CutScenes/Commands.cpp
+        src/Objects/GameObjects/GameObjectItem/Sign.cpp
+        src/Objects/GameObjects/GameObjectItem/Sign.h)
 
 find_package(ZLIB)
 
