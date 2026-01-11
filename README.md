@@ -1,5 +1,14 @@
 # SamsSearch
 
+This project has been a work in progress for me to learn SDL3 and C++
+
+You play as Sam, a young teenager that is always on their computer much to their parents dismay.
+After a small argument and a wish that computers had never been invented by their parent, Sam wakes up in a world, that is similar, but also very different, computers haven't been invented and they must try and navigate their way in this weird unusual world! 
+
+At this stage it is not in a playable state, but anyone is welcome to have a look and use what is here now as a base for themselves, I learn best by example and wish to pass that back to the community!
+
+## Lastest videos of this project can be found on [YouTube](https://www.youtube.com/playlist?list=PLOSLKczLuELqIxt9de66xdFcmZilwd-Ks)
+
 ## From a clean install of Pop OS 22.04:
 
 ```
@@ -11,7 +20,7 @@ libxkbcommon-dev libdrm-dev libgbm-dev libgl1-mesa-dev libgles2-mesa-dev \
 libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev libthai-dev
 ```
 
-### For each library (SDL/image/ttf/mixer:
+### For each library (SDL/image/ttf/mixer):
 
 ### SDL
 ```
@@ -86,7 +95,7 @@ sudo cmake --install . --config Release
 sudo ldconfig
 ```
 
-### Pull assets if the folder is empty:
+### Pull assets if the folder is empty: (This is not possible as this a private repo due to being paid assets!)
 ```
 rmdir assets
 git submodule update --init --recursive
