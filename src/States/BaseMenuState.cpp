@@ -1,5 +1,7 @@
 #include "BaseMenuState.h"
 
+#include <functional>
+
 UIObject *BaseMenuState::generateTitle() {
     Title *title = new Title();
     LoaderParams parameters = LoaderParams(0, 0, 906, 131, "title");
@@ -7,7 +9,7 @@ UIObject *BaseMenuState::generateTitle() {
     return title;
 }
 
-UIObject *BaseMenuState::generateButton(const std::string &text, const std::function<void()>& callback, int width) {
+UIObject *BaseMenuState::generateButton(const std::string &text, std::function<void()> callback, int width){
     Button *button = new Button();
     App::get()->getAssets()->createTextTexture(width, ROW_HEIGHT, text, "Text", "btn_" + text);
     App::get()->getAssets()->addBorderToExistingTexture("btn_" + text, 2);
@@ -23,14 +25,14 @@ UIObject *BaseMenuState::generateLabel(const std::string &text, int width) {
     return label;
 }
 
-UIObject *BaseMenuState::generateLabel(bool link, int width) {
+UIObject *BaseMenuState::generateLabelBool(const std::function<bool()>& link, int width) {
     LabelBoolean *label = new LabelBoolean();
     label->load(LoaderParams(0, 0, width, ROW_HEIGHT, "toggle_On"));
     label->setLink(link);
     return label;
 }
 
-UIObject *BaseMenuState::generateLabel(int (*link)(), int width) {
+UIObject *BaseMenuState::generateLabelInt(const std::function<int()>& link, int width) {
     LabelInteger *label = new LabelInteger();
     label->load(LoaderParams(0, 0, width, ROW_HEIGHT, "int_0"));
     label->setLink(link);

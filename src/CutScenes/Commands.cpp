@@ -35,8 +35,8 @@ void cmdWait::update(const float deltaTime) {
 
 
 //MoveTo
-cmdMoveTo::cmdMoveTo(GameObject *gameObjectCreature, const float x, const float y, const float duration) {
-    m_gameObject = gameObjectCreature;
+cmdMoveTo::cmdMoveTo(GameObject *gameObject, const float x, const float y, const float duration) {
+    m_gameObject = gameObject;
     m_endPosition = {x, y};
     m_duration = duration;
     m_timeSoFar = 0.0f;

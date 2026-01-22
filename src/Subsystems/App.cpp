@@ -88,9 +88,8 @@ void App::init()
     m_pStateMachine->registerState("PLAY", new PlayState());
 
     m_pStateMachine->registerState("PAUSE", new PauseState());
-    m_pStateMachine->registerState("SETTINGS", new SettingsMenu());
+    m_pStateMachine->registerState("SETTINGS", new SettingsMenu(m_pSettings));
 
-    //m_pStateMachine->setInitialState("MAINMENU");
     m_bRunning = true;
 }
 

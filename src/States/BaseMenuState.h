@@ -42,20 +42,20 @@ public:
     /// @param link boolean function
     /// @param width of label, default of 200
     /// @return
-    static UIObject *generateLabel(bool link, int width = LABEL_WIDTH);
+    static UIObject *generateLabelBool(const std::function<bool()>& link, int width = LABEL_WIDTH);
 
     /// @brief Generate an integer label
     /// @param link integer function
     /// @param width of label, default of 200
     /// @return
-    static UIObject *generateLabel(int (*link)(), int width = LABEL_WIDTH);
+    static UIObject *generateLabelInt(const std::function<int()>& link, int width = LABEL_WIDTH);
 
     /// @brief Generate a clickable button
     /// @param text for the button
     /// @param callback function to run when clicked
     /// @param width width of button, default of 200
     /// @return
-    static UIObject *generateButton(const std::string &text, const std::function<void()>& callback, int width = BUTTON_WIDTH);
+    static UIObject *generateButton(const std::string &text, std::function<void()> callback, int width = BUTTON_WIDTH);
 
 protected:
     /// @brief Do nothing, this is only to be used during development as a stub

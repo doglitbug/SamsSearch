@@ -8,9 +8,9 @@ public:
     LabelBoolean() = default;
     ~LabelBoolean() = default;
 
-    void update(float deltaTime) override { m_textureID = m_link ? "toggle_On" : "toggle_Off"; };
-    void setLink(bool(link)) { m_link = link; }
+    void update(float deltaTime) override { m_textureID = m_link() ? "toggle_On" : "toggle_Off"; };
+    void setLink(const std::function<bool()>& link) { m_link = link; }
 
 private:
-    bool m_link;
+    std::function<bool()> m_link;
 };
