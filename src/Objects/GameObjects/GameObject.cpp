@@ -34,7 +34,7 @@ void GameObject::drawSelf(SDL_Rect *pViewport) {
     if ((m_position.getY() + m_height) < pViewport->y) return;
     if (m_position.getY() > (pViewport->y + pViewport->h)) return;
 
-    AssetManager::get()->drawSprite(m_sprite,
+    App::get()->getAssets()->drawSprite(m_sprite,
                                     (int) m_position.getX() - pViewport->x,
                                     (int) m_position.getY() - pViewport->y,
                                     m_direction,
@@ -48,8 +48,8 @@ void GameObject::drawSelf(SDL_Rect *pViewport) {
         hitBoxLocation.w = m_hitBox->w;
         hitBoxLocation.h = m_hitBox->h;
 
-        SDL_SetRenderDrawColor(EngineStateManager::get()->getRenderer(), 255, 0, 0, 0);
-        SDL_RenderRect(EngineStateManager::get()->getRenderer(), &hitBoxLocation);
+        SDL_SetRenderDrawColor(App::get()->getRenderer(), 255, 0, 0, 0);
+        SDL_RenderRect(App::get()->getRenderer(), &hitBoxLocation);
     }
 }
 

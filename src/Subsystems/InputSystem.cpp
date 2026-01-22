@@ -1,6 +1,7 @@
-#include "InputManager.h"
+#include "InputSystem.h"
+#include "App.h"
 
-void InputManager::initializeGamepads() {
+void InputSystem::initializeGamepads() {
     if (!SDL_HasGamepad()) {
         SDL_Log("No Gamepads connected");
         m_bGamepad = false;
@@ -31,12 +32,12 @@ void InputManager::initializeGamepads() {
     m_bGamepad = true;
 }
 
-void InputManager::update() {
+void InputSystem::update() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_EVENT_QUIT:
-                EngineStateManager::get()->quit();
+                App::get()->quit();
                 return;
 
             case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
@@ -63,13 +64,13 @@ void InputManager::update() {
     }
 }
 
-void InputManager::clean() const {
+void InputSystem::clean() const {
     if (m_bGamepad) {
         SDL_CloseGamepad(m_gamepad);
     }
 }
 
-Vector2D InputManager::getMovement() const {
+Vector2D InputSystem::getMovement() const {
     Vector2D newVelocity = {0, 0};
 
     //TODO Make these changeable in settings and or move to WASD!
@@ -91,14 +92,14 @@ Vector2D InputManager::getMovement() const {
     return newVelocity;
 }
 
-bool InputManager::getButtonDown(const SDL_GamepadButton button) const {
+bool InputSystem::getButtonDown(const SDL_GamepadButton button) const {
     //Allow us to check if a button is pressed without first checking if there is an active gamepad
     if (!m_bGamepad) return false;
 
     return m_buttonStates[button];
 }
 
-std::string InputManager::getButtonLabel(const SDL_GamepadButton button) const {
+std::string InputSystem::getButtonLabel(const SDL_GamepadButton button) const {
     if (!m_bGamepad) return "";
 
     switch (SDL_GetGamepadButtonLabel(m_gamepad, button)) {
@@ -123,44 +124,45 @@ std::string InputManager::getButtonLabel(const SDL_GamepadButton button) const {
     }
 }
 
-void InputManager::initializeMouse() {
+void InputSystem::initializeMouse() {
     for (int i = 0; i < 3; i++) {
         m_mouseButtonStates.push_back(false);
     }
     m_mousePosition = Vector2D(0, 0);
 }
 
-bool InputManager::getMouseButtonState(const int buttonNumber) {
+bool InputSystem::getMouseButtonState(const int buttonNumber) {
     return m_mouseButtonStates[buttonNumber];
 }
 
-Vector2D *InputManager::getMousePosition() {
+Vector2D *InputSystem::getMousePosition() {
     return &m_mousePosition;
 }
 
-bool InputManager::getKeyDown(const SDL_Scancode key) const {
+bool InputSystem::getKeyDown(const SDL_Scancode key) const {
     if (!m_keyStates)
         return false;
     return m_keyStates[key] == 1;
 }
 
-void InputManager::onButtonChange(const SDL_Event &event) {
+void InputSystem::onButtonChange(const SDL_Event &event) {
     SDL_Log("Pressed %s", getButtonLabel(static_cast<SDL_GamepadButton>(event.gbutton.button))
             .c_str());
     m_buttonStates[event.gbutton.button] = event.gbutton.down;
 }
 
-void InputManager::onKeyChange() {
+void InputSystem::onKeyChange() {
     m_keyStates = SDL_GetKeyboardState(nullptr);
 }
 
-void InputManager::onMouseMove(const SDL_Event &event) {
-    const float scale = EngineStateManager::get()->getScale();
+void InputSystem::onMouseMove(const SDL_Event &event) {
+    const float scale = 1.0f;
+    //TODO Make this a setting?
     m_mousePosition.setX(event.motion.x / scale);
     m_mousePosition.setY(event.motion.y / scale);
 }
 
-void InputManager::onMouseButtonChange(const SDL_Event &event) {
+void InputSystem::onMouseButtonChange(const SDL_Event &event) {
     const bool state = event.button.down;
     //TODO Refactor this like onButtonChange
     switch (event.button.button) {

@@ -1,5 +1,5 @@
 #include "Button.h"
-#include "../../Managers/InputManager.h"
+#include "App.h"
 
 void Button::load(const LoaderParams &pParams) {
     UIObject::load(pParams);
@@ -8,7 +8,7 @@ void Button::load(const LoaderParams &pParams) {
 }
 
 void Button::update(float deltaTime) {
-    Vector2D *pMousePos = InputManager::get()->getMousePosition();
+    Vector2D *pMousePos = App::get()->getInput()->getMousePosition();
 
     // Check if mouse is hovering over button
     // TODO Replace with SDL_PointInRect?
@@ -17,10 +17,10 @@ void Button::update(float deltaTime) {
         && pMousePos->getY() < (m_ScreenPosition.getY() + m_height)
         && pMousePos->getY() > m_ScreenPosition.getY()) {
 
-        if (InputManager::get()->getMouseButtonState(InputManager::get()->LEFT) && m_bReleased) {
+        if (App::get()->getInput()->getMouseButtonState(InputSystem::LEFT) && m_bReleased) {
             m_bReleased = false;
             m_callback();
-        } else if (!InputManager::get()->getMouseButtonState(InputManager::get()->LEFT)) {
+        } else if (!App::get()->getInput()->getMouseButtonState(InputSystem::LEFT)) {
             m_bReleased = true;
             m_currentFrame = ACTIVE;
         }

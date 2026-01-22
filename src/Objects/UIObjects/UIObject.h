@@ -2,12 +2,11 @@
 
 #include "LoaderParams.h"
 #include "Vector2D.h"
-#include "Managers/AssetManager.h"
 
 class UIObject {
 public:
     UIObject()= default;
-    ~UIObject() = default;
+    virtual ~UIObject() = default;
 
     virtual void load(const LoaderParams &pParams);
     virtual void draw();

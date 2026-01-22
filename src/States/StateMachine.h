@@ -9,7 +9,7 @@ class StateMachine {
 public:
     void update(float deltaTime);
 
-    void render();
+    void render() const;
 
     void registerState(const std::string& stateID, BaseState *pState);
     void setInitialState(const std::string& stateID);
@@ -33,7 +33,6 @@ private:
 
     void changeState();
 
-private:
     ~StateMachine() {
         for (auto it = m_gameStates.cbegin(); it != m_gameStates.cend() /* not hoisted */; /* no increment */) {
             delete it->second;

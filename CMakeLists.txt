@@ -3,13 +3,15 @@ project(SamsSearch)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 include_directories(src)
 include_directories(src/ThirdParty/Base64)
 include_directories(src/Objects)
 include_directories(src/Objects/UIObjects)
 include_directories(src/Maps)
 include_directories(src/CutScenes)
-include_directories(src/Managers)
+include_directories(src/Subsystems)
 include_directories(src/States)
 include_directories(src/ThirdParty/TinyXML)
 
@@ -40,14 +42,12 @@ add_executable(SamsSearch
         src/Maps/MapParser.h
         src/Maps/TileLayer.cpp
         src/Maps/TileLayer.h
-        src/Managers/AssetManager.cpp
-        src/Managers/AssetManager.h
-        src/Managers/EngineStateManager.cpp
-        src/Managers/EngineStateManager.h
-        src/Managers/InputManager.cpp
-        src/Managers/InputManager.h
-        src/Managers/SettingsManager.cpp
-        src/Managers/SettingsManager.h
+        src/Subsystems/Assets.cpp
+        src/Subsystems/Assets.h
+        src/Subsystems/InputSystem.cpp
+        src/Subsystems/InputSystem.h
+        src/Subsystems/Settings.cpp
+        src/Subsystems/Settings.h
         src/States/BaseState.h
         src/States/StateMachine.cpp
         src/States/StateMachine.h
@@ -59,8 +59,8 @@ add_executable(SamsSearch
         src/States/PauseState.h
         src/States/PlayState.cpp
         src/States/PlayState.h
-        src/States/SettingsState.cpp
-        src/States/SettingsState.h
+        src/States/SettingsMenu.cpp
+        src/States/SettingsMenu.h
         src/ThirdParty/TinyXML/tinyxml2.cpp
         src/ThirdParty/TinyXML/tinyxml2.h
         src/main.cpp
@@ -86,7 +86,9 @@ add_executable(SamsSearch
         src/CutScenes/CommandProcessor.h
         src/CutScenes/Commands.cpp
         src/Objects/GameObjects/GameObjectItem/Sign.cpp
-        src/Objects/GameObjects/GameObjectItem/Sign.h)
+        src/Objects/GameObjects/GameObjectItem/Sign.h
+        src/Subsystems/App.cpp
+        src/Subsystems/App.h)
 
 find_package(ZLIB)
 

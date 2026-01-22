@@ -1,19 +1,14 @@
 #pragma once
 
+#include <string>
 #include <vector>
 #include <SDL3/SDL.h>
 #include "../Vector2D.h"
-#include "EngineStateManager.h"
 
-class InputManager {
+class InputSystem {
 public:
-    static InputManager *get() {
-        static InputManager me;
-        return &me;
-    };
-
-    InputManager(InputManager &other) = delete;
-    void operator=(const InputManager &) = delete;
+    InputSystem() = default;
+    ~InputSystem() = default;
 
     void update();
     void clean() const;
@@ -47,9 +42,6 @@ public:
     bool getKeyDown(SDL_Scancode key) const;
 
 private:
-    InputManager() {};
-    ~InputManager() {};
-
     // Mouse
     Vector2D m_mousePosition;
     std::vector<bool> m_mouseButtonStates;
@@ -66,4 +58,5 @@ private:
     SDL_Gamepad *m_gamepad;
     std::vector<bool> m_buttonStates;
     void onButtonChange(const SDL_Event &event);
+
 };

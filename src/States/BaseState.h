@@ -3,11 +3,11 @@
 #include <string>
 #include <vector>
 
-#include "Objects/UIObjects/UIObject.h"
-#include "Managers/AssetManager.h"
+#include "UIObject.h"
 
 class BaseState {
 public:
+    virtual ~BaseState() = default;
     //Must be overridden in children
     virtual void onEnter() = 0;
 
@@ -36,7 +36,7 @@ public:
         //Clear the texture manager (never used)
         for(const auto & id : m_textureIDList)
         {
-            AssetManager::get()->deleteTexture(id);
+            //TODO Assets::get()->deleteTexture(id);
         }
     }
 

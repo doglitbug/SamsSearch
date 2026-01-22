@@ -53,7 +53,7 @@ void MapParser::parseTilesets(XMLElement *pTilesetRoot, std::vector<TileSet> *pT
     std::string sourceLocation = pTilesetRoot->FirstChildElement()->Attribute("source");
     sourceLocation = "assets" + sourceLocation.substr(2);
 
-    AssetManager::get()->loadTexture(sourceLocation,
+    App::get()->getAssets()->loadTexture(sourceLocation,
                                      pTilesetRoot->Attribute("name"));
     TileSet tileset;
     tileset.width = pTilesetRoot->FirstChildElement()->IntAttribute("width");

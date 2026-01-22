@@ -7,11 +7,18 @@ void StateMachine::update(float deltaTime) {
     }
 }
 
-void StateMachine::render() {
+void StateMachine::render() const
+{
     m_gameStateStack.back()->render();
 }
 
 void StateMachine::registerState(const std::string& stateID, BaseState *pState) {
+    //Is this the first state, if so, set as default
+    if (m_gameStateStack.empty())
+    {
+        m_gameStateStack.push_back(pState);
+        m_gameStateStack.back()->onEnter();
+    }
     m_gameStates[stateID] = pState;
 }
 

@@ -1,14 +1,14 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "../../Managers/AssetManager.h"
+#include "../../Subsystems/Assets.h"
 #include "GameObjects/GameObject.h"
 #include "Vector2D.h"
 
 class Command {
 public:
-    Command() {}
-    virtual ~Command() {}
+    Command() = default;
+    virtual ~Command() = default;
 
     virtual void start() {};
     virtual void update(float deltaTime) {};
@@ -25,7 +25,7 @@ public:
     /// @param dialogFace Sprite to display as the face
     /// @param dialogLines Dialog lines
     cmdShowDialog(const Sprite &dialogFace, const std::vector<std::string> &dialogLines);
-    ~cmdShowDialog() override {};
+    ~cmdShowDialog() override = default;
 
     void start() override;
     void update(float deltaTime) override;
@@ -37,13 +37,13 @@ private:
 
 class cmdMoveTo final : public Command {
 public:
-    /// @brief Move a GameObjectCreature to destination
-    /// @param gameObjectCreature GameObjectCreature to move
+    /// @brief Move a GameObject to destination
+    /// @param gameObject GameObject to move
     /// @param x Destination x
     /// @param y Destination y
     /// @param duration Time to take: 0 is instant, -1 will default to normal objects speed
-    cmdMoveTo(GameObject *gameObjectCreature, const float x, const float y, float duration = 0.0f);
-    ~cmdMoveTo() override {};
+    cmdMoveTo(GameObject *gameObject, float x, float y, float duration = 0.0f);
+    ~cmdMoveTo() override = default;
 
     void start() override;
     void update(float deltaTime) override;

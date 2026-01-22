@@ -1,8 +1,8 @@
 #include "MainMenuState.h"
 
 void MainMenuState::onEnter() {
-    if (SettingsManager::getTitleMusicEnabled()) {
-        AssetManager::get()->playMusic("main_menu");
+    if (App::get()->getSettings()->getTitleMusicEnabled()) {
+        App::get()->getAssets()->playMusic("main_menu");
     }
     //Title
     m_gameObjects.push_back(generateTitle());
@@ -16,7 +16,7 @@ void MainMenuState::onEnter() {
 
 void MainMenuState::update(float deltaTime) {
     int width, height;
-    EngineStateManager::get()->getWindowSize(&width, &height);
+    App::get()->getWindowSize(&width, &height);
 
     int leftSide = width / 2;
     int middle = 200;
@@ -39,18 +39,18 @@ void MainMenuState::update(float deltaTime) {
 }
 
 void MainMenuState::onExit() {
-    AssetManager::get()->stopMusic();
+    App::get()->getAssets()->stopMusic();
     BaseState::onExit();
 }
 
 void MainMenuState::s_menuToPlay() {
-    EngineStateManager::get()->getStateMachine()->changeState("PLAY");
+    App::get()->getStateMachine()->changeState("PLAY");
 }
 
 void MainMenuState::s_menuToSettings() {
-    EngineStateManager::get()->getStateMachine()->pushState("SETTINGS");
+    App::get()->getStateMachine()->pushState("SETTINGS");
 }
 
 void MainMenuState::s_menuToExit() {
-    EngineStateManager::get()->quit();
+    App::get()->quit();
 }
