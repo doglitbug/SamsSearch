@@ -3,6 +3,8 @@ project(SamsSearch)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 include_directories(src)
 include_directories(src/ThirdParty/Base64)
 include_directories(src/Objects)
@@ -42,10 +44,8 @@ add_executable(SamsSearch
         src/Maps/TileLayer.h
         src/Subsystems/Assets.cpp
         src/Subsystems/Assets.h
-        src/Subsystems/App.cpp
-        src/Subsystems/App.h
-        src/Subsystems/InputManager.cpp
-        src/Subsystems/InputManager.h
+        src/Subsystems/InputSystem.cpp
+        src/Subsystems/InputSystem.h
         src/Subsystems/Settings.cpp
         src/Subsystems/Settings.h
         src/States/BaseState.h
@@ -86,7 +86,9 @@ add_executable(SamsSearch
         src/CutScenes/CommandProcessor.h
         src/CutScenes/Commands.cpp
         src/Objects/GameObjects/GameObjectItem/Sign.cpp
-        src/Objects/GameObjects/GameObjectItem/Sign.h)
+        src/Objects/GameObjects/GameObjectItem/Sign.h
+        src/Subsystems/App.cpp
+        src/Subsystems/App.h)
 
 find_package(ZLIB)
 

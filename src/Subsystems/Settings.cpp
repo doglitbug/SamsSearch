@@ -2,7 +2,7 @@
 #include <fstream>
 
 #include "Settings.h"
-#include "Assets.h"
+#include "App.h"
 
 Settings::Settings()
 {
@@ -34,8 +34,8 @@ void Settings::load()
     SDL_free(filepath);
 
     //Go tell Asset manager about music stuff
-    Assets::get()->setMusicVolume(m_settings.musicVolume);
-    Assets::get()->setGameVolume(m_settings.gameVolume);
+    //App::get()->getAssets()->setMusicVolume(m_settings.musicVolume);
+    //App::get()->getAssets()->setGameVolume(m_settings.gameVolume);
 }
 
 void Settings::save()
@@ -75,7 +75,7 @@ bool Settings::getTitleMusicEnabled() const { return m_settings.titleMusicEnable
 void Settings::setTitleMusicEnabled(const bool enabled)
 {
     m_settings.titleMusicEnabled = enabled;
-    if (!enabled) Assets::get()->stopTitleMusic();
+    if (!enabled) App::get()->getAssets()->stopTitleMusic();
 }
 
 bool Settings::getGameMusicEnabled() const { return m_settings.gameMusicEnabled; };
@@ -85,14 +85,14 @@ int Settings::getMusicVolume() const { return m_settings.musicVolume; };
 void Settings::setMusicVolume(const int volume)
 {
     m_settings.musicVolume = volume;
-    Assets::get()->setMusicVolume(volume);
+    App::get()->getAssets()->setMusicVolume(volume);
 };
 
 int Settings::getGameVolume() const { return m_settings.gameVolume; };
 void Settings::setGameVolume(const int volume)
 {
     m_settings.gameVolume = volume;
-    Assets::get()->setGameVolume(volume);
+    App::get()->getAssets()->setGameVolume(volume);
 };
 // endregion
 

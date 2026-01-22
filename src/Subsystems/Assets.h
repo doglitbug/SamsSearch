@@ -9,10 +9,6 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_mixer/SDL_mixer.h>
 
-#include "App.h"
-
-class App;
-
 /// @brief An individual sprite from a sprite sheet
 /// @param m_textureID
 /// @param m_width Width of sprite
@@ -31,9 +27,8 @@ struct Sprite
 class Assets
 {
 public:
-    Assets() = default;
+    Assets();
     ~Assets();
-    explicit Assets(App* pSDLApplication);
 
     // Fonts/text
     /// @brief Load a font at the specified size
@@ -153,7 +148,6 @@ public:
 
 private:
     SDL_Renderer* m_pRenderer;
-    App* m_pApplication;
 
     std::map<std::string, SDL_Texture*> m_textureMap;
     std::map<std::string, TTF_Font*> m_fontMap;

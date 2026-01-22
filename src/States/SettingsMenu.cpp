@@ -1,31 +1,26 @@
 #include "SettingsMenu.h"
 
-void SettingsMenu::linkSettings(Settings* pSettings)
-{
-    m_pSettings = pSettings;
-}
-
 void SettingsMenu::onEnter() {
     //Header
     m_gameObjects.push_back(generateHeader("Settings"));
     m_gameObjects.push_back(generateLabel("Title Music", 300));
     m_gameObjects.push_back(generateButton("|<", s_menuTitleMusicOff, 50));
-    m_gameObjects.push_back(generateLabel(m_pSettings->getTitleMusicEnabled()));
+    m_gameObjects.push_back(generateLabel(App::get()->getSettings()->getTitleMusicEnabled()));
     m_gameObjects.push_back(generateButton(">|", s_menuTitleMusicOn, 50));
 
     m_gameObjects.push_back(generateLabel("Game Music", 300));
     m_gameObjects.push_back(generateButton("|<", s_menuGameMusicOff, 50));
-    m_gameObjects.push_back(generateLabel(m_pSettings->getGameMusicEnabled()));
+    m_gameObjects.push_back(generateLabel(App::get()->getSettings()->getGameMusicEnabled()));
     m_gameObjects.push_back(generateButton(">|", s_menuGameMusicOn, 50));
 
     m_gameObjects.push_back(generateLabel("Music Volume", 300));
     m_gameObjects.push_back(generateButton("<", s_menuMusicVolumeDown, 50));
-    m_gameObjects.push_back(generateLabel(m_pSettings->getMusicVolume()));
+    m_gameObjects.push_back(generateLabel(App::get()->getSettings()->getMusicVolume()));
     m_gameObjects.push_back(generateButton(">", s_menuMusicVolumeUp, 50));
 
     m_gameObjects.push_back(generateLabel("Game Volume", 300));
     m_gameObjects.push_back(generateButton("<", s_menuGameVolumeDown, 50));
-    m_gameObjects.push_back(generateLabel(m_pSettings->getGameVolume()));
+    m_gameObjects.push_back(generateLabel(App::get()->getSettings()->getGameVolume()));
     m_gameObjects.push_back(generateButton(">", s_menuGameVolumeUp, 50));
 
     m_gameObjects.push_back(generateButton("Reset", s_menuResetSettings));
@@ -78,58 +73,59 @@ void SettingsMenu::update(float deltaTime) {
     BaseMenuState::update(deltaTime);
 }
 
-void SettingsMenu::s_menuTitleMusicOff() {
-    m_pSettings->setTitleMusicEnabled(false);
+void SettingsMenu::s_menuTitleMusicOff()
+{
+    App::get()->getSettings()->setTitleMusicEnabled(false);
 }
 
 void SettingsMenu::s_menuTitleMusicOn() {
-    m_pSettings->setTitleMusicEnabled(true);
+    App::get()->getSettings()->setTitleMusicEnabled(true);
 }
 
 void SettingsMenu::s_menuGameMusicOff() {
-    m_pSettings->setGameMusicEnabled(false);
+    App::get()->getSettings()->setGameMusicEnabled(false);
 }
 
 void SettingsMenu::s_menuGameMusicOn() {
-    m_pSettings->setGameMusicEnabled(true);
+    App::get()->getSettings()->setGameMusicEnabled(true);
 }
 
 void SettingsMenu::s_menuMusicVolumeDown() {
-    int value = m_pSettings->getMusicVolume();
+    int value = App::get()->getSettings()->getMusicVolume();
     value -= MUSICVOLUMESCALE;
     if (value < 0) { value = 0; }
-    m_pSettings->setMusicVolume(value);
+    App::get()->getSettings()->setMusicVolume(value);
 }
 
 void SettingsMenu::s_menuMusicVolumeUp() {
-    int value = m_pSettings->getMusicVolume();
+    int value = App::get()->getSettings()->getMusicVolume();
     value += MUSICVOLUMESCALE;
     if (value > 100) { value = 100; }
-    m_pSettings->setMusicVolume(value);
+    App::get()->getSettings()->setMusicVolume(value);
 }
 
 void SettingsMenu::s_menuGameVolumeDown() {
-    int value = m_pSettings->getGameVolume();
+    int value = App::get()->getSettings()->getGameVolume();
     value -= GAMEVOLUMESCALE;
     if (value < 0) { value = 0; }
-    m_pSettings->setGameVolume(value);
-    Assets::get()->playSound("Menu audio check");
+    App::get()->getSettings()->setGameVolume(value);
+    App::get()->getAssets()->playSound("Menu audio check");
 }
 
 void SettingsMenu::s_menuGameVolumeUp() {
-    int value = m_pSettings->getGameVolume();
+    int value = App::get()->getSettings()->getGameVolume();
     value += GAMEVOLUMESCALE;
     if (value > 100) { value = 100; }
-    m_pSettings->setGameVolume(value);
-    Assets::get()->playSound("Menu audio check");
+    App::get()->getSettings()->setGameVolume(value);
+    App::get()->getAssets()->playSound("Menu audio check");
 }
 
 void SettingsMenu::s_menuSaveSettings() {
-    m_pSettings->save();
+    App::get()->getSettings()->save();
 }
 
 void SettingsMenu::s_menuResetSettings() {
-    m_pSettings->reset();
+    App::get()->getSettings()->reset();
 }
 
 void SettingsMenu::onExit() {

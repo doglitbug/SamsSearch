@@ -28,7 +28,7 @@ void TileLayer::render(SDL_Rect *pViewport) {
             }
             TileSet tileSet = getTileSetByID(id);
             id--;
-            Assets::get()->drawTile(tileSet.name, tileSet.margin, tileSet.spacing,
+            App::get()->getAssets()->drawTile(tileSet.name, tileSet.margin, tileSet.spacing,
                                           (j * m_tileSize) - xTileOffset, (i * m_tileSize) - yTileOffset, m_tileSize,
                                           m_tileSize, (id - (tileSet.firstgid - 1)) /
                                                       tileSet.columns, (id - (tileSet.firstgid - 1)) %

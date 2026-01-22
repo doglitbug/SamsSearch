@@ -2,20 +2,20 @@
 
 #include "App.h"
 #include "Assets.h"
-#include "InputManager.h"
+#include "InputSystem.h"
 
 #include "../States/MainMenuState.h"
 #include "../States/PauseState.h"
 #include "../States/PlayState.h"
 #include "../States/SettingsMenu.h"
 
-App::App()
+void App::init()
 {
     //Load settings subsystem here for video init
-    m_Settings.load();
+    m_pSettings = new Settings();
 
     int flags = SDL_WINDOW_RESIZABLE;
-    if (m_Settings.getFullScreen())
+    if (m_pSettings->getFullScreen())
         flags |= SDL_WINDOW_FULLSCREEN;
 
     // Attempt to initialize SDL
@@ -43,7 +43,7 @@ App::App()
     }
 
     // Create assets subsystem
-    m_pAssets = new Assets(this) ;
+    m_pAssets = new Assets();
 
     //TODO Move loading to a startup State? (video etc)
     //Preload assets
@@ -76,12 +76,12 @@ App::App()
     //Preload other stuff
 
     //Create input subsystem
+    m_pInput = new InputSystem();
+    //TODO Move these to constructor
+    m_pInput->initializeGamepads();
+    m_pInput->initializeMouse();
 
-    InputManager::get()->initializeGamepads();
-    InputManager::get()->initializeMouse();
-
-
-    //Add all states
+    //Create state machine and populate
     m_pStateMachine = new StateMachine();
 
     m_pStateMachine->registerState("MAINMENU", new MainMenuState());
@@ -90,7 +90,7 @@ App::App()
     m_pStateMachine->registerState("PAUSE", new PauseState());
     m_pStateMachine->registerState("SETTINGS", new SettingsMenu());
 
-    //TODO Delete m_pStateMachine->setInitialState("MAINMENU");
+    //m_pStateMachine->setInitialState("MAINMENU");
     m_bRunning = true;
 }
 
@@ -108,18 +108,9 @@ void App::update(float deltaTime) const
     m_pStateMachine->update(deltaTime);
 }
 
-void App::handleEvents()
+void App::handleEvents() const
 {
-    InputManager::get()->update();
+    m_pInput->update();
     //TODO Move this to inputmanager???
-    Vector2D* p_mousePos = InputManager::get()->getMousePosition();
-}
-
-App::~App()
-{
-    std::cout << "Cleaning game\n";
-
-    //m_pAssets->clean();
-    //InputManager::get()->clean();
-    //SettingsManager::get()->clean();
+    Vector2D* p_mousePos = m_pInput->getMousePosition();
 }

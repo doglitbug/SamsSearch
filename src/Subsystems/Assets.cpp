@@ -2,11 +2,11 @@
 
 #include "Settings.h"
 #include "App.h"
+#include "SDL3_image/SDL_image.h"
 
-Assets::Assets(App* pSDLApplication) : m_pApplication(pSDLApplication)
+Assets::Assets()
 {
-    //Cache this for brevity
-    m_pRenderer = m_pApplication->getRenderer();
+    m_pRenderer = App::get()->getRenderer();
     //TODO Cancel using Audio or quit if this fails?
     if (!MIX_Init())
     {
@@ -21,7 +21,7 @@ Assets::Assets(App* pSDLApplication) : m_pApplication(pSDLApplication)
     m_pSoundTrack = MIX_CreateTrack(m_pMixer);
 
     //Set volumes!
-    MIX_SetTrackGain(m_pMusicTrack, m_pApplication->getSettings()->getMusicVolume());
+    MIX_SetTrackGain(m_pMusicTrack, App::get()->getSettings()->getMusicVolume());
     //TODO Load from Settings
     MIX_SetTrackGain(m_pSoundTrack, 1.0f);
 }
@@ -112,7 +112,7 @@ SDL_Texture* Assets::createDialogue(const std::string& characterName, const Spri
 
     //Decide texture size:
     int width;
-    m_pApplication->getWindowSize(&width, nullptr);
+    App::get()->getWindowSize(&width, nullptr);
 
     TTF_Font* gFont = m_fontMap[fontID];
 

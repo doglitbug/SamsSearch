@@ -3,12 +3,10 @@
 #include <string>
 #include <vector>
 
-#include "Objects/UIObjects/UIObject.h"
-#include "Subsystems/Assets.h"
+#include "UIObject.h"
 
 class BaseState {
 public:
-    explicit BaseState(App* pSDLApplication): m_pApplication(pSDLApplication) {};
     virtual ~BaseState() = default;
     //Must be overridden in children
     virtual void onEnter() = 0;
@@ -43,7 +41,6 @@ public:
     }
 
 protected:
-    App* m_pApplication;
     std::vector<UIObject *> m_gameObjects;
     std::vector<std::string> m_textureIDList;
 };

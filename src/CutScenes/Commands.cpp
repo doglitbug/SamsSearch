@@ -1,6 +1,5 @@
 #include "Commands.h"
-
-#include "InputManager.h"
+#include "App.h"
 
 //Show Dialog
 cmdShowDialog::cmdShowDialog(const Sprite &dialogFace, const std::vector<std::string> &dialogLines) {
@@ -9,14 +8,14 @@ cmdShowDialog::cmdShowDialog(const Sprite &dialogFace, const std::vector<std::st
 }
 
 void cmdShowDialog::start() {
-    Assets::get()->createDialogue("Samuel", sprite, dialog, "Text");
+    App::get()->getAssets()->createDialogue("Samuel", sprite, dialog, "Text");
 }
 
 void cmdShowDialog::update(float deltaTime) {
     //TODO If player hits action button
-    if (InputManager::get()->getKeyDown(SDL_SCANCODE_ESCAPE) || InputManager::get()->getButtonDown(SDL_GAMEPAD_BUTTON_SOUTH)) {
+    if (App::get()->getInput()->getKeyDown(SDL_SCANCODE_ESCAPE) || App::get()->getInput()->getButtonDown(SDL_GAMEPAD_BUTTON_SOUTH)) {
         completed = true;
-        Assets::get()->deleteTexture("dialog");
+        App::get()->getAssets()->deleteTexture("dialog");
     }
 }
 

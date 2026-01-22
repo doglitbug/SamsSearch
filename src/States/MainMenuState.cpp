@@ -1,8 +1,8 @@
 #include "MainMenuState.h"
 
 void MainMenuState::onEnter() {
-    if (Settings::getTitleMusicEnabled()) {
-        Assets::get()->playMusic("main_menu");
+    if (App::get()->getSettings()->getTitleMusicEnabled()) {
+        App::get()->getAssets()->playMusic("main_menu");
     }
     //Title
     m_gameObjects.push_back(generateTitle());
@@ -16,7 +16,7 @@ void MainMenuState::onEnter() {
 
 void MainMenuState::update(float deltaTime) {
     int width, height;
-    App::getSettings()->getWindowSize(&width, &height);
+    App::get()->getWindowSize(&width, &height);
 
     int leftSide = width / 2;
     int middle = 200;
@@ -39,7 +39,7 @@ void MainMenuState::update(float deltaTime) {
 }
 
 void MainMenuState::onExit() {
-    Assets::get()->stopMusic();
+    App::get()->getAssets()->stopMusic();
     BaseState::onExit();
 }
 

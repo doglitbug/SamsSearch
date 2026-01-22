@@ -1,12 +1,11 @@
 #pragma once
 
 #include "BaseMenuState.h"
-#include "Settings.h"
 
 class SettingsMenu : public BaseMenuState
 {
 public:
-    static void linkSettings(Settings* pSettings);
+    SettingsMenu()= default;
 
     void onEnter() override;
     void update(float deltaTime) override;
@@ -30,5 +29,4 @@ private:
 
     static constexpr int MUSICVOLUMESCALE = 5;
     static constexpr int GAMEVOLUMESCALE = 5;
-    static Settings* m_pSettings;
 };

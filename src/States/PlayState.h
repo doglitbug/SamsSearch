@@ -2,16 +2,11 @@
 
 //Ignore anything that is greyed out, it will be used by the engine
 
-#include "Subsystems/InputManager.h"
 #include "GameObjects/GameObjectCreature/Player.h"
 #include "GameObjects/GameObjectCreature/Dog.h"
-#include "GameObjects/GameObjectCreature/Cat.h"
-#include "GameObjects/GameObjectItem/Teleport.h"
-#include "GameObjects/GameObjectItem/Sign.h"
 
 #include "BaseMap.h"
-#include "Maps/MapInsideDadsHouse.h"
-#include "Maps/MapTest.h"
+
 
 #include "CommandProcessor.h"
 

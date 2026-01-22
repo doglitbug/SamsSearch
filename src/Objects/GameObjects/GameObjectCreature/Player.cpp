@@ -1,13 +1,13 @@
 #include "Player.h"
-#include "Subsystems/InputManager.h"
+#include "Subsystems/InputSystem.h"
 
 void Player::load(const int x, const int y, const int width, const int height, CPO &pCustomProperties) {
     GameObjectCreature::load(x, y, width, height, pCustomProperties);
     m_hitBox = new SDL_FRect{12, 44, 28, 28};
     m_speed = 150.0f;
-    Assets::get()->loadSound("assets/sounds/leohpaz/Farm/Ambient/Barn_Door_Open.wav", "Enter door");
-    Assets::get()->loadSound("assets/sounds/leohpaz/TrueHeros/Human/Step_dirt_1.wav", "Footstep");
-    Assets::get()->loadSound("assets/sounds/leohpaz/TrueHeros/Human/Step_dirt_3.wav", "Footstep2");
+    App::get()->getAssets()->loadSound("assets/sounds/leohpaz/Farm/Ambient/Barn_Door_Open.wav", "Enter door");
+    App::get()->getAssets()->loadSound("assets/sounds/leohpaz/TrueHeros/Human/Step_dirt_1.wav", "Footstep");
+    App::get()->getAssets()->loadSound("assets/sounds/leohpaz/TrueHeros/Human/Step_dirt_3.wav", "Footstep2");
 }
 
 void Player::update(const float deltaTime, GameObject *pPlayer)
@@ -23,9 +23,9 @@ void Player::update(const float deltaTime, GameObject *pPlayer)
     //TODO Add sneakers as an item to remove this annoying sound
     if (m_velocity.length() > 0.5f & timeElapsed > 0.25f) {
         if (random() % 10 > 5) {
-            Assets::get()->playSound("Footstep");
+            App::get()->getAssets()->playSound("Footstep");
         } else {
-            Assets::get()->playSound("Footstep2");
+            App::get()->getAssets()->playSound("Footstep2");
         }
         timeElapsed = 0.0f;
     }

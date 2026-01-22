@@ -34,7 +34,7 @@ void GameObject::drawSelf(SDL_Rect *pViewport) {
     if ((m_position.getY() + m_height) < pViewport->y) return;
     if (m_position.getY() > (pViewport->y + pViewport->h)) return;
 
-    Assets::get()->drawSprite(m_sprite,
+    App::get()->getAssets()->drawSprite(m_sprite,
                                     (int) m_position.getX() - pViewport->x,
                                     (int) m_position.getY() - pViewport->y,
                                     m_direction,

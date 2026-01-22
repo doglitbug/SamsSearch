@@ -2,6 +2,12 @@
 
 #include <algorithm>
 
+#include "GameObjects/GameObjectCreature/Cat.h"
+#include "GameObjects/GameObjectItem/Sign.h"
+#include "GameObjects/GameObjectItem/Teleport.h"
+#include "Maps/MapInsideDadsHouse.h"
+#include "Maps/MapTest.h"
+
 void PlayState::onEnter() {
     //GameObjectFactory::get()->registerType("Player", new PlayerCreator());
     GameObjectFactory::get()->registerType("Teleport", new TeleportCreator());
@@ -59,7 +65,7 @@ void PlayState::update(const float deltaTime) {
             //TODO IF type of teleport, do xyz else
             if (const auto tp = dynamic_cast<Teleport *>(gameObject)) {
                 changeMap(tp->destMap, tp->destX, tp->destY, tp->destDirection);
-                Assets::get()->playSound("Enter door");
+                App::get()->getAssets()->playSound("Enter door");
                 continue;
             }
             gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
@@ -176,11 +182,11 @@ void PlayState::drawUI() const {
     const int textWidth = static_cast<int>(mapName.length()) * 32;
     //TODO Overwrite this texture with the new map name on change map...
     //or properly implement writeTextToScreen
-    Assets::get()->createTextTexture(textWidth, 60, mapName, "Text32", "mapName");
-    Assets::get()->drawTexture("mapName", width / 2 - textWidth / 2, 0, textWidth, 60);
+    App::get()->getAssets()->createTextTexture(textWidth, 60, mapName, "Text32", "mapName");
+    App::get()->getAssets()->drawTexture("mapName", width / 2 - textWidth / 2, 0, textWidth, 60);
 
     //TODO Now that it is drawn, we can delete the texture (it needs to be deleted so that different map names work)
-    Assets::get()->deleteTexture("mapName");
+    App::get()->getAssets()->deleteTexture("mapName");
 
     //Draw Dialog now if we have any.
     //This is placed here to stop it being overwritten on screen!
@@ -188,18 +194,18 @@ void PlayState::drawUI() const {
         App::get()->getWindowSize(&width, &height);
 
         float dialogHeight;
-        Assets::get()->getTextureSize("dialog", nullptr, &dialogHeight);
-        Assets::get()->drawTexture("dialog", 0, height - dialogHeight);
+        App::get()->getAssets()->getTextureSize("dialog", nullptr, &dialogHeight);
+        App::get()->getAssets()->drawTexture("dialog", 0, height - dialogHeight);
     }
 }
 
 void PlayState::handleInput() {
-    if (InputManager::get()->getKeyDown(SDL_SCANCODE_ESCAPE) || InputManager::get()->getButtonDown(SDL_GAMEPAD_BUTTON_START)) {
+    if (App::get()->getInput()->getKeyDown(SDL_SCANCODE_ESCAPE) || App::get()->getInput()->getButtonDown(SDL_GAMEPAD_BUTTON_START)) {
         App::get()->getStateMachine()->pushState("PAUSE");
         return;
     }
 
-    if (InputManager::get()->getKeyDown(SDL_SCANCODE_Z)) {
+    if (App::get()->getInput()->getKeyDown(SDL_SCANCODE_Z)) {
         const std::vector<std::string> dialogLines = {
             "Hello",
             "Have you been inside yet?",
@@ -214,5 +220,5 @@ void PlayState::handleInput() {
         m_commandProcessor.AddCommand(new cmdWait(2.5));
     }
 
-    mPlayer->m_velocity = InputManager::get()->getMovement() *= mPlayer->m_speed;
+    mPlayer->m_velocity = App::get()->getInput()->getMovement() *= mPlayer->m_speed;
 }

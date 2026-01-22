@@ -17,6 +17,7 @@ void StateMachine::registerState(const std::string& stateID, BaseState *pState) 
     if (m_gameStateStack.empty())
     {
         m_gameStateStack.push_back(pState);
+        m_gameStateStack.back()->onEnter();
     }
     m_gameStates[stateID] = pState;
 }
