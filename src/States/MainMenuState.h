@@ -2,7 +2,7 @@
 
 #include <map>
 #include "BaseMenuState.h"
-#include "../Managers/SettingsManager.h"
+#include "../Subsystems/Settings.h"
 
 class MainMenuState : public BaseMenuState {
 public:

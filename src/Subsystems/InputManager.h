@@ -3,17 +3,12 @@
 #include <vector>
 #include <SDL3/SDL.h>
 #include "../Vector2D.h"
-#include "EngineStateManager.h"
+#include "App.h"
 
 class InputManager {
 public:
-    static InputManager *get() {
-        static InputManager me;
-        return &me;
-    };
-
-    InputManager(InputManager &other) = delete;
-    void operator=(const InputManager &) = delete;
+    InputManager(App* pSDLApplication);
+    ~InputManager() {};
 
     void update();
     void clean() const;
@@ -47,9 +42,7 @@ public:
     bool getKeyDown(SDL_Scancode key) const;
 
 private:
-    InputManager() {};
-    ~InputManager() {};
-
+    App* m_pApplication;
     // Mouse
     Vector2D m_mousePosition;
     std::vector<bool> m_mouseButtonStates;
@@ -66,4 +59,6 @@ private:
     SDL_Gamepad *m_gamepad;
     std::vector<bool> m_buttonStates;
     void onButtonChange(const SDL_Event &event);
+
+
 };

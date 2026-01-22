@@ -1,12 +1,14 @@
 #pragma once
 
 #include "BaseState.h"
-#include "../Managers/EngineStateManager.h"
+#include "../Subsystems/App.h"
 #include "Objects/UIObjects/Title.h"
 #include "Objects/UIObjects/Button.h"
 #include "Objects/UIObjects/Label.h"
 #include "Objects/UIObjects/LabelBoolean.h"
 #include "Objects/UIObjects/LabelInteger.h"
+
+#include <functional>
 
 //Default sizes
 #define ROW_HEIGHT 50
@@ -36,11 +38,11 @@ public:
     /// @return
     static UIObject *generateLabel(const std::string &text, int width = LABEL_WIDTH);
 
-    /// @brief Generate a On/Off label
+    /// @brief Generate an On/Off label
     /// @param link boolean function
     /// @param width of label, default of 200
     /// @return
-    static UIObject *generateLabel(bool (*link)(), int width = LABEL_WIDTH);
+    static UIObject *generateLabel(bool link, int width = LABEL_WIDTH);
 
     /// @brief Generate an integer label
     /// @param link integer function
@@ -53,7 +55,7 @@ public:
     /// @param callback function to run when clicked
     /// @param width width of button, default of 200
     /// @return
-    static UIObject *generateButton(const std::string &text, void (*callback)(), int width = BUTTON_WIDTH);
+    static UIObject *generateButton(const std::string &text, const std::function<void()>& callback, int width = BUTTON_WIDTH);
 
 protected:
     /// @brief Do nothing, this is only to be used during development as a stub

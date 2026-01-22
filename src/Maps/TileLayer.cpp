@@ -1,5 +1,5 @@
 #include "TileLayer.h"
-#include "../Managers/EngineStateManager.h"
+#include "../Subsystems/App.h"
 
 TileLayer::TileLayer(int tileSize, const std::vector<TileSet> &tileSets) : m_tileSize(tileSize), m_tileSets(tileSets) {
 
@@ -28,7 +28,7 @@ void TileLayer::render(SDL_Rect *pViewport) {
             }
             TileSet tileSet = getTileSetByID(id);
             id--;
-            AssetManager::get()->drawTile(tileSet.name, tileSet.margin, tileSet.spacing,
+            Assets::get()->drawTile(tileSet.name, tileSet.margin, tileSet.spacing,
                                           (j * m_tileSize) - xTileOffset, (i * m_tileSize) - yTileOffset, m_tileSize,
                                           m_tileSize, (id - (tileSet.firstgid - 1)) /
                                                       tileSet.columns, (id - (tileSet.firstgid - 1)) %

@@ -8,5 +8,5 @@ void UIObject::load(const LoaderParams &pParams) {
 }
 
 void UIObject::draw() {
-    AssetManager::get()->drawTexture(m_textureID, m_ScreenPosition.getX(), m_ScreenPosition.getY());
+    Assets::get()->drawTexture(m_textureID, m_ScreenPosition.getX(), m_ScreenPosition.getY());
 }

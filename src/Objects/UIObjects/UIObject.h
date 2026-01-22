@@ -2,7 +2,7 @@
 
 #include "LoaderParams.h"
 #include "Vector2D.h"
-#include "Managers/AssetManager.h"
+#include "Subsystems/Assets.h"
 
 class UIObject {
 public:

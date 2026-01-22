@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "UIObject.h"
 
 /// @brief Create a clickable button
@@ -11,7 +13,7 @@ public:
     void load(const LoaderParams &pParams) override;
     void update(float deltaTime) override;
 
-    void setCallback(void(*callback)()) { m_callback = callback; }
+    void setCallback(const std::function<void()>& callback) { m_callback = callback; }
 
 private:
     enum buttonState {
@@ -22,5 +24,5 @@ private:
     bool m_bReleased;
     int m_currentFrame;
 
-    void (*m_callback)();
+    std::function<void()> m_callback;
 };

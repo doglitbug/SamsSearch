@@ -59,7 +59,7 @@ void PlayState::update(const float deltaTime) {
             //TODO IF type of teleport, do xyz else
             if (const auto tp = dynamic_cast<Teleport *>(gameObject)) {
                 changeMap(tp->destMap, tp->destX, tp->destY, tp->destDirection);
-                AssetManager::get()->playSound("Enter door");
+                Assets::get()->playSound("Enter door");
                 continue;
             }
             gameObject->onInteraction(mPlayer, INTERACT_TYPE::TOUCH);
@@ -109,7 +109,7 @@ void PlayState::onExit() {
 
 SDL_Rect PlayState::getViewport() const {
     int windowWidth, windowHeight;
-    EngineStateManager::get()->getWindowSize(&windowWidth, &windowHeight);
+    App::get()->getWindowSize(&windowWidth, &windowHeight);
 
     //Set viewport position for-x axis
     const int mapWidth = pCurrentMap->getWidth() * 32;
@@ -169,33 +169,33 @@ void PlayState::saveGame() {
 void PlayState::drawUI() const {
     //TODO Make this better by caching this crap?
     int width, height;
-    EngineStateManager::get()->getWindowSize(&width, &height);
+    App::get()->getWindowSize(&width, &height);
 
     const std::string mapName = pCurrentMap->getName();
     //TODO Make this better by measuring correctly
     const int textWidth = static_cast<int>(mapName.length()) * 32;
     //TODO Overwrite this texture with the new map name on change map...
     //or properly implement writeTextToScreen
-    AssetManager::get()->createTextTexture(textWidth, 60, mapName, "Text32", "mapName");
-    AssetManager::get()->drawTexture("mapName", width / 2 - textWidth / 2, 0, textWidth, 60);
+    Assets::get()->createTextTexture(textWidth, 60, mapName, "Text32", "mapName");
+    Assets::get()->drawTexture("mapName", width / 2 - textWidth / 2, 0, textWidth, 60);
 
     //TODO Now that it is drawn, we can delete the texture (it needs to be deleted so that different map names work)
-    AssetManager::get()->deleteTexture("mapName");
+    Assets::get()->deleteTexture("mapName");
 
     //Draw Dialog now if we have any.
     //This is placed here to stop it being overwritten on screen!
     if (m_commandProcessor.showingDialog()) {
-        EngineStateManager::get()->getWindowSize(&width, &height);
+        App::get()->getWindowSize(&width, &height);
 
         float dialogHeight;
-        AssetManager::get()->getTextureSize("dialog", nullptr, &dialogHeight);
-        AssetManager::get()->drawTexture("dialog", 0, height - dialogHeight);
+        Assets::get()->getTextureSize("dialog", nullptr, &dialogHeight);
+        Assets::get()->drawTexture("dialog", 0, height - dialogHeight);
     }
 }
 
 void PlayState::handleInput() {
     if (InputManager::get()->getKeyDown(SDL_SCANCODE_ESCAPE) || InputManager::get()->getButtonDown(SDL_GAMEPAD_BUTTON_START)) {
-        EngineStateManager::get()->getStateMachine()->pushState("PAUSE");
+        App::get()->getStateMachine()->pushState("PAUSE");
         return;
     }
 

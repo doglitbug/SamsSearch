@@ -1,11 +1,15 @@
-#include "AssetManager.h"
+#include "Assets.h"
 
-#include "EngineStateManager.h"
-#include "SettingsManager.h"
+#include "Settings.h"
+#include "App.h"
 
-AssetManager::AssetManager() {
+Assets::Assets(App* pSDLApplication) : m_pApplication(pSDLApplication)
+{
+    //Cache this for brevity
+    m_pRenderer = m_pApplication->getRenderer();
     //TODO Cancel using Audio or quit if this fails?
-    if (!MIX_Init()) {
+    if (!MIX_Init())
+    {
         SDL_Log("MIX_Init failed: %s", SDL_GetError());
     }
 
@@ -17,46 +21,29 @@ AssetManager::AssetManager() {
     m_pSoundTrack = MIX_CreateTrack(m_pMixer);
 
     //Set volumes!
+    MIX_SetTrackGain(m_pMusicTrack, m_pApplication->getSettings()->getMusicVolume());
     //TODO Load from Settings
-    MIX_SetTrackGain(m_pMusicTrack, SettingsManager::get()->getMusicVolume());
     MIX_SetTrackGain(m_pSoundTrack, 1.0f);
 }
 
-void AssetManager::clean() {
-    //Textures
-    for (auto &[id, texture]: m_textureMap) {
-        SDL_DestroyTexture(m_textureMap[id]);
-    }
+// region Fonts
 
-    //Fonts
-    //TTF_CloseFont
-    TTF_Quit();
-
-    //Audio
-    for (auto &[id, music]: m_music) {
-        MIX_DestroyAudio(m_music[id]);
-    }
-    for (auto &[id, chunk]: m_sound) {
-        MIX_DestroyAudio(m_sound[id]);
-    }
-    MIX_DestroyMixer(m_pMixer);
-    MIX_Quit();
-}
-
-#pragma region Fonts
-
-void AssetManager::loadFont(const std::string &filename, const std::string &fontID, const int size) {
-    if (m_fontMap.find(fontID) != m_fontMap.end()) {
+void Assets::loadFont(const std::string& filename, const std::string& fontID, const int size)
+{
+    if (m_fontMap.find(fontID) != m_fontMap.end())
+    {
         return;
     }
 
-    if (!TTF_Init()) {
+    if (!TTF_Init())
+    {
         std::cout << "SDL_ttf could not initialize! SDL_ttf Error: " << SDL_GetError() << std::endl;
         return;
     }
 
-    TTF_Font *pFont = TTF_OpenFont(("assets/fonts/" + filename).c_str(), size);
-    if (pFont == nullptr) {
+    TTF_Font* pFont = TTF_OpenFont(("assets/fonts/" + filename).c_str(), size);
+    if (pFont == nullptr)
+    {
         std::cout << "Failed to load font! SDL_ttf Error: " << SDL_GetError() << std::endl;
         return;
     }
@@ -64,12 +51,13 @@ void AssetManager::loadFont(const std::string &filename, const std::string &font
     m_fontMap[fontID] = pFont;
 }
 
-#pragma endregion
+// endregion
 
-#pragma region Text
-void AssetManager::createTextTexture(const int width, const int height, const std::string &text,
-                                     const std::string &fontID,
-                                     const std::string &textureID) {
+// region Text
+void Assets::createTextTexture(const int width, const int height, const std::string& text,
+                               const std::string& fontID,
+                               const std::string& textureID)
+{
     // Check to see if we have no text to write
     // if (text.size() != 0)
 
@@ -77,17 +65,17 @@ void AssetManager::createTextTexture(const int width, const int height, const st
     if (m_textureMap.find(textureID) != m_textureMap.end()) return;
 
     // TODO check font exists?
-    TTF_Font *gFont = m_fontMap[fontID];
+    TTF_Font* gFont = m_fontMap[fontID];
 
-    SDL_Texture *backgroundTexture = SDL_CreateTexture(m_pRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET,
+    SDL_Texture* backgroundTexture = SDL_CreateTexture(m_pRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET,
                                                        width, height);
     SDL_SetRenderTarget(m_pRenderer, backgroundTexture);
 
     // Create the text item
     //TODO Make this a parameter
     constexpr auto textColor = SDL_Color{0xFF, 0xFF, 0xFF};
-    SDL_Surface *pTextSurface = TTF_RenderText_Blended(gFont, text.c_str(), 0, textColor);
-    SDL_Texture *pTextTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTextSurface);
+    SDL_Surface* pTextSurface = TTF_RenderText_Blended(gFont, text.c_str(), 0, textColor);
+    SDL_Texture* pTextTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTextSurface);
     SDL_DestroySurface(pTextSurface);
 
     // Get size of the text texture
@@ -113,8 +101,9 @@ void AssetManager::createTextTexture(const int width, const int height, const st
     SDL_SetRenderTarget(m_pRenderer, nullptr);
 }
 
-SDL_Texture *AssetManager::createDialogue(const std::string &characterName, const Sprite &face,
-                                          const std::vector<std::string> &dialog, const std::string &fontID) {
+SDL_Texture* Assets::createDialogue(const std::string& characterName, const Sprite& face,
+                                    const std::vector<std::string>& dialog, const std::string& fontID)
+{
     constexpr int border = 5;
     //TODO Make this a set height always?
     const int height = face.height + 2 * border;
@@ -123,11 +112,11 @@ SDL_Texture *AssetManager::createDialogue(const std::string &characterName, cons
 
     //Decide texture size:
     int width;
-    EngineStateManager::get()->getWindowSize(&width, nullptr);
+    m_pApplication->getWindowSize(&width, nullptr);
 
-    TTF_Font *gFont = m_fontMap[fontID];
+    TTF_Font* gFont = m_fontMap[fontID];
 
-    SDL_Texture *dialogTexture = SDL_CreateTexture(m_pRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET,
+    SDL_Texture* dialogTexture = SDL_CreateTexture(m_pRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET,
                                                    width, height);
     SDL_SetRenderTarget(m_pRenderer, dialogTexture);
 
@@ -136,7 +125,8 @@ SDL_Texture *AssetManager::createDialogue(const std::string &characterName, cons
     SDL_RenderClear(m_pRenderer);
 
     //Check we have a face image
-    if (face.textureID != "") {
+    if (face.textureID != "")
+    {
         offset += face.width;
         //Draw face
         SDL_FRect dstRect;
@@ -159,9 +149,10 @@ SDL_Texture *AssetManager::createDialogue(const std::string &characterName, cons
     constexpr auto textColor = SDL_Color{0xFF, 0xFF, 0xFF};
 
     int linePosition = border + 5;
-    for (const auto line: dialog) {
-        SDL_Surface *pTextSurface = TTF_RenderText_Blended(gFont, line.c_str(), 0, textColor);
-        SDL_Texture *pTextTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTextSurface);
+    for (const auto line : dialog)
+    {
+        SDL_Surface* pTextSurface = TTF_RenderText_Blended(gFont, line.c_str(), 0, textColor);
+        SDL_Texture* pTextTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTextSurface);
         SDL_DestroySurface(pTextSurface);
 
         // Get the size of the text texture
@@ -193,8 +184,10 @@ SDL_Texture *AssetManager::createDialogue(const std::string &characterName, cons
     return dialogTexture;
 }
 
-void AssetManager::getTextureSize(const std::string &textureID, float *width, float *height) {
-    if (m_textureMap.find(textureID) == m_textureMap.end()) {
+void Assets::getTextureSize(const std::string& textureID, float* width, float* height)
+{
+    if (m_textureMap.find(textureID) == m_textureMap.end())
+    {
         SDL_Log("Texture not found: %s", textureID.c_str());
         return;
     }
@@ -203,24 +196,28 @@ void AssetManager::getTextureSize(const std::string &textureID, float *width, fl
     SDL_GetTextureSize(m_textureMap[textureID], width, height);
 }
 
-#pragma endregion
+// endregion
 
-#pragma region Images
-void AssetManager::loadTexture(const std::string &filename, const std::string &id) {
-    if (m_textureMap.find(id) != m_textureMap.end()) {
+// region Images
+void Assets::loadTexture(const std::string& filename, const std::string& id)
+{
+    if (m_textureMap.find(id) != m_textureMap.end())
+    {
         return;
     }
 
-    SDL_Surface *pTempSurface = IMG_Load((filename).c_str());
-    if (!pTempSurface) {
+    SDL_Surface* pTempSurface = IMG_Load((filename).c_str());
+    if (!pTempSurface)
+    {
         std::cout << "Could not load image " << id << " from " << filename << std::endl;
         return;
     }
 
-    SDL_Texture *pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTempSurface);
+    SDL_Texture* pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTempSurface);
     SDL_DestroySurface(pTempSurface);
 
-    if (!pTexture) {
+    if (!pTexture)
+    {
         std::cout << "Could not create texture " << std::endl;
         return;
     }
@@ -228,11 +225,13 @@ void AssetManager::loadTexture(const std::string &filename, const std::string &i
     m_textureMap[id] = pTexture;
 }
 
-void AssetManager::addBorderToExistingTexture(const std::string &textureID, const float size) {
+void Assets::addBorderToExistingTexture(const std::string& textureID, const float size)
+{
     //TODO Refactor this mess to use SDL_RenderFillRects
 
     //Check texture exists
-    if (m_textureMap.find(textureID) == m_textureMap.end()) {
+    if (m_textureMap.find(textureID) == m_textureMap.end())
+    {
         SDL_Log("Texture not found: %s", textureID.c_str());
         return;
     }
@@ -262,8 +261,10 @@ void AssetManager::addBorderToExistingTexture(const std::string &textureID, cons
     SDL_SetRenderTarget(m_pRenderer, nullptr);
 }
 
-void AssetManager::drawTexture(const std::string &id, const float x, const float y, float width, float height) {
-    if (width == 0.0f) {
+void Assets::drawTexture(const std::string& id, const float x, const float y, float width, float height)
+{
+    if (width == 0.0f)
+    {
         getTextureSize(id, &width, &height);
     }
 
@@ -278,10 +279,11 @@ void AssetManager::drawTexture(const std::string &id, const float x, const float
     SDL_RenderTexture(m_pRenderer, m_textureMap[id], &srcRect, &destRect);
 }
 
-void AssetManager::drawSprite(const Sprite &sprite,
-                              const float x, const float y,
-                              const int extraRow,
-                              const int extraColumn) {
+void Assets::drawSprite(const Sprite& sprite,
+                        const float x, const float y,
+                        const int extraRow,
+                        const int extraColumn)
+{
     SDL_FRect srcRect;
     SDL_FRect destRect;
     srcRect.x = sprite.width * static_cast<float>(sprite.column + extraColumn);
@@ -293,9 +295,10 @@ void AssetManager::drawSprite(const Sprite &sprite,
     SDL_RenderTexture(m_pRenderer, m_textureMap[sprite.textureID], &srcRect, &destRect);
 }
 
-void AssetManager::drawTile(const std::string &id, int margin, int spacing, int x, int y, int width, int height,
-                            const int currentRow,
-                            const int currentFrame) {
+void Assets::drawTile(const std::string& id, int margin, int spacing, int x, int y, int width, int height,
+                      const int currentRow,
+                      const int currentFrame)
+{
     SDL_FRect srcRect;
     SDL_FRect destRect;
     srcRect.x = margin + (spacing + width) * currentFrame;
@@ -307,20 +310,25 @@ void AssetManager::drawTile(const std::string &id, int margin, int spacing, int 
     SDL_RenderTexture(m_pRenderer, m_textureMap[id], &srcRect, &destRect);
 }
 
-void AssetManager::deleteTexture(const std::string &id) {
+void Assets::deleteTexture(const std::string& id)
+{
     SDL_DestroyTexture(m_textureMap[id]);
     m_textureMap.erase(id);
 }
-#pragma endregion
 
-#pragma region Audio
-bool AssetManager::loadMusic(const std::string &filename, const std::string &id) {
+// endregion
+
+// region Audio
+bool Assets::loadMusic(const std::string& filename, const std::string& id)
+{
     //Check to see if this has been loaded already
-    if (m_music.find(id) != m_music.end()) {
+    if (m_music.find(id) != m_music.end())
+    {
         return true;
     }
 
-    if (MIX_Audio *pMusic = MIX_LoadAudio(m_pMixer, filename.c_str(), true)) {
+    if (MIX_Audio* pMusic = MIX_LoadAudio(m_pMixer, filename.c_str(), true))
+    {
         m_music[id] = pMusic;
         return true;
     }
@@ -328,37 +336,46 @@ bool AssetManager::loadMusic(const std::string &filename, const std::string &id)
     return false;
 }
 
-void AssetManager::playMusic(const std::string &id, int loop) {
+void Assets::playMusic(const std::string& id, int loop)
+{
     MIX_SetTrackAudio(m_pMusicTrack, m_music[id]);
     MIX_PlayTrack(m_pMusicTrack, -1);
     m_currentMusic = id;
 }
 
-void AssetManager::stopMusic() {
+void Assets::stopMusic()
+{
     MIX_StopTrack(m_pMusicTrack, 0);
 }
 
-void AssetManager::stopTitleMusic() {
-    if (m_currentMusic == "main_menu") {
+void Assets::stopTitleMusic()
+{
+    if (m_currentMusic == "main_menu")
+    {
         stopMusic();
     }
 }
 
-void AssetManager::setMusicVolume(const int volume) {
+void Assets::setMusicVolume(const int volume)
+{
     MIX_SetTrackGain(m_pMusicTrack, static_cast<float>(volume) / 100.0f);
 }
 
-void AssetManager::setGameVolume(const int volume) {
+void Assets::setGameVolume(const int volume)
+{
     MIX_SetTrackGain(m_pSoundTrack, static_cast<float>(volume) / 100.0f);
 }
 
-bool AssetManager::loadSound(const std::string &filename, const std::string &id) {
+bool Assets::loadSound(const std::string& filename, const std::string& id)
+{
     //Check to see if this has been loaded already
-    if (m_sound.find(id) != m_sound.end()) {
+    if (m_sound.find(id) != m_sound.end())
+    {
         return true;
     }
 
-    if (auto *pSound = MIX_LoadAudio(m_pMixer, filename.c_str(), true)) {
+    if (auto* pSound = MIX_LoadAudio(m_pMixer, filename.c_str(), true))
+    {
         m_sound[id] = pSound;
         return true;
     }
@@ -366,8 +383,10 @@ bool AssetManager::loadSound(const std::string &filename, const std::string &id)
     return false;
 }
 
-void AssetManager::playSound(const std::string &id, int loops, int channel) {
-    if (m_sound.find(id) == m_sound.end()) {
+void Assets::playSound(const std::string& id, int loops, int channel)
+{
+    if (m_sound.find(id) == m_sound.end())
+    {
         std::cout << "Could not find sound: " << id << std::endl;
         return;
     }
@@ -376,4 +395,29 @@ void AssetManager::playSound(const std::string &id, int loops, int channel) {
     MIX_PlayTrack(m_pSoundTrack, 0);
 }
 
-#pragma endregion
+// endregion
+
+Assets::~Assets()
+{
+    //Textures
+    for (auto& [id, texture] : m_textureMap)
+    {
+        SDL_DestroyTexture(m_textureMap[id]);
+    }
+
+    //Fonts
+    //TTF_CloseFont
+    TTF_Quit();
+
+    //Audio
+    for (auto& [id, music] : m_music)
+    {
+        MIX_DestroyAudio(m_music[id]);
+    }
+    for (auto& [id, chunk] : m_sound)
+    {
+        MIX_DestroyAudio(m_sound[id]);
+    }
+    MIX_DestroyMixer(m_pMixer);
+    MIX_Quit();
+}

@@ -10,7 +10,7 @@
 
 void PauseState::update(float deltaTime){
     int width, height;
-    EngineStateManager::get()->getWindowSize(&width, &height);
+    App::get()->getWindowSize(&width, &height);
 
     int leftSide = width / 2;
     int middle = 200;
@@ -35,10 +35,10 @@ void PauseState::onExit() {
 }
 
 void PauseState::s_pauseToMainMenu() {
-    EngineStateManager::get()->getStateMachine()->changeState("MAINMENU");
+    App::get()->getStateMachine()->changeState("MAINMENU");
 }
 
 //TODO Combine with menu to m_settings?
 void PauseState::s_pauseToSettings() {
-    EngineStateManager::get()->getStateMachine()->pushState("SETTINGS");
+    App::get()->getStateMachine()->pushState("SETTINGS");
 }

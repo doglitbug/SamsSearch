@@ -4,12 +4,12 @@ void Cat::load(int x, int y, int width, int height, CPO &pCustomProperties) {
     NPC::load(x, y, width, height, pCustomProperties);
     m_hitBox = new SDL_FRect{12, 44, 28, 28};
     m_speed = 100.0f;
-    AssetManager::get()->loadSound("assets/sounds/leohpaz/DomesticAnimals/Cat/Cat_Idle_Meow_1.wav", "Cat meow");
+    Assets::get()->loadSound("assets/sounds/leohpaz/DomesticAnimals/Cat/Cat_Idle_Meow_1.wav", "Cat meow");
 }
 
 void Cat::onInteraction(GameObject *other, INTERACT_TYPE interactType) {
     if (timeSinceLastAction > m_timeBetweenMeows) {
-        AssetManager::get()->playSound("Cat meow");
+        Assets::get()->playSound("Cat meow");
         timeSinceLastAction = 0.0f;
     }
 }

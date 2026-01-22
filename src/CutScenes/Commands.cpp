@@ -9,14 +9,14 @@ cmdShowDialog::cmdShowDialog(const Sprite &dialogFace, const std::vector<std::st
 }
 
 void cmdShowDialog::start() {
-    AssetManager::get()->createDialogue("Samuel", sprite, dialog, "Text");
+    Assets::get()->createDialogue("Samuel", sprite, dialog, "Text");
 }
 
 void cmdShowDialog::update(float deltaTime) {
     //TODO If player hits action button
     if (InputManager::get()->getKeyDown(SDL_SCANCODE_ESCAPE) || InputManager::get()->getButtonDown(SDL_GAMEPAD_BUTTON_SOUTH)) {
         completed = true;
-        AssetManager::get()->deleteTexture("dialog");
+        Assets::get()->deleteTexture("dialog");
     }
 }
 

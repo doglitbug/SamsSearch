@@ -31,12 +31,17 @@ void InputManager::initializeGamepads() {
     m_bGamepad = true;
 }
 
+InputManager::InputManager(App* pSDLApplication)
+{
+    m_pApplication = pSDLApplication;
+}
+
 void InputManager::update() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_EVENT_QUIT:
-                EngineStateManager::get()->quit();
+                m_pApplication->quit();
                 return;
 
             case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
@@ -155,7 +160,8 @@ void InputManager::onKeyChange() {
 }
 
 void InputManager::onMouseMove(const SDL_Event &event) {
-    const float scale = EngineStateManager::get()->getScale();
+    const float scale = 1.0f;
+    //TODO Make this a setting?
     m_mousePosition.setX(event.motion.x / scale);
     m_mousePosition.setY(event.motion.y / scale);
 }
