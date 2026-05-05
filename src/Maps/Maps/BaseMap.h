@@ -1,9 +1,9 @@
 #pragma once
 
 #include <vector>
-#include "BaseLayer.h"
+#include "../BaseLayer.h"
 #include "GameObjects/GameObject.h"
-#include "CollisionLayer.h"
+#include "../CollisionLayer.h"
 
 struct TileSet
 {
@@ -20,8 +20,8 @@ struct TileSet
 
 class BaseMap {
 public:
-    BaseMap(){};
-    ~BaseMap(){
+    BaseMap()= default;
+    virtual ~BaseMap(){
         // Clean up layers here
         for (auto it = m_upperLayers.begin(); it != m_upperLayers.end();) {
                 it = m_upperLayers.erase(it);  // Returns iterator to the next element
@@ -85,8 +85,8 @@ private:
     CollisionLayer m_collisionLayer;
     std::vector<GameObject *> m_gameObjects;
 
-    int width;
-    int height;
+    int width{};
+    int height{};
     std::string name;
 protected:
     std::string filename;

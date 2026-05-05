@@ -156,6 +156,7 @@ void PlayState::changeMap(const std::string &mapName, const float destX, const f
     //Check if we are changing to a different map
     if (mapName != pCurrentMap->getFileName()) {
         pCurrentMap->onExit();
+        //Delete GOs, add back player?
         pCurrentMap = m_maps.find(mapName)->second;
         pCurrentMap->onEnter(); //TODO Import GOs
     }

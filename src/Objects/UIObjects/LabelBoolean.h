@@ -2,7 +2,7 @@
 
 #include "UIObject.h"
 
-/// @brief Create a on/off label
+/// @brief Create an on/off label
 class LabelBoolean : public UIObject {
 public:
     LabelBoolean() = default;
