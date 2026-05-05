@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseMap.h"
+#include "Maps/BaseMap.h"
 #include "../TinyXML/tinyxml2.h"
 
 using namespace tinyxml2;

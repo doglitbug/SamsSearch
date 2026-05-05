@@ -37,7 +37,7 @@ add_executable(SamsSearch
         src/Maps/CollisionLayer.cpp
         src/Maps/CollisionLayer.h
         src/Maps/BaseLayer.h
-        src/Maps/BaseMap.h
+        src/Maps/Maps/BaseMap.h
         src/Maps/MapParser.cpp
         src/Maps/MapParser.h
         src/Maps/TileLayer.cpp
