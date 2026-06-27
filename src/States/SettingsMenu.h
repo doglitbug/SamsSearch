@@ -25,7 +25,7 @@ private:
     void s_menuGameVolumeUp();
 
     void s_menuSaveSettings();
-    //TODO Reset settings
+
     void s_menuResetSettings();
 
     static constexpr int MUSICVOLUMESCALE = 5;

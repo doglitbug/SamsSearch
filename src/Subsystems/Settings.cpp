@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 
 #include "Settings.h"
 #include "App.h"
@@ -8,7 +9,6 @@ Settings::Settings()
 {
     load();
 }
-
 void Settings::load()
 {
     //TODO Refactor these into an object for RAII
@@ -37,7 +37,6 @@ void Settings::load()
     //App::get()->getAssets()->setMusicVolume(m_settings.musicVolume);
     //App::get()->getAssets()->setGameVolume(m_settings.gameVolume);
 }
-
 void Settings::save()
 {
     //TODO Refactor these into an object for RAII
@@ -69,6 +68,24 @@ void Settings::reset()
     setGameVolume(75);
     setFullScreen(false);
 }
+
+// Observers
+void Settings::addObserver(IObserver* observer) {
+        observers.push_back(observer);
+    }
+
+    void Settings::removeObserver(IObserver* observer) {
+        observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
+    }
+
+    void Settings::notifyObservers(const std::string &message, MyType newValue)
+    {
+         for (IObserver* observer : observers) {
+            if (observer) {
+                observer->onNotify(message, newValue); // Synchronous broadcast
+            }
+        }
+    }
 
 // region Audio
 bool Settings::getTitleMusicEnabled() const { return m_settings.titleMusicEnabled; }
