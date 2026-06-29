@@ -15,9 +15,9 @@ void SettingsMenu::onEnter() {
     m_gameObjects.push_back(generateButton(">|", [this]{s_menuGameMusicOn();}, 50));
 
     m_gameObjects.push_back(generateLabel("Music Volume", 300));
-    m_gameObjects.push_back(generateButton("<",[this]{ s_menuMusicVolumeDown();}, 50));
-    m_gameObjects.push_back(generateLabelInt([this]()->int{ return m_pSettings->getMusicVolume();}));
-    m_gameObjects.push_back(generateButton(">", [this]{s_menuMusicVolumeUp();}, 50));
+    m_gameObjects.push_back(generateButton("<",[this]{ s_menuGameMusicVolumeDown();}, 50));
+    m_gameObjects.push_back(generateLabelInt([this]()->int{ return m_pSettings->getGameMusicVolume();}));
+    m_gameObjects.push_back(generateButton(">", [this]{s_menuGameMusicVolumeUp();}, 50));
 
     m_gameObjects.push_back(generateLabel("Game Volume", 300));
     m_gameObjects.push_back(generateButton("<", [this]{s_menuGameVolumeDown();}, 50));
@@ -91,18 +91,18 @@ void SettingsMenu::s_menuGameMusicOn() {
     m_pSettings->setGameMusicEnabled(true);
 }
 
-void SettingsMenu::s_menuMusicVolumeDown() {
-    int value = m_pSettings->getMusicVolume();
+void SettingsMenu::s_menuGameMusicVolumeDown() {
+    int value = m_pSettings->getGameMusicVolume();
     value -= MUSICVOLUMESCALE;
     if (value < 0) { value = 0; }
-    m_pSettings->setMusicVolume(value);
+    m_pSettings->setGameMusicVolume(value);
 }
 
-void SettingsMenu::s_menuMusicVolumeUp() {
-    int value = m_pSettings->getMusicVolume();
+void SettingsMenu::s_menuGameMusicVolumeUp() {
+    int value = m_pSettings->getGameMusicVolume();
     value += MUSICVOLUMESCALE;
     if (value > 100) { value = 100; }
-    m_pSettings->setMusicVolume(value);
+    m_pSettings->setGameMusicVolume(value);
 }
 
 void SettingsMenu::s_menuGameVolumeDown() {
@@ -130,6 +130,5 @@ void SettingsMenu::s_menuResetSettings() {
 }
 
 void SettingsMenu::onExit() {
-    //TODO Check for need to save m_settings?
     BaseState::onExit();
 }

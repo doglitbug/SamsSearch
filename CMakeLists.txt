@@ -88,7 +88,8 @@ add_executable(SamsSearch
         src/Objects/GameObjects/GameObjectItem/Sign.cpp
         src/Objects/GameObjects/GameObjectItem/Sign.h
         src/Subsystems/App.cpp
-        src/Subsystems/App.h)
+        src/Subsystems/App.h
+        src/Observers.h)
 
 find_package(ZLIB)
 

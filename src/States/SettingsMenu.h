@@ -19,8 +19,8 @@ private:
     void s_menuGameMusicOff();
     void s_menuGameMusicOn();
 
-    void s_menuMusicVolumeDown();
-    void s_menuMusicVolumeUp();
+    void s_menuGameMusicVolumeDown();
+    void s_menuGameMusicVolumeUp();
     void s_menuGameVolumeDown();
     void s_menuGameVolumeUp();
 

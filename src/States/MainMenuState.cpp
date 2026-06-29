@@ -1,12 +1,12 @@
 #include "MainMenuState.h"
 
-void MainMenuState::onEnter() {
-    if (App::get()->getSettings()->getTitleMusicEnabled()) {
-        App::get()->getAssets()->playMusic("main_menu");
-    }
-    //Title
+void MainMenuState::onEnter()
+{
+    App::get()->getAssets()->toggleTitleMusic(true);
+
+    // Title
     m_gameObjects.push_back(generateTitle());
-    //Buttons
+    // Buttons
     m_gameObjects.push_back(generateButton("New Game", s_menuToPlay));
     m_gameObjects.push_back(generateButton("Load Game", s_menuToNothing));
     m_gameObjects.push_back(generateButton("Settings", s_menuToSettings));
@@ -14,21 +14,22 @@ void MainMenuState::onEnter() {
     m_gameObjects.push_back(generateButton("Quit", s_menuToExit));
 }
 
-void MainMenuState::update(float deltaTime) {
+void MainMenuState::update(float deltaTime)
+{
     int width, height;
     App::get()->getWindowSize(&width, &height);
 
     int leftSide = width / 2;
     int middle = 200;
 
-    //Reposition all game objects
+    // Reposition all game objects
     int index = 0;
 
-    //Title
+    // Title
     m_gameObjects[index++]->setPosition(leftSide - 453, middle - 100);
 
     leftSide -= LABEL_WIDTH / 2;
-    //Buttons
+    // Buttons
     m_gameObjects[index++]->setPosition(leftSide, middle + (ROW_HEIGHT + ROW_GAP) * index);
     m_gameObjects[index++]->setPosition(leftSide, middle + (ROW_HEIGHT + ROW_GAP) * index);
     m_gameObjects[index++]->setPosition(leftSide, middle + (ROW_HEIGHT + ROW_GAP) * index);
@@ -38,19 +39,23 @@ void MainMenuState::update(float deltaTime) {
     BaseMenuState::update(deltaTime);
 }
 
-void MainMenuState::onExit() {
-    App::get()->getAssets()->stopMusic();
+void MainMenuState::onExit()
+{
     BaseState::onExit();
 }
 
-void MainMenuState::s_menuToPlay() {
+void MainMenuState::s_menuToPlay()
+{
+    App::get()->getAssets()->toggleTitleMusic(false);
     App::get()->getStateMachine()->changeState("PLAY");
 }
 
-void MainMenuState::s_menuToSettings() {
+void MainMenuState::s_menuToSettings()
+{
     App::get()->getStateMachine()->pushState("SETTINGS");
 }
 
-void MainMenuState::s_menuToExit() {
+void MainMenuState::s_menuToExit()
+{
     App::get()->quit();
 }
