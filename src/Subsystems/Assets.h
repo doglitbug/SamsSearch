@@ -124,7 +124,7 @@ public:
     /// @param volume as a percentage
     void setTitleMusicVolume(int volume);
 
-    /// @brief Play music
+    /// @brief Play music (if allowed)
     /// @param id musicID to play
     /// @param loop Number of loops to play the music for: 0 for once, -1 for repeat (default)
 
@@ -132,6 +132,10 @@ public:
 
     /// @brief Pause/resume game music
     void toggleGameMusic(bool enabled);
+
+    /// @brief Set game music volume
+    /// @param volume as a percentage
+    void setGameMusicVolume(int volume);
 
     /// @brief Set game volume
     /// @param volume as a percentage
@@ -143,9 +147,6 @@ public:
     /// @param loops how many times to loop, defaults to no extra loops (once)
     /// @param channel to play on, defaults to -1 for next available channel
     void playSound(const std::string &id, int loops = 0, int channel = -1);
-
-    // End game
-    void clean();
 
 private:
     SDL_Renderer *m_pRenderer;

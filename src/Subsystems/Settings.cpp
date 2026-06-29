@@ -59,9 +59,9 @@ void Settings::save()
 void Settings::reset()
 {
     setTitleMusicEnabled(true);
-    setTitleMusicVolume(50);
+    setTitleMusicVolume(5);
     setGameMusicEnabled(true);
-    setGameMusicVolume(50);
+    setGameMusicVolume(5);
     setGameVolume(75);
     setFullScreen(false);
 }

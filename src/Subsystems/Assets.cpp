@@ -26,7 +26,7 @@ Assets::Assets()
 
     // Load settings
     setTitleMusicVolume(App::get()->getSettings()->getTitleMusicVolume());
-
+    setGameMusicVolume(App::get()->getSettings()->getGameMusicVolume());
     setGameVolume(App::get()->getSettings()->getGameVolume());
 }
 
@@ -371,9 +371,12 @@ void Assets::toggleGameMusic(bool enabled)
     }
     else
     {
-    MIX_PauseTrack(m_pGameMusicTrack);
+        MIX_PauseTrack(m_pGameMusicTrack);
     }
-
+}
+void Assets::setGameMusicVolume(int volume)
+{
+    MIX_SetTrackGain(m_pGameMusicTrack, static_cast<float>(volume) / 100.0f);
 }
 
 void Assets::setGameVolume(const int volume)
@@ -451,11 +454,17 @@ void Assets::onNotify(const std::string &message, MyType newValue)
 
     if (message == "GAME_MUSIC_ENABLED")
     {
-        //setGameMusic(std::get<bool>(newValue));
+        // What if we toggle this in the menu?
+        // toggleGameMusic(std::get<bool>(newValue));
     }
 
     if (message == "GAME_MUSIC_VOLUME")
     {
-        //setGameMusicVolume(std::get<int>(newValue));
+        setGameMusicVolume(std::get<int>(newValue));
+    }
+
+    if (message == "GAME_VOLUME")
+    {
+        setGameVolume(std::get<int>(newValue));
     }
 }

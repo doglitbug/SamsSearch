@@ -35,6 +35,7 @@ void PauseState::update(float deltaTime){
 void PauseState::onExit() {
     //Incase player re-enabled it in the pause->settings menu
     App::get()->getAssets()->toggleTitleMusic(false);
+    App::get()->getAssets()->toggleGameMusic(true);
     BaseState::onExit();
 }
 
