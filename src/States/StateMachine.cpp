@@ -2,7 +2,7 @@
 
 void StateMachine::update(float deltaTime) {
     m_gameStateStack.back()->update(deltaTime);
-    if (m_requestedChangeType != NOCHANGE) {
+    if (m_requestedChangeType != changeType::NOCHANGE) {
         changeState();
     }
 }
@@ -34,7 +34,7 @@ void StateMachine::setInitialState(const std::string& stateID) {
 void StateMachine::changeState(const std::string& stateID) {
     if (m_gameStates[stateID]) {
         m_requestedState = stateID;
-        m_requestedChangeType = CHANGE;
+        m_requestedChangeType = changeType::CHANGE;
     } else {
         std::cout << "State "<< stateID << " not found" << std::endl;
     }
@@ -43,19 +43,19 @@ void StateMachine::changeState(const std::string& stateID) {
 void StateMachine::pushState(const std::string& stateID) {
     if(m_gameStates[stateID]) {
         m_requestedState = stateID;
-        m_requestedChangeType = PUSH;
+        m_requestedChangeType = changeType::PUSH;
     } else {
         std::cout << "State "<< stateID << " not found" << std::endl;
     }
 }
 
 void StateMachine::popState() {
-    m_requestedChangeType = POP;
+    m_requestedChangeType = changeType::POP;
 }
 
 void StateMachine::changeState() {
     switch (m_requestedChangeType) {
-        case CHANGE:
+        case changeType::CHANGE:
             //Remove current states
             for (BaseState *gs: m_gameStateStack) {
                 gs->onExit();
@@ -66,16 +66,16 @@ void StateMachine::changeState() {
             m_gameStateStack.push_back(m_gameStates[m_requestedState]);
             m_gameStateStack.back()->onEnter();
             break;
-        case PUSH:
+        case changeType::PUSH:
             m_gameStateStack.push_back(m_gameStates[m_requestedState]);
             m_gameStateStack.back()->onEnter();
             break;
-        case POP:
+        case changeType::POP:
             m_gameStateStack.back()->onExit();
             m_gameStateStack.pop_back();
             break;
-        case NOCHANGE:
+        case changeType::NOCHANGE:
             break;
     }
-    m_requestedChangeType = NOCHANGE;
+    m_requestedChangeType = changeType::NOCHANGE;
 }

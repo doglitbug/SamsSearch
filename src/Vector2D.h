@@ -87,7 +87,7 @@ private:
 
 /// @brief Facing direction, aligns with row in character sheets
 /// @todo move elsewhere?
-enum DIRECTION {
+enum class DIRECTION {
     NORTH = 3,
     EAST = 2,
     SOUTH = 0,

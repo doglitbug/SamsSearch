@@ -32,7 +32,7 @@ void PlayState::onEnter() {
     auto prop = CPO(playerProp);
     mPlayer->load(100, 100, 52, 72, prop);
 
-    changeMap("Test", 18 * 32, 2 * 32, SOUTH);
+    changeMap("Test", 18 * 32, 2 * 32, DIRECTION::SOUTH);
 }
 
 void PlayState::update(const float deltaTime) {
@@ -202,12 +202,12 @@ void PlayState::drawUI() const {
 
 void PlayState::handleInput() {
     //TODO Move this!!!!
-    if (App::get()->getInput()->getKeyDown(SDL_SCANCODE_ESCAPE) || App::get()->getInput()->getButtonDown(SDL_GAMEPAD_BUTTON_START)) {
+    if (App::get()->getInput()->getAction(actions::MENU)) {
         App::get()->getStateMachine()->pushState("PAUSE");
         return;
     }
 
-    if (App::get()->getInput()->getKeyDown(SDL_SCANCODE_Z)) {
+    if (App::get()->getInput()->getAction(actions::CANCEL)) {
         const std::vector<std::string> dialogLines = {
             "Hello",
             "Have you been inside yet?",

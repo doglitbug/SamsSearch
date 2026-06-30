@@ -37,7 +37,7 @@ void GameObject::drawSelf(SDL_Rect *pViewport) {
     App::get()->getAssets()->drawSprite(m_sprite,
                                     (int) m_position.getX() - pViewport->x,
                                     (int) m_position.getY() - pViewport->y,
-                                    m_direction,
+                                    static_cast<int>(m_direction),
                                     m_currentFrame);
 
     //TODO Move out of this function!

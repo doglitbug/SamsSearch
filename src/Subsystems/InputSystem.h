@@ -6,7 +6,15 @@
 #include "../Vector2D.h"
 #include "Settings.h"
 
-class InputSystem {
+enum class mouseButtons
+{
+    LEFT = 0,
+    MIDDLE = 1,
+    RIGHT = 2
+};
+
+class InputSystem
+{
 public:
     InputSystem() = default;
     ~InputSystem() = default;
@@ -16,14 +24,14 @@ public:
 
     /// @return Normalized movement vector based on user input
     Vector2D getMovement() const;
+
     /// @brief See if the action is currently being performed via keyboard/controller
-    /// @param action actions.MENU/ATTACK etc 
+    /// @param action actions.MENU/ATTACK etc
     /// @return boolean
     bool getAction(actions action);
 
     // Joystick Handling
     void initializeGamepads();
-    bool getButtonDown(int button) const;
     bool gamepadInUse() const { return m_bGamepad; }
 
     /// @param button
@@ -31,18 +39,9 @@ public:
     std::string getButtonLabel(SDL_GamepadButton button) const;
 
     // Mouse handling
-    enum mouse_buttons {
-        LEFT = 0,
-        MIDDLE = 1,
-        RIGHT = 2
-    };
-
     void initializeMouse();
-    bool getMouseButtonState(int buttonNumber);
-    Vector2D* getMousePosition();
-
-    // Keyboard handling
-    bool getKeyDown(int key) const;
+    bool getMouseButtonState(mouseButtons buttonNumber);
+    Vector2D *getMousePosition();
 
 private:
     // Mouse
@@ -54,12 +53,13 @@ private:
     // Keyboard
     const bool *m_keyStates;
     void onKeyChange();
+    bool getKeyDown(int key) const;
 
     // Joysticks
     /// @brief are we using a GamePad?
     bool m_bGamepad;
+    bool getButtonDown(int button) const;
     SDL_Gamepad *m_gamepad;
     std::vector<bool> m_buttonStates;
     void onButtonChange(const SDL_Event &event);
-
 };

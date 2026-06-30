@@ -1,9 +1,10 @@
 #include "Button.h"
 #include "App.h"
+#include "InputSystem.h"
 
 void Button::load(const LoaderParams &pParams) {
     UIObject::load(pParams);
-    m_currentFrame = INACTIVE;
+    m_currentFrame = static_cast<int>(buttonState::ACTIVE);
     m_bReleased = false;
 }
 
@@ -17,14 +18,14 @@ void Button::update(float deltaTime) {
         && pMousePos->getY() < (m_ScreenPosition.getY() + m_height)
         && pMousePos->getY() > m_ScreenPosition.getY()) {
 
-        if (App::get()->getInput()->getMouseButtonState(InputSystem::LEFT) && m_bReleased) {
+        if (App::get()->getInput()->getMouseButtonState(mouseButtons::LEFT) && m_bReleased) {
             m_bReleased = false;
             m_callback();
-        } else if (!App::get()->getInput()->getMouseButtonState(InputSystem::LEFT)) {
+        } else if (!App::get()->getInput()->getMouseButtonState(mouseButtons::LEFT)) {
             m_bReleased = true;
-            m_currentFrame = ACTIVE;
+            m_currentFrame = static_cast<int>(buttonState::ACTIVE);
         }
     } else {
-        m_currentFrame = INACTIVE;
+        m_currentFrame = static_cast<int>(buttonState::INACTIVE);
     }
 }

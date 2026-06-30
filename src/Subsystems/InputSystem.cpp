@@ -21,7 +21,7 @@ void InputSystem::initializeGamepads()
 
     m_gamepad = SDL_OpenGamepad(joystickIDs[0]);
     SDL_Log("%s connected", SDL_GetGamepadName(m_gamepad));
-    SDL_RumbleGamepad(m_gamepad, 0xffff, 0xffff, 500);
+    //SDL_RumbleGamepad(m_gamepad, 0xffff, 0xffff, 500);
 
     SDL_free(joystickIDs);
 
@@ -175,9 +175,9 @@ void InputSystem::initializeMouse()
     m_mousePosition = Vector2D(0, 0);
 }
 
-bool InputSystem::getMouseButtonState(const int buttonNumber)
+bool InputSystem::getMouseButtonState(mouseButtons buttonNumber)
 {
-    return m_mouseButtonStates[buttonNumber];
+    return m_mouseButtonStates[static_cast<int>(buttonNumber)];
 }
 
 Vector2D *InputSystem::getMousePosition()
@@ -217,13 +217,13 @@ void InputSystem::onMouseButtonChange(const SDL_Event &event)
     switch (event.button.button)
     {
     case SDL_BUTTON_LEFT:
-        m_mouseButtonStates[LEFT] = state;
+        m_mouseButtonStates[static_cast<int>(mouseButtons::LEFT)] = state;
         break;
     case SDL_BUTTON_MIDDLE:
-        m_mouseButtonStates[MIDDLE] = state;
+        m_mouseButtonStates[static_cast<int>(mouseButtons::MIDDLE)] = state;
         break;
     case SDL_BUTTON_RIGHT:
-        m_mouseButtonStates[RIGHT] = state;
+        m_mouseButtonStates[static_cast<int>(mouseButtons::RIGHT)] = state;
         break;
     default:
         break;

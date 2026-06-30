@@ -32,7 +32,7 @@ struct bindings
     int CANCEL;
 };
 
-enum actions {
+enum class actions {
     MENU,
     ATTACK,
     SECONDARY_ATTACK,
