@@ -201,6 +201,7 @@ void PlayState::drawUI() const {
 }
 
 void PlayState::handleInput() {
+    //TODO Move this!!!!
     if (App::get()->getInput()->getKeyDown(SDL_SCANCODE_ESCAPE) || App::get()->getInput()->getButtonDown(SDL_GAMEPAD_BUTTON_START)) {
         App::get()->getStateMachine()->pushState("PAUSE");
         return;

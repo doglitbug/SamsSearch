@@ -4,6 +4,7 @@
 #include <vector>
 #include <SDL3/SDL.h>
 #include "../Vector2D.h"
+#include "Settings.h"
 
 class InputSystem {
 public:
@@ -13,16 +14,18 @@ public:
     void update();
     void clean() const;
 
-    ///
     /// @return Normalized movement vector based on user input
     Vector2D getMovement() const;
+    /// @brief See if the action is currently being performed via keyboard/controller
+    /// @param action actions.MENU/ATTACK etc 
+    /// @return boolean
+    bool getAction(actions action);
 
     // Joystick Handling
     void initializeGamepads();
-    bool getButtonDown(SDL_GamepadButton button) const;
+    bool getButtonDown(int button) const;
     bool gamepadInUse() const { return m_bGamepad; }
 
-    /// #
     /// @param button
     /// @return
     std::string getButtonLabel(SDL_GamepadButton button) const;
@@ -39,7 +42,7 @@ public:
     Vector2D* getMousePosition();
 
     // Keyboard handling
-    bool getKeyDown(SDL_Scancode key) const;
+    bool getKeyDown(int key) const;
 
 private:
     // Mouse

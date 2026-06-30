@@ -64,6 +64,9 @@ void Settings::reset()
     setGameMusicVolume(5);
     setGameVolume(75);
     setFullScreen(false);
+
+    m_keyboard = {};
+    m_gamepad = {};
 }
 
 // region observers
@@ -104,8 +107,9 @@ void Settings::setTitleMusicVolume(const int volume)
 };
 
 bool Settings::getGameMusicEnabled() const { return m_settings.gameMusicEnabled; };
-void Settings::setGameMusicEnabled(const bool enabled) {
-    m_settings.gameMusicEnabled = enabled; 
+void Settings::setGameMusicEnabled(const bool enabled)
+{
+    m_settings.gameMusicEnabled = enabled;
     notifyObservers("GAME_MUSIC_ENABLED", enabled);
 }
 
@@ -126,7 +130,8 @@ void Settings::setGameVolume(const int volume)
 
 // region Video
 bool Settings::getFullScreen() const { return m_settings.fullScreen; };
-void Settings::setFullScreen(const bool enabled) {
+void Settings::setFullScreen(const bool enabled)
+{
     m_settings.fullScreen = enabled;
     notifyObservers("FULLSCREEN", enabled);
 }

@@ -4,7 +4,7 @@
 #include "Vector2D.h"
 #include "CPO.h"
 
-enum INTERACT_TYPE {
+enum class INTERACT_TYPE {
     TOUCH,
     INTERACT,
     ATTACK
