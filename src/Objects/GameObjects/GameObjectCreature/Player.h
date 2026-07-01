@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Objects/GameObjects/GameObjectCreature/GameObjectCreature.h"
+#include "GameObjectCreature.h"
 #include "Objects/GameObjects/GameObjectFactory.h"
 
 class Player : public GameObjectCreature {
 public:
     Player()= default;
 
-    void load(int x, int y, int width, int height, CPO &pCustomProperties);
+    void load(int x, int y, int width, int height, CPO &pCustomProperties) override;
     void update(float deltaTime, GameObject *pPlayer = nullptr) override;
 };
 

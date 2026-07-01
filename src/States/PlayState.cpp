@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "Objects/GameObjects/GameObjectCreature/Cat.h"
+#include "Objects/GameObjects/GameObjectCreature/Dog.h"
 #include "Objects/GameObjects/GameObjectItem/Sign.h"
 #include "Objects/GameObjects/GameObjectItem/Teleport.h"
 #include "Maps/MapInsideDadsHouse.h"
@@ -241,22 +242,24 @@ void PlayState::handleInput()
     if (App::get()->getInput()->getAction(actions::ATTACK))
     {
         // If attacking, look ahead in direction of attack and do something?
-        SDL_FPoint playerDirectionPoint = mPlayer->m_position + mPlayer->m_direction;
+        //TODO Get these from player object
+        Vector2D PlayerCenter = mPlayer->m_position + Vector2D(26, 36);
+        SDL_FPoint playerDirectionPoint = PlayerCenter + mPlayer->m_direction;
         for (auto *gameObject : *pCurrentMap->getGameObjects())
         {
             SDL_FRect otherHitBox = gameObject->getWorldHitBox();
             if (SDL_PointInRectFloat(&playerDirectionPoint, &otherHitBox))
             {
-
                 if (const auto goc = dynamic_cast<GameObjectCreature *>(gameObject))
                 {
                     // ATTACK IT
+                    SDL_Log("Attack!");
                 }
                 else if (const auto goi = dynamic_cast<GameObjectItem *>(gameObject))
                 {
                     // INTERACT with it
                     SDL_Log("HELLO!");
-                    goc->onInteraction(mPlayer, INTERACT_TYPE::INTERACT);
+                    //goi->onInteraction(mPlayer, INTERACT_TYPE::INTERACT);
                 }
             }
         }

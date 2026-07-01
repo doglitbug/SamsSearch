@@ -55,22 +55,22 @@ public:
         switch (direction)
         {
         case DIRECTION::NORTH:
-            return Vector2D(m_x, m_y - 1.0f);
+            return Vector2D{m_x, m_y - 16.0f};
         case DIRECTION::SOUTH:
-            return Vector2D(m_x, m_y + 1.0f);
+            return Vector2D{m_x, m_y + 16.0f};
         case DIRECTION::WEST:
-            return Vector2D(m_x - 1.0f, m_y);
+            return Vector2D{m_x - 16.0f, m_y};
         case DIRECTION::EAST:
-            return Vector2D(m_x + 1.0f, m_y);
+            return Vector2D{m_x + 16.0f, m_y};
         default:
-            return Vector2D(m_x, m_y);
+            return Vector2D{m_x, m_y};
         }
     }
 
     // Multiplication my a scalar
     Vector2D operator*(const float scalar) const
     {
-        return Vector2D(m_x * scalar, m_y * scalar);
+        return Vector2D{m_x * scalar, m_y * scalar};
     }
 
     Vector2D &operator*=(const float scalar)

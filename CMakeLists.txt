@@ -1,48 +1,97 @@
 cmake_minimum_required(VERSION 3.22)
-project(SamsSearch LANGUAGES CXX)
+project(SamsSearch)
 
-# Use standard variables and prevent global pollution
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Configure output directories cleanly
+set(CMAKE_BUILD_TYPE Debug)
+
+include_directories(src)
+include_directories(src/ThirdParty/Base64)
+include_directories(src/Objects)
+include_directories(src/Objects/GameObjects)
+include_directories(src/Objects/UIObjects)
+include_directories(src/Maps)
+include_directories(src/CutScenes)
+include_directories(src/Subsystems)
+include_directories(src/States)
+include_directories(src/ThirdParty/TinyXML)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-# Find required dependencies
-find_package(SDL3 REQUIRED)
-find_package(SDL3_image REQUIRED)
-find_package(SDL3_mixer REQUIRED)
-find_package(SDL3_ttf REQUIRED)
-find_package(ZLIB REQUIRED)
+add_executable(SamsSearch
+        src/ThirdParty/Base64/base64.cpp
+        src/ThirdParty/Base64/base64.h
+        src/Objects/UIObjects/Button.cpp
+        src/Objects/UIObjects/Button.h
+        src/Objects/UIObjects/Label.h
+        src/Objects/UIObjects/LabelBoolean.h
+        src/Objects/UIObjects/LabelInteger.h
+        src/Objects/UIObjects/Title.h
+        src/Objects/GameObjects/GameObjectItem/Teleport.cpp
+        src/Objects/GameObjects/GameObjectItem/Teleport.h
+        src/Objects/GameObjects/GameObjectFactory.h
+        src/Objects/UIObjects/LoaderParams.h
+        src/Objects/GameObjects/GameObject.cpp
+        src/Objects/GameObjects/GameObject.h
+        src/Maps/CollisionLayer.cpp
+        src/Maps/CollisionLayer.h
+        src/Maps/BaseLayer.h
+        src/Maps/Maps/BaseMap.h
+        src/Maps/MapParser.cpp
+        src/Maps/MapParser.h
+        src/Maps/TileLayer.cpp
+        src/Maps/TileLayer.h
+        src/Subsystems/Assets.cpp
+        src/Subsystems/Assets.h
+        src/Subsystems/InputSystem.cpp
+        src/Subsystems/InputSystem.h
+        src/Subsystems/Settings.cpp
+        src/Subsystems/Settings.h
+        src/States/BaseState.h
+        src/States/StateMachine.cpp
+        src/States/StateMachine.h
+        src/States/MainMenuState.cpp
+        src/States/MainMenuState.h
+        src/States/BaseMenuState.cpp
+        src/States/BaseMenuState.h
+        src/States/PauseState.cpp
+        src/States/PauseState.h
+        src/States/PlayState.cpp
+        src/States/PlayState.h
+        src/States/SettingsMenu.cpp
+        src/States/SettingsMenu.h
+        src/ThirdParty/TinyXML/tinyxml2.cpp
+        src/ThirdParty/TinyXML/tinyxml2.h
+        src/main.cpp
+        src/Vector2D.h
+        src/Objects/UIObjects/UIObject.h
+        src/Objects/UIObjects/UIObject.cpp
+        src/Objects/GameObjects/GameObjectCreature/NPC.h
+        src/Objects/GameObjects/GameObjectCreature/NPC.cpp
+        src/Objects/GameObjects/GameObjectCreature/Dog.cpp
+        src/Objects/GameObjects/GameObjectCreature/Dog.h
+        src/Objects/GameObjects/GameObjectCreature/Cat.cpp
+        src/Objects/GameObjects/GameObjectCreature/Cat.h
+        src/Objects/GameObjects/GameObjectCreature/Player.cpp
+        src/Objects/GameObjects/GameObjectCreature/Player.h
+        src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.cpp
+        src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.h
+        src/Objects/GameObjects/GameObjectItem/GameObjectItem.cpp
+        src/Objects/GameObjects/GameObjectItem/GameObjectItem.h
+        src/Objects/GameObjects/CPO.h
+        src/Maps/Maps/MapTest.h
+        src/Maps/Maps/MapTest.cpp
+        src/Maps/Maps/MapInsideDadsHouse.h
+        src/Maps/Maps/MapInsideDadsHouse.cpp
+        src/CutScenes/CommandProcessor.cpp
+        src/CutScenes/CommandProcessor.h
+        src/CutScenes/Commands.cpp
+        src/Objects/GameObjects/GameObjectItem/Sign.cpp
+        src/Objects/GameObjects/GameObjectItem/Sign.h
+        src/Subsystems/App.cpp
+        src/Subsystems/App.h
+        src/Observers.h)
 
-# 1. Automatically collect all source and header files recursively
-file(GLOB_RECURSE PROJECT_SOURCES 
-    CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
-)
+find_package(ZLIB)
 
-# 2. Define the executable target
-add_executable(SamsSearch ${PROJECT_SOURCES})
-
-# 3. Modern target-based include paths (Replaces all include_directories)
-target_include_directories(SamsSearch PRIVATE 
-    src
-    src/ThirdParty/Base64
-    src/ThirdParty/TinyXML
-    src/Objects/GameObjects
-    src/Objects/UIObjects
-    src/Maps
-    src/CutScenes
-    src/Subsystems
-    src/States
-)
-
-# 4. Link libraries directly to the target
-target_link_libraries(SamsSearch PRIVATE 
-    SDL3::SDL3 
-    SDL3_image::SDL3_image 
-    SDL3_mixer::SDL3_mixer 
-    SDL3_ttf::SDL3_ttf 
-    ZLIB::ZLIB
-)
+target_link_libraries(${PROJECT_NAME} SDL3 SDL3_image SDL3_mixer SDL3_ttf ZLIB::ZLIB)

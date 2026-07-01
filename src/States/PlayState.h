@@ -1,10 +1,7 @@
 #pragma once
 
 #include "Objects/GameObjects/GameObjectCreature/Player.h"
-#include "Objects/GameObjects/GameObjectCreature/Dog.h"
-
 #include "Maps/BaseMap.h"
-
 #include "CommandProcessor.h"
 
 /// @brief PlayState is the GameEngine

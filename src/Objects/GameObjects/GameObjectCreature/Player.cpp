@@ -1,7 +1,6 @@
 #include "Player.h"
-#include "Subsystems/InputSystem.h"
-
-void Player::load(const int x, const int y, const int width, const int height, CPO &pCustomProperties) {
+void Player::load(const int x, const int y, const int width, const int height, CPO &pCustomProperties)
+{
     GameObjectCreature::load(x, y, width, height, pCustomProperties);
     m_hitBox = new SDL_FRect{12, 44, 28, 28};
     m_speed = 150.0f;
@@ -19,12 +18,16 @@ void Player::update(const float deltaTime, GameObject *pPlayer)
 
     timeElapsed += deltaTime;
 
-    //TODO Check for running?
-    //TODO Add sneakers as an item to remove this annoying sound
-    if (m_velocity.length() > 0.5f & timeElapsed > 0.25f) {
-        if (random() % 10 > 5) {
+    // TODO Check for running?
+    // TODO Add sneakers as an item to remove this annoying sound
+    if (m_velocity.length() > 0.5f & timeElapsed > 0.25f)
+    {
+        if (random() % 10 > 5)
+        {
             App::get()->getAssets()->playSound("Footstep");
-        } else {
+        }
+        else
+        {
             App::get()->getAssets()->playSound("Footstep2");
         }
         timeElapsed = 0.0f;
