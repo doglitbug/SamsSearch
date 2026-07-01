@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "../BaseLayer.h"
-#include "GameObjects/GameObject.h"
+#include "Objects/GameObjects/GameObject.h"
 #include "../CollisionLayer.h"
 
 struct TileSet

@@ -1,10 +1,9 @@
 #pragma once
 
+#include "Objects/GameObjects/GameObjectCreature/Player.h"
+#include "Objects/GameObjects/GameObjectCreature/Dog.h"
 
-#include "GameObjects/GameObjectCreature/Player.h"
-#include "GameObjects/GameObjectCreature/Dog.h"
-
-#include "../Maps/Maps/BaseMap.h"
+#include "Maps/BaseMap.h"
 
 #include "CommandProcessor.h"
 

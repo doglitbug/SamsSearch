@@ -9,4 +9,5 @@ void Teleport::load(const int x, const int y, const int width, const int height,
     destX = pCustomProperties.getFloat("destX");
     destY = pCustomProperties.getFloat("destY");
     destDirection = static_cast<DIRECTION>(pCustomProperties.getInt("destDirection", static_cast<int>(DIRECTION::SOUTH)));
+    //add getDirection to pCustomProperties?
 }

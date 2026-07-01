@@ -15,7 +15,6 @@ void cmdShowDialog::start()
 
 void cmdShowDialog::update(float deltaTime)
 {
-    // TODO If player hits action button
     if (App::get()->getInput()->getAction(actions::CONFIRM))
     {
         completed = true;
