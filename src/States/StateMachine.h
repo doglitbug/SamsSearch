@@ -21,7 +21,7 @@ private:
     std::map<std::string, BaseState *> m_gameStates;
     std::vector<BaseState *> m_gameStateStack;
 
-    enum changeType {
+    enum class changeType {
         NOCHANGE,
         CHANGE,
         PUSH,
@@ -29,7 +29,7 @@ private:
     };
 
     std::string m_requestedState;
-    changeType m_requestedChangeType = NOCHANGE;
+    changeType m_requestedChangeType = changeType::NOCHANGE;
 
     void changeState();
 

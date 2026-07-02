@@ -14,7 +14,7 @@ public:
     void setCallback(const std::function<void()>& callback) { m_callback = callback; }
 
 private:
-    enum buttonState
+    enum class buttonState
     {
         INACTIVE = 0,
         ACTIVE = 1,
@@ -22,7 +22,7 @@ private:
     };
 
     bool m_bReleased = false;
-    int m_currentFrame = INACTIVE;
+    int m_currentFrame = static_cast<int>(buttonState::INACTIVE);
 
     std::function<void()> m_callback;
 };

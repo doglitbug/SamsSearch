@@ -11,7 +11,6 @@
 
 void App::init()
 {
-    //Load settings subsystem here for video init
     m_pSettings = new Settings();
 
     int flags = SDL_WINDOW_RESIZABLE;
@@ -44,6 +43,7 @@ void App::init()
 
     // Create assets subsystem
     m_pAssets = new Assets();
+    m_pSettings->addObserver(m_pAssets);
 
     //TODO Move loading to a startup State? (video etc)
     //Preload assets
@@ -70,7 +70,7 @@ void App::init()
     m_pAssets->loadTexture("assets/images/characters/animals1.png", "animals1");
 
     //Preload main menu audio
-    m_pAssets->loadMusic("assets/music/chiptunes/CGE-title-theme.flac", "main_menu");
+    //m_pAssets->loadMusic("assets/music/chiptunes/CGE-title-theme.flac", "main_menu");
     m_pAssets->loadSound("assets/sounds/leohpaz/Inventory/Managing/Unequip.wav", "Menu audio check");
 
     //Preload other stuff
@@ -85,7 +85,7 @@ void App::init()
     m_pStateMachine = new StateMachine();
 
     m_pStateMachine->registerState("MAINMENU", new MainMenuState());
-    m_pStateMachine->registerState("PLAY", new PlayState());
+    m_pStateMachine->registerState("PLAY", new PlayState());//TODO Pass in load game?
 
     m_pStateMachine->registerState("PAUSE", new PauseState());
     m_pStateMachine->registerState("SETTINGS", new SettingsMenu(m_pSettings));

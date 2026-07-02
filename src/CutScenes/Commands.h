@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "../../Subsystems/Assets.h"
-#include "GameObjects/GameObject.h"
+#include "Objects/GameObjects/GameObject.h"
 #include "Vector2D.h"
 
 class Command {

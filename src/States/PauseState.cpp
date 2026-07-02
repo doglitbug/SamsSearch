@@ -1,6 +1,8 @@
 #include "PauseState.h"
 
  void PauseState::onEnter() {
+    App::get()->getAssets()->toggleGameMusic(false);
+    App::get()->getAssets()->toggleTitleMusic(true);
     m_gameObjects.push_back(generateHeader("Pause"));
 
     m_gameObjects.push_back(generateButton("Resume", s_previousState));
@@ -31,6 +33,9 @@ void PauseState::update(float deltaTime){
 }
 
 void PauseState::onExit() {
+    //Incase player re-enabled it in the pause->settings menu
+    App::get()->getAssets()->toggleTitleMusic(false);
+    App::get()->getAssets()->toggleGameMusic(true);
     BaseState::onExit();
 }
 

@@ -11,8 +11,8 @@
 #include <functional>
 
 //Default sizes
-#define ROW_HEIGHT 50
-#define ROW_GAP 15
+#define ROW_HEIGHT 40
+#define ROW_GAP 10
 
 #define BUTTON_WIDTH 200
 #define LABEL_WIDTH 200

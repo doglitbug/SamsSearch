@@ -8,6 +8,7 @@ set(CMAKE_BUILD_TYPE Debug)
 include_directories(src)
 include_directories(src/ThirdParty/Base64)
 include_directories(src/Objects)
+include_directories(src/Objects/GameObjects)
 include_directories(src/Objects/UIObjects)
 include_directories(src/Maps)
 include_directories(src/CutScenes)
@@ -30,14 +31,12 @@ add_executable(SamsSearch
         src/Objects/GameObjects/GameObjectItem/Teleport.h
         src/Objects/GameObjects/GameObjectFactory.h
         src/Objects/UIObjects/LoaderParams.h
-        src/Objects/GameObjects/GameObjectCreature/Player.cpp
-        src/Objects/GameObjects/GameObjectCreature/Player.h
         src/Objects/GameObjects/GameObject.cpp
         src/Objects/GameObjects/GameObject.h
         src/Maps/CollisionLayer.cpp
         src/Maps/CollisionLayer.h
         src/Maps/BaseLayer.h
-        src/Maps/BaseMap.h
+        src/Maps/Maps/BaseMap.h
         src/Maps/MapParser.cpp
         src/Maps/MapParser.h
         src/Maps/TileLayer.cpp
@@ -73,6 +72,8 @@ add_executable(SamsSearch
         src/Objects/GameObjects/GameObjectCreature/Dog.h
         src/Objects/GameObjects/GameObjectCreature/Cat.cpp
         src/Objects/GameObjects/GameObjectCreature/Cat.h
+        src/Objects/GameObjects/GameObjectCreature/Player.cpp
+        src/Objects/GameObjects/GameObjectCreature/Player.h
         src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.cpp
         src/Objects/GameObjects/GameObjectCreature/GameObjectCreature.h
         src/Objects/GameObjects/GameObjectItem/GameObjectItem.cpp
@@ -88,7 +89,8 @@ add_executable(SamsSearch
         src/Objects/GameObjects/GameObjectItem/Sign.cpp
         src/Objects/GameObjects/GameObjectItem/Sign.h
         src/Subsystems/App.cpp
-        src/Subsystems/App.h)
+        src/Subsystems/App.h
+        src/Observers.h)
 
 find_package(ZLIB)
 
