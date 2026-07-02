@@ -106,7 +106,7 @@ Vector2D InputSystem::getMovement() const
     return newVelocity;
 }
 
-bool InputSystem::getAction(actions action)
+bool InputSystem::getAction(const actions action) const
 {
     switch (action)
     {

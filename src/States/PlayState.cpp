@@ -255,6 +255,11 @@ void PlayState::handleInput()
                     // ATTACK IT
                     SDL_Log("Attack!");
                 }
+                else if (const auto sign = dynamic_cast<Sign *>(gameObject))
+                {
+                    const Sprite dialogFace{"tf_char2", 144, 144};
+                    m_commandProcessor.AddCommand(new cmdShowDialog(dialogFace, sign->text));
+                }
                 else if (const auto goi = dynamic_cast<GameObjectItem *>(gameObject))
                 {
                     // INTERACT with it
@@ -263,21 +268,6 @@ void PlayState::handleInput()
                 }
             }
         }
-    }
-
-    if (App::get()->getInput()->getAction(actions::CANCEL))
-    {
-        const std::vector<std::string> dialogLines = {
-            "Hello",
-            "Have you been inside yet?",
-            "You need to find your shoes",
-            "and as usual, turn off your damn light!",
-            "Press A to continue"};
-
-        const Sprite dialogFace{"tf_char2", 144, 144};
-
-        m_commandProcessor.AddCommand(new cmdShowDialog(dialogFace, dialogLines));
-        m_commandProcessor.AddCommand(new cmdWait(2.5));
     }
 
     mPlayer->m_velocity = App::get()->getInput()->getMovement() *= mPlayer->m_speed;

@@ -128,7 +128,7 @@ SDL_Texture *Assets::createDialogue(const std::string &characterName, const Spri
     SDL_RenderClear(m_pRenderer);
 
     // Check we have a face image
-    if (face.textureID != "")
+    if (!face.textureID.empty())
     {
         offset += face.width;
         // Draw face
@@ -151,7 +151,7 @@ SDL_Texture *Assets::createDialogue(const std::string &characterName, const Spri
     constexpr auto textColor = SDL_Color{0xFF, 0xFF, 0xFF};
 
     int linePosition = border + 5;
-    for (const auto line : dialog)
+    for (const auto& line : dialog)
     {
         SDL_Surface *pTextSurface = TTF_RenderText_Blended(gFont, line.c_str(), 0, textColor);
         SDL_Texture *pTextTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTextSurface);

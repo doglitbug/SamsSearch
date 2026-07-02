@@ -28,7 +28,7 @@ public:
     /// @brief See if the action is currently being performed via keyboard/controller
     /// @param action actions.MENU/ATTACK etc
     /// @return boolean
-    bool getAction(actions action);
+    bool getAction(actions action) const;
 
     // Joystick Handling
     void initializeGamepads();

@@ -15,7 +15,7 @@ void cmdShowDialog::start()
 
 void cmdShowDialog::update(float deltaTime)
 {
-    if (App::get()->getInput()->getAction(actions::CONFIRM))
+    if (App::get()->getInput()->getAction(actions::ATTACK))
     {
         completed = true;
         App::get()->getAssets()->deleteTexture("dialog");
